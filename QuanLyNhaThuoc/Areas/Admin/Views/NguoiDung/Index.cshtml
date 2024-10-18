@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<NguoiDung>
+
+<h1> Quản lý người dùng</h1>
+<form method="get" class="form-inline mb-3">
+    <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm người dùng" value="@ViewBag.CurrentFilter" />
+    <select name="roleFilter" class="form-control ml-2">
+        <option value="">Lọc theo vai trò</option>
+    </select>
+    <select name="statusFilter" class="form-control ml-2">
+        <option value="">Lọc theo trạng thái</option>
+    </select>
+    <button type="submit" class="btn btn-primary ml-2">Lọc</button>
+</form>
+
+<div class="user-list-container" style="overflow-y:auto; max-height: 600px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="select-all"></th>
+                <th>Mã Người Dùng</th>
+                <th>Tên Người Dùng</th>
+                <th>Email</th>
+                <th>Số Điện Thoại</th>
+                <th>Vai trò</th>
+                <th>Trạng Thái</th>
+                <th>Ngày Tạo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td><input type="checkbox" class="user-select" value="@user.MaNguoiDung"></td>
+                    <td>@user.MaNguoiDung</td>
+                    <td>@user.TenNguoiDung</td>
+                    <td>@user.Email</td>
+                    <td>@user.SoDienThoai</td>
+                    <td>@user.MaVaiTro</td>
+                    <td>@user.TrangThai</td>
+                    <td>@user.NgayTao.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="action-buttons">
+    <a asp-action="Create" asp-controller="NguoiDung" asp-area="Admin" class="btn btn-success">Thêm người dùng</a>
+
+    <button type="button" class="btn btn-warning" id="edit-user">Sửa</button>
+    <button type="button" class="btn btn-danger" id="delete-user">Xóa</button>
+</div>
+
+<script>
+    // Select/Deselect all users
+    document.getElementById('select-all').addEventListener('click', function () {
+        var checkboxes = document.querySelectorAll('.user-select');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = event.target.checked;
+        });
+    });
+
+    // Edit selected user
+    document.getElementById('edit-user').addEventListener('click', function () {
+        let selected = document.querySelector('input.user-select:checked');
+        if (selected) {
+            window.location.href = '/Admin/NguoiDung/Edit/' + selected.value;
+        }
+    });
+
+    // Delete selected users
+    document.getElementById('delete-user').addEventListener('click', function () {
+        let selectedUsers = [...document.querySelectorAll('.user-select:checked')].map(cb => cb.value);
+        if (selectedUsers.length > 0) {
+            if (confirm('Bạn có chắc chắn muốn xóa những người dùng này?')) {
+                // Call API for deletion (implement API call in your controller)
+            }
+        }
+    });
+</script>
+
+
