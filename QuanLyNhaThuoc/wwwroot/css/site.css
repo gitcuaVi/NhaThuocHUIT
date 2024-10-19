@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -15,4 +15,20 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.form-select {
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+    .form-select option:checked {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .form-select:hover {
+        border-color: #28a745;
+    }
+
 }
