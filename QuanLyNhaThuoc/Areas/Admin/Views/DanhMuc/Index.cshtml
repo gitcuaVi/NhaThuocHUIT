@@ -13,30 +13,27 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Mã Danh Mục
-            </th>
-            <th>
-                Tên Danh Mục
-            </th>
+            <th>Mã Danh Mục</th>
+            <th>Tên Danh Mục</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.MaDanhMuc)</td>
+                <td>@Html.DisplayFor(modelItem => item.TenDanhMuc)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MaDanhMuc)
+                    <a asp-action="Edit" asp-route-id="@item.MaDanhMuc">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.MaDanhMuc">Details</a> |
+
+                    <!-- Form to delete the item -->
+                    <form asp-action="Delete" asp-route-id="@item.MaDanhMuc" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                    </form>
                 </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenDanhMuc)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaDanhMuc">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaDanhMuc">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaDanhMuc">Delete</a>
-            </td>
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>

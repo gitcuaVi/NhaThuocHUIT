@@ -94,13 +94,20 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             return View(danhMuc);
         }
 
-
         [HttpPost("delete/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            var parameters = new object[] { id };
-            _context.Database.ExecuteSqlRaw("EXEC DeleteDanhMuc @p0", parameters);
+            try
+            {
+                _context.Database.ExecuteSqlRaw("EXEC DeleteDanhMuc @p0", id);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
