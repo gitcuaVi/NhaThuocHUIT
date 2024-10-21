@@ -15,37 +15,96 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             _context = context;
         }
-
-        // GET: /admin/danhmuc
         [HttpGet("")]
         public IActionResult Index()
         {
             var danhMucList = _context.DanhMucs
-                              .Include(dm => dm.LoaiSanPhams)
+                              .FromSqlRaw("EXEC GetDanhMucList")
                               .ToList();
             return View(danhMucList);
         }
 
-        // GET: /admin/danhmuc/create
-        [HttpGet("create")]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /admin/danhmuc/create
-        [HttpPost("create")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create(DanhMuc danhMuc)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(danhMuc);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var parameters = new[] { danhMuc.TenDanhMuc };
+                    _context.Database.ExecuteSqlRaw("EXEC CreateDanhMuc @p0", parameters);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi tạo danh mục: " + ex.Message);
+                }
             }
             return View(danhMuc);
         }
+
+        [HttpGet("Edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            var danhMuc = _context.DanhMucs.FirstOrDefault(dm => dm.MaDanhMuc == id);
+            if (danhMuc == null)
+            {
+                return NotFound();
+            }
+            return View(danhMuc);
+        }
+
+        [HttpPost("Edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, DanhMuc danhMuc)
+        {
+            if (id != danhMuc.MaDanhMuc)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var parameters = new object[] { danhMuc.MaDanhMuc, danhMuc.TenDanhMuc };
+                    _context.Database.ExecuteSqlInterpolated($"EXEC UpdateDanhMuc {danhMuc.MaDanhMuc}, {danhMuc.TenDanhMuc}");
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.DanhMucs.Any(dm => dm.MaDanhMuc == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return View(danhMuc);
+        }
+
+
+        [HttpPost("delete/{id}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var parameters = new object[] { id };
+            _context.Database.ExecuteSqlRaw("EXEC DeleteDanhMuc @p0", parameters);
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 
 }
