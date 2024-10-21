@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,16 +14,20 @@
         body {
             background-color: #f8f9fa;
         }
+
         .btn-primary, .btn-success, .btn-warning, .btn-danger {
             background-color: #28a745;
             border-color: #28a745;
         }
+
             .btn-primary:hover, .btn-success:hover {
                 background-color: #218838;
             }
-            .btn-warning:hover{
-                background-color:goldenrod;
+
+            .btn-warning:hover {
+                background-color: goldenrod;
             }
+
             .btn-danger:hover {
                 background-color: #dc3545;
                 border-color: #dc3545;
@@ -55,6 +60,7 @@
     <div class="container my-4">
         <h1 class="mb-4">Quản lý người dùng</h1>
         <form method="get" class="row g-3 align-items-center mb-3">
+            @Html.AntiForgeryToken()
             <div class="col-md-3">
                 <div class="custom-search-icon">
                     <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm người dùng..." value="@ViewBag.CurrentFilter" />
@@ -67,7 +73,7 @@
                     @foreach (var role in ViewBag.RoleList)
                     {
                         <option value="@role.MaVaiTro">@role.TenVaiTro</option>
-                    } 
+                    }
                 </select>
             </div>
             <div class="col-md-3">
@@ -126,6 +132,9 @@
             <button type="button" class="btn btn-danger mx-3 btn-lg" id="delete-user">
                 <i class="bi bi-trash"></i> Xóa
             </button>
+            <button type="button" class="btn btn-primary mx-3 btn-lg" id="reset-password">
+                <i class="bi bi-key"></i> Reset mật khẩu
+            </button>
         </div>
 
         <div class="pagination mt-3">
@@ -157,7 +166,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // lấy alll
+        // Chọn tất cả người dùng
         document.getElementById('select-all').addEventListener('click', function () {
             var checkboxes = document.querySelectorAll('.user-select');
             checkboxes.forEach(function (checkbox) {
@@ -165,7 +174,7 @@
             });
         });
 
-        // ràng buộc Edit chọn 
+        // Sự kiện chỉnh sửa người dùng
         document.getElementById('edit-user').addEventListener('click', function () {
             let selected = document.querySelectorAll('input.user-select:checked');
             if (selected.length == 1) {
@@ -175,16 +184,64 @@
             }
         });
 
-        // Delete selected users
+        // Sự kiện xóa người dùng
         document.getElementById('delete-user').addEventListener('click', function () {
-            let selectedUsers = [...document.querySelectorAll('.user-select:checked')].map(cb => cb.value);
-            if (selectedUsers.length > 0) {
-                if (confirm('Bạn có chắc chắn muốn xóa những người dùng này?')) {
-                }
-            } else {
+            let selected = document.querySelectorAll('input.user-select:checked');
+            let ids = Array.from(selected).map(el => el.value);
+
+            if (ids.length === 0) {
                 alert('Vui lòng chọn ít nhất một người dùng để xóa.');
+                return;
             }
+
+            // Hiển thị ID được chọn trước khi gửi yêu cầu xóa
+            console.log("IDs selected for deletion: ", ids);
+
+            $.ajax({
+                url: '/Admin/NguoiDung/Delete',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    ids: ids
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Người dùng đã được xóa thành công. ID đã xóa: ' + ids.join(', '));
+                        location.reload(); 
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
         });
+        document.getElementById('reset-password').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.user-select:checked');
+            let ids = Array.from(selected).map(el => el.value);
+
+            if (ids.length === 0) {
+                alert('Vui lòng chọn ít nhất một người dùng để reset mật khẩu.');
+                return;
+            }
+
+            $.ajax({
+                url: '/Admin/NguoiDung/ResetPassword',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    ids: ids
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Mật khẩu đã được reset thành công.');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
+        });
+
+
     </script>
 </body>
 </html>

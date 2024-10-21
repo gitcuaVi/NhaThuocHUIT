@@ -5,37 +5,73 @@
 }
 @model NguoiDung
 
-
 <head>
     <!-- Các thẻ head khác -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha384-8YklhE9i4lGqlTLH+JnCXVqL4y1uF+qg2k2H+mW5uGBZ3rH41WFEj0t8J9b/cAnD" crossorigin="anonymous">
     <link rel="stylesheet" href="~\wwwroot\css\site.css" /> <!-- Kết nối với CSS riêng -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLR4pF5Ag5N15S5Z2GMJZo9z5sqXb5RGA9Rv/zDMP6" crossorigin="anonymous"></script>
 </head>
+
 <div class="container mt-5">
     <h2 class="mb-4">Thêm Người Dùng</h2>
 
-    <form method="post" asp-action="Create">
+    <form method="post" asp-action="Create" onsubmit="return validateForm()">
         <div class="mb-3">
-            <label asp-for ="TenNguoiDung" class="form-label">Tên Người Dùng</label>
+            <label asp-for="TenNguoiDung" class="form-label">Tên Người Dùng</label>
             <input asp="text" class="form-control" id="TenNguoiDung" name="TenNguoiDung" placeholder="Nhập tên người dùng" required />
+            <div class="invalid-feedback" id="usernameError"></div>
         </div>
 
         <div class="mb-3">
             <label for="Email" class="form-label">Email</label>
             <input type="email" class="form-control" id="Email" name="Email" placeholder="Nhập email" required />
+            <div class="invalid-feedback" id="emailError"></div>
         </div>
 
         <div class="mb-3">
             <label for="SoDienThoai" class="form-label">Số Điện Thoại</label>
             <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" placeholder="Nhập số điện thoại" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="Password" class="form-label">Mật Khẩu</label>
-            <input type="password" class="form-control" id="Password" name="Password" placeholder="Nhập mật khẩu" required />
+            <div class="invalid-feedback" id="phoneError"></div>
         </div>
 
         <button type="submit" class="btn btn-success">Lưu</button>
         <a href="/admin/NguoiDung" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
+
+<script>
+    function validateForm() {
+        var isValid = true;
+
+        var username = $("#TenNguoiDung").val();
+        var usernameRegex = /^[\p{L}\s]+$/u;
+
+        if (!usernameRegex.test(username)) {
+            $("#usernameError").text("Tên người dùng không được chứa ký tự số hoặc ký tự đặc biệt.");
+            $("#TenNguoiDung").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#TenNguoiDung").removeClass("is-invalid");
+        }
+
+        var phone = $("#SoDienThoai").val();
+        var phoneRegex = /^[0-9]{9,}$/;
+        if (!phoneRegex.test(phone)) {
+            $("#phoneError").text("Số điện thoại phải là số và dài tối thiểu 9 ký tự.");
+            $("#SoDienThoai").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#SoDienThoai").removeClass("is-invalid");
+        }
+
+        var email = $("#Email").val();
+        var emailRegex = /^[^\s]+[^\s]+\.[^\s]+$/; 
+        if (!emailRegex.test(email)) {
+            $("#emailError").text("Email không hợp lệ.");
+            $("#Email").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#Email").removeClass("is-invalid");
+        }
+    }
+</script>
