@@ -1,5 +1,6 @@
 ﻿using QuanLyNhaThuoc.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace QuanLyNhaThuoc
 {
@@ -9,12 +10,28 @@ namespace QuanLyNhaThuoc
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Thêm DbContext vào DI container với chuỗi kết nối từ appsettings.json
             builder.Services.AddDbContext<QL_NhaThuocContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("QL_NhaThuoc")));
 
             // Thêm dịch vụ MVC
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+
+            // Cấu hình dịch vụ session
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Admin/Admin/Login"; // Page to redirect if not logged in
+                    options.AccessDeniedPath = "/Admin/Account/AccessDenied"; // Page to show if access is denied
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                });
 
             var app = builder.Build();
 
@@ -30,6 +47,9 @@ namespace QuanLyNhaThuoc
 
             app.UseRouting();
 
+            // Kích hoạt session và authentication middleware
+            app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Cấu hình route cho khu vực (Area)
