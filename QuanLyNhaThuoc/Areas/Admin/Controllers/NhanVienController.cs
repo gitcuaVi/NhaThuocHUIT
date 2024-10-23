@@ -5,8 +5,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin, NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class NhanVienController : Controller

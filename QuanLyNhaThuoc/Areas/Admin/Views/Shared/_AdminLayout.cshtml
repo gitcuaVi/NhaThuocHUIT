@@ -1,10 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-@{
-    var userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole");
-    var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName"); // Lấy tên người dùng từ Session
-}
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +15,29 @@
     <!-- CSS tùy chỉnh -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
+    <!-- Các thư viện bổ sung từ CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/css/bootstrap-colorpicker.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/bootstrap-duallistbox.min.css" />
+    <style>
+        .custom-sidebar {
+            background-color: #28a745 !important; /* Màu xanh lá Bootstrap */
+        }
+
+        .action-buttons {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
     <!-- Các thư viện bổ sung từ CDN -->
     @RenderSection("Styles", required: false)
 </head>
@@ -41,7 +58,7 @@
                 <!-- User Info Dropdown -->
                 <li class="nav-item dropdown user-panel-dropdown">
                     <a class="nav-link" href="#" role="button">
-                        <i class="fas fa-user-circle"></i> @userName
+                        <i class="fas fa-user-circle"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right user-panel-dropdown-content">
                         <a href="/User/Profile" class="dropdown-item">
@@ -85,15 +102,14 @@
                         <img src="~/lib/Image/user3-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">@userName</a>
+                        <a href="#" class="d-block"></a>
                     </div>
                 </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        @if (userRole == "NhanVien")
-                        {
+                      
                             <!-- Các mục dành cho nhân viên -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
@@ -173,9 +189,7 @@
                                     <p>Sao lưu và phục hồi</p>
                                 </a>
                             </li>
-                        }
-                        @if (userRole == "Admin")
-                        {
+ 
                             <!-- Các mục dành cho Admin -->
                             <li class="nav-item">
                                 <a href="/Admin/PhanQuyen" class="nav-link">
@@ -204,7 +218,7 @@
                                     <p>Thống kê</p>
                                 </a>
                             </li>
-                        }
+                        
                     </ul>
                 </nav>
             </div>

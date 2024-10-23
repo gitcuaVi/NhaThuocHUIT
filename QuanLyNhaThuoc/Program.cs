@@ -1,6 +1,6 @@
-﻿using QuanLyNhaThuoc.Models;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using QuanLyNhaThuoc.Models;
 
 namespace QuanLyNhaThuoc
 {
@@ -10,14 +10,22 @@ namespace QuanLyNhaThuoc
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configure database context
             builder.Services.AddDbContext<QL_NhaThuocContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("QL_NhaThuoc")));
 
-            // Thêm dịch vụ MVC
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpContextAccessor();
+            // Add authentication services before building the app
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+     .AddCookie(options =>
+     {
+         options.LoginPath = "/Account/Login";
+         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+         options.SlidingExpiration = true;
+         options.AccessDeniedPath = "/Account/AccessDenied";
+     });
 
-            // Cấu hình dịch vụ session
+
+            // Configure session services
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -25,34 +33,34 @@ namespace QuanLyNhaThuoc
                 options.Cookie.IsEssential = true;
             });
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Admin/Admin/Login"; // Page to redirect if not logged in
-                    options.AccessDeniedPath = "/Admin/Account/AccessDenied"; // Page to show if access is denied
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                });
+            // Add other necessary services
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
 
+            // Build the app
             var app = builder.Build();
 
-            // Cấu hình HTTP request pipeline.
+            // Error handling and security features
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
+            // Middleware configuration
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            // Kích hoạt session và authentication middleware
+            // Enable session middleware
             app.UseSession();
+
+            // Authentication and authorization middleware
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Cấu hình route cho khu vực (Area)
+            // Endpoint routing
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

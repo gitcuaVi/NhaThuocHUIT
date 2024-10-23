@@ -10,6 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
         body {
@@ -131,16 +132,22 @@
     </div>
 
     <div class="action-buttons mt-3 d-flex justify-content-center">
+       
         <a href="/Admin/NhanVien/Create" class="btn btn-success mx-3">
             <i class="bi bi-person-plus"></i> Thêm nhân viên
         </a>
+
+        <!-- Sửa button -->
         <button type="button" class="btn btn-warning mx-3 btn-lg" id="edit-user">
-            <i class="bi bi-pencil"></i> Sửa
+            <i class="bi bi-pencil-square"></i> Sửa
         </button>
+
+        <!-- Xóa button -->
         <button type="button" class="btn btn-danger mx-3 btn-lg" id="delete-user">
-            <i class="bi bi-trash"></i> Xóa
+            <i class="bi bi-trash-fill"></i> Xóa
         </button>
     </div>
+
 
     <!-- Pagination -->
     <div class="pagination mt-3">

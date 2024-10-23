@@ -2,9 +2,11 @@
 using QuanLyNhaThuoc.Models;
 using Microsoft.Data.SqlClient; 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin, NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class NguoiDungController : Controller
