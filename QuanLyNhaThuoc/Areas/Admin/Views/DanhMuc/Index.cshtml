@@ -1,39 +1,199 @@
 ﻿@model IEnumerable<QuanLyNhaThuoc.Models.DanhMuc>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QL_NhaThuoc</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Danh Mục</th>
-            <th>Tên Danh Mục</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.MaDanhMuc)</td>
-                <td>@Html.DisplayFor(modelItem => item.TenDanhMuc)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaDanhMuc">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.MaDanhMuc">Details</a> |
-
-                    <!-- Form to delete the item -->
-                    <form asp-action="Delete" asp-route-id="@item.MaDanhMuc" method="post" style="display:inline">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                    </form>
-                </td>
-            </tr>
+    <style>
+        body {
+            background-color: #f8f9fa;
         }
-    </tbody>
-</table>
+
+        .btn-primary, .btn-success, .btn-warning, .btn-danger {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-primary:hover, .btn-success:hover {
+                background-color: #218838;
+            }
+
+            .btn-warning:hover {
+                background-color: goldenrod;
+            }
+
+            .btn-danger:hover {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+
+        .pagination .active > .page-link {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .custom-search-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .custom-search-icon i {
+                position: absolute;
+                right: 15px;
+            }
+
+        #edit-category, #delete-category {
+            font-size: 1.1rem;
+            padding: 10px 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="mb-4">Quản lý danh mục</h1>
+        <form method="get" class="row g-3 align-items-center mb-3">
+            @Html.AntiForgeryToken()
+            <div class="col-md-3">
+                <div class="custom-search-icon">
+                    <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm danh mục..." value="@ViewBag.CurrentFilter" />
+                    <i class="bi bi-search"></i>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> <!-- Bootstrap search icon -->
+                </button>
+            </div>
+        </form>
+
+        <div class="category-list-container" style="overflow-y:auto; max-height: 600px;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all"></th>
+                        <th>Mã Danh Mục</th>
+                        <th>Tên Danh Mục</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td><input type="checkbox" class="category-select" value="@category.MaDanhMuc"></td>
+                            <td>@category.MaDanhMuc</td>
+                            <td>@category.TenDanhMuc</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="action-buttons mt-3 d-flex justify-content-center">
+            <a href="/Admin/DanhMuc/Create" class="btn btn-success mx-3">
+                <i class="bi bi-plus-circle"></i> Thêm danh mục
+            </a>
+            <button type="button" class="btn btn-warning mx-3 btn-lg" id="edit-category">
+                <i class="bi bi-pencil"></i> Sửa
+            </button>
+            <button type="button" class="btn btn-danger mx-3 btn-lg" id="delete-category">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </div>
+
+        <div class="pagination mt-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&searchString=@ViewBag.CurrentFilter">Trước</a>
+                        </li>
+                    }
+                    @for (var i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i&searchString=@ViewBag.CurrentFilter">@i</a>
+                        </li>
+                    }
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&searchString=@ViewBag.CurrentFilter">Sau</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Select all categories
+        document.getElementById('select-all').addEventListener('click', function () {
+            var checkboxes = document.querySelectorAll('.category-select');
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = event.target.checked;
+            });
+        });
+
+        // Edit category
+        document.getElementById('edit-category').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.category-select:checked');
+            if (selected.length == 1) {
+                window.location.href = '/Admin/DanhMuc/Edit/' + selected[0].value;
+            } else {
+                alert('Chỉ được chọn 1 danh mục để sửa.');
+            }
+        });
+
+        // Delete category
+        document.getElementById('delete-category').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.category-select:checked');
+            let ids = Array.from(selected).map(el => el.value);
+
+            if (ids.length === 0) {
+                alert('Vui lòng chọn ít nhất một danh mục để xóa.');
+                return;
+            }
+
+            if (confirm('Bạn có chắc muốn xóa danh mục này không?')) {
+                $.ajax({
+                    url: '/Admin/DanhMuc/Delete',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                        ids: ids
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Danh mục đã được xóa thành công.');
+
+                            // Xóa các hàng đã chọn khỏi bảng
+                            selected.forEach(function (checkbox) {
+                                checkbox.closest('tr').remove();
+                            });
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Đã xảy ra lỗi khi xóa danh mục.');
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

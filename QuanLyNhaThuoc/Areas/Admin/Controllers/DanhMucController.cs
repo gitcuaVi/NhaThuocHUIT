@@ -94,22 +94,32 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             return View(danhMuc);
         }
 
-        [HttpPost("delete/{id}")]
+        [HttpPost("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(List<int> ids)
         {
             try
             {
-                _context.Database.ExecuteSqlRaw("EXEC DeleteDanhMuc @p0", id);
-                _context.SaveChanges();
+                if (ids == null || ids.Count == 0)
+                {
+                    return Json(new { success = false, message = "Không có loại sản phẩm nào được chọn để xóa." });
+                }
+
+                // Tạo danh sách ID dưới dạng chuỗi để sử dụng trong câu truy vấn
+                var idList = string.Join(",", ids);
+
+                // Gọi stored procedure xóa nhiều sản phẩm cùng lúc
+                _context.Database.ExecuteSqlRaw($"EXEC sp_XoaLoaiSanPham @Ids = '{idList}'");
+
+                return Json(new { success = true, message = "Các loại sản phẩm đã được xóa thành công." });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
             }
-
-            return RedirectToAction(nameof(Index));
         }
+
+
 
 
     }

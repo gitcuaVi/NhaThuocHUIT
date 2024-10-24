@@ -107,27 +107,33 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("Delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [Route("/Admin/LoaiSanPham/Delete")]
+        public IActionResult Delete(int[] MaLoaiSanPham)
         {
             try
             {
-                var parameters = new[]
+                foreach (var id in MaLoaiSanPham)
                 {
-            new SqlParameter("@MaLoaiSanPham", id)
-        };
+                    var parameters = new[]
+                    {
+                new SqlParameter("@MaLoaiSanPham", id)
+            };
 
-                _context.Database.ExecuteSqlRaw("EXEC sp_XoaLoaiSanPham @MaLoaiSanPham", parameters);
+                    // Call the stored procedure to delete the product type
+                    _context.Database.ExecuteSqlRaw("EXEC sp_XoaLoaiSanPham @MaLoaiSanPham", parameters);
+                }
 
-                // Trả về JSON thông báo thành công
-                return Json(new { success = true, message = "Xóa thành công!" });
+                return Json(new { success = true, message = "Loại sản phẩm đã được xóa thành công." });
             }
             catch (Exception ex)
             {
-                // Trả về JSON thông báo lỗi
-                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
         }
+
+
+
 
     }
 }
