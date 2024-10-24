@@ -1,0 +1,54 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.Models.Thuoc>
+@{
+    ViewData["Title"] = "Danh sách thuốc";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Danh sách thuốc</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-success">Thêm thuốc mới</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên Thuốc</th>
+            <th>Hạn Sử Dụng</th>
+            <th>Đơn Giá</th>
+            <th>Số Lượng Tồn</th>
+            <th>Hình Ảnh</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TenThuoc</td>
+                <td>@item.HanSuDung?.ToString("dd/MM/yyyy")</td>
+                <td>@item.DonGia.ToString("N0")</td> <!-- Định dạng số tiền -->
+                <td>@item.SoLuongTon</td>
+                <td>
+                    <!-- Hiển thị hình ảnh đầu tiên -->
+                    @if (item.HinhAnhs.Any())
+                    {
+                        var firstImage = item.HinhAnhs.FirstOrDefault();
+                        <img src="@Url.Content(firstImage.UrlAnh)" alt="Hình ảnh thuốc" style="width: 100px; height: 100px;" />
+                    }
+                    else
+                    {
+                        <span>Không có hình ảnh</span>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.MaThuoc })" class="btn btn-primary">Chỉnh sửa</a>
+                    <form asp-action="Delete" asp-route-id="@item.MaThuoc" method="post" style="display:inline"
+                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa thuốc này không?');">
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

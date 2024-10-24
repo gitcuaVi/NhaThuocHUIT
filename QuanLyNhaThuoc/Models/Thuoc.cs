@@ -27,7 +27,7 @@ namespace QuanLyNhaThuoc.Models
         public virtual ICollection<ChiTietPn> ChiTietPns { get; set; }
         public virtual ICollection<ChiTietPx> ChiTietPxes { get; set; }
         public virtual ICollection<GioHang> GioHangs { get; set; }
-        public virtual ICollection<HinhAnh> HinhAnhs { get; set; }
+        public virtual ICollection<HinhAnh> HinhAnhs { get; set; }  
         public virtual ICollection<TonKho> TonKhos { get; set; }
     }
 }

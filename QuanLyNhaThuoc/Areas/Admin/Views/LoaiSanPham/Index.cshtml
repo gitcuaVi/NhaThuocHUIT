@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h1>Index</h1>
@@ -13,37 +14,31 @@
     <thead>
         <tr>
             <th>
-                Mã Loại
+                @Html.DisplayNameFor(model => model.TenLoai)
             </th>
             <th>
-                Tên Loại
-            </th>
-            <th>
-                Tên Danh Mục
+                @Html.DisplayNameFor(model => model.MaDanhMucNavigation)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaLoaiSanPham)
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenLoai)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaDanhMucNavigation.TenDanhMuc) 
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaLoaiSanPham">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.MaLoaiSanPham">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MaLoaiSanPham">Delete</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenLoai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaDanhMucNavigation.MaDanhMuc)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MaLoaiSanPham">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MaLoaiSanPham">Details</a> |
+                    <form asp-action="Delete" asp-route-id="@item.MaLoaiSanPham" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                    </form>
+            </td>
+        </tr>
+}
     </tbody>
 </table>
