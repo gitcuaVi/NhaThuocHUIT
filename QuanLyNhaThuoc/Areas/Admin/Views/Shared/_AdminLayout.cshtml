@@ -57,21 +57,24 @@
             <ul class="navbar-nav ml-auto">
                 <!-- User Info Dropdown -->
                 <li class="nav-item dropdown user-panel-dropdown">
-                    <a class="nav-link" href="#" role="button">
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right user-panel-dropdown-content">
-                        <a href="/User/Profile" class="dropdown-item">
+                        <a href="/Admin/User" class="dropdown-item">
                             <i class="fas fa-user"></i> Thông tin cá nhân
                         </a>
-                        <a href="/User/ChangePassword" class="dropdown-item">
-                            <i class="fas fa-key"></i> Đổi mật khẩu
-                        </a>
-                        <a href="/User/Logout" class="dropdown-item">
-                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                        </a>
+
+                        <form id="logoutForm" method="post" action="/Account/Logout">
+                            @Html.AntiForgeryToken() <!-- Token chống CSRF -->
+                            <button type="submit" class="dropdown-item" onclick="return confirmLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </button>
+                        </form>
+
                     </div>
                 </li>
+
                 <!-- Fullscreen và Control Sidebar buttons -->
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -250,3 +253,9 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+<script>
+    function confirmLogout() {
+        // Hiển thị hộp thoại xác nhận
+        return confirm("Bạn có chắc chắn muốn đăng xuất không?");
+    }
+</script>

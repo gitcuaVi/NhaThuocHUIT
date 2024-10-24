@@ -40,7 +40,8 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<Thuoc> Thuocs { get; set; } = null!;
         public virtual DbSet<TonKho> TonKhos { get; set; } = null!;
         public virtual DbSet<VaiTro> VaiTros { get; set; } = null!;
-
+        public DbSet<ThongTinCaNhanView> ThongTinCaNhanView { get; set; }
+      
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -63,7 +64,11 @@ namespace QuanLyNhaThuoc.Models
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
             });
-
+            modelBuilder.Entity<ThongTinCaNhanView>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView("v_ThongTinCaNhan");
+            });
             modelBuilder.Entity<ChamCong>(entity =>
             {
                 entity.HasKey(e => new { e.MaChamCong, e.MaNhanVien, e.NgayChamCong })

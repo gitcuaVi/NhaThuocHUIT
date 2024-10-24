@@ -51,9 +51,10 @@ namespace QuanLyNhaThuoc.Controllers
                                 var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, username),
-                            new Claim("UserId", maNguoiDung.ToString())
+                            new Claim("UserId", maNguoiDung.ToString()) // Lưu mã người dùng trong claim
                         };
 
+                                // Lưu quyền người dùng
                                 if (maVaiTro == 1) // Admin
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
@@ -67,13 +68,10 @@ namespace QuanLyNhaThuoc.Controllers
 
                                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                                // If returnUrl is not null or empty, redirect to that page
                                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                                 {
-                                    return Redirect(returnUrl); // Redirect to original page before login
+                                    return Redirect(returnUrl);
                                 }
-
-                                // Otherwise, redirect based on the user's role
                                 if (maVaiTro == 1) // Admin
                                 {
                                     return RedirectToAction("Index", "Home", new { area = "Admin" });
@@ -104,13 +102,12 @@ namespace QuanLyNhaThuoc.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // Clear session
-            HttpContext.Session.Clear();
-
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
+
     }
 }
