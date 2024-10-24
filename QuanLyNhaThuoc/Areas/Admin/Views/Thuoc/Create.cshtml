@@ -1,0 +1,30 @@
+﻿@model QuanLyNhaThuoc.Models.Thuoc
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Tên Thuốc</label>
+        <input asp-for="TenThuoc" />
+    </div>
+    <div>
+        <label>Hạn Sử Dụng</label>
+        <input asp-for="HanSuDung" type="date" />
+    </div>
+    <div>
+        <label>Đơn Giá</label>
+        <input asp-for="DonGia" />
+    </div>
+    <div>
+        <label>Số Lượng Tồn</label>
+        <input asp-for="SoLuongTon" />
+    </div>
+    <div>
+        <label>Loại Sản Phẩm</label>
+        <select asp-for="MaLoaiSanPham" asp-items="ViewBag.MaLoaiSanPham"></select>
+    </div>
+    <div>
+        <label>Hình Ảnh</label>
+        <input type="file" name="ImageFiles" multiple />
+    </div>
+
+    <button type="submit">Thêm</button>
+</form>

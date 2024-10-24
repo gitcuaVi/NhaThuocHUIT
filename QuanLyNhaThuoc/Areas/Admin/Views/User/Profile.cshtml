@@ -4,7 +4,7 @@
 @{
 }
 @model ThongTinCaNhanView
-
+@using System.Globalization
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -38,34 +38,18 @@
                                 <p><strong>Địa Chỉ:</strong> @Model.DiaChi</p>
                                 <p><strong>Chức Vụ:</strong> @Model.ChucVu</p>
                                 <p><strong>Ngày Tuyển Dụng:</strong> @Model.NgayTuyenDung?.ToString("dd/MM/yyyy")</p>
-                                <p><strong>Lương Cơ Bản:</strong> @Model.LuongCoBan1Ca?.ToString("C0")</p>
-                                <p><strong>Lương Tăng Ca 1 Giờ:</strong> @Model.LuongTangCa1Gio?.ToString("C0")</p>
+                                <p><strong>Lương Cơ Bản:</strong> @Model.LuongCoBan1Ca?.ToString("N0", new CultureInfo("vi-VN"))</p>
+                                <p><strong>Lương Tăng Ca 1 Giờ:</strong> @Model.LuongTangCa1Gio?.ToString("N0", new CultureInfo("vi-VN"))</p>
                             </div>
                         }
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="/Admin/User/Edit" class="btn btn-primary">Chỉnh sửa thông tin</a>
+                    <a href="/Admin/User/Edit" class="btn btn-primary">Đổi Mật Khẩu</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    .card {
-        border-radius: 10px;
-    }
-    .card-header {
-        border-bottom: none;
-    }
-    .badge-success {
-        background-color: #28a745;
-    }
-    .badge-danger {
-        background-color: #dc3545;
-    }
-</style>
+<link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />

@@ -47,21 +47,33 @@ namespace QuanLyNhaThuoc.Controllers
 
                             if (maNguoiDung != -1)
                             {
-                                // Create claims and sign in the user
+                                // Tạo claims và lưu vào phiên đăng nhập
                                 var claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, username),
-                            new Claim("UserId", maNguoiDung.ToString()) // Lưu mã người dùng trong claim
-                        };
+                                {
+                                    new Claim(ClaimTypes.Name, username),
+                                    new Claim("UserId", maNguoiDung.ToString()), // Lưu mã người dùng trong claim
+                                };
+
+                                // Chỉ lấy MaNhanVien nếu không phải là Admin
+                                if (maVaiTro == 2) // Nhân viên
+                                {
+                                    int maNhanVien = GetMaNhanVien(maNguoiDung);
+                                    if (maNhanVien == -1)
+                                    {
+                                        ViewBag.ErrorMessage = "Không tìm thấy mã nhân viên tương ứng.";
+                                        return View();
+                                    }
+                                    claims.Add(new Claim("MaNhanVien", maNhanVien.ToString())); // Lưu mã nhân viên trong claim
+                                }
 
                                 // Lưu quyền người dùng
                                 if (maVaiTro == 1) // Admin
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
                                 }
-                                else if (maVaiTro == 2) // Employee
+                                else if (maVaiTro == 2) // Nhân viên
                                 {
-                                    claims.Add(new Claim(ClaimTypes.Role, "Employee"));
+                                    claims.Add(new Claim(ClaimTypes.Role, "NhanVien"));
                                 }
 
                                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -76,30 +88,29 @@ namespace QuanLyNhaThuoc.Controllers
                                 {
                                     return RedirectToAction("Index", "Home", new { area = "Admin" });
                                 }
-                                else if (maVaiTro == 2) // Employee
+                                else if (maVaiTro == 2) // Nhân viên
                                 {
                                     return RedirectToAction("Index", "Home", new { area = "Admin" });
                                 }
                             }
                             else
                             {
-                                ViewBag.ErrorMessage = "Invalid credentials or inactive account.";
+                                ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ hoặc tài khoản không hoạt động.";
                                 return View();
                             }
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Login failed. Please try again.";
+                            ViewBag.ErrorMessage = "Đăng nhập thất bại. Vui lòng thử lại.";
                             return View();
                         }
                     }
                 }
             }
 
-            ViewBag.ErrorMessage = "Unexpected error occurred. Please try again.";
+            ViewBag.ErrorMessage = "Lỗi không xác định. Vui lòng thử lại.";
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,5 +120,27 @@ namespace QuanLyNhaThuoc.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        // Hàm để lấy MaNhanVien dựa vào MaNguoiDung
+        private int GetMaNhanVien(int maNguoiDung)
+        {
+            using (var conn = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand("SELECT MaNhanVien FROM NhanVien WHERE MaNguoiDung = @MaNguoiDung", conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNguoiDung", maNguoiDung);
+
+                    var result = cmd.ExecuteScalar();
+
+                    if (result != null && int.TryParse(result.ToString(), out int maNhanVien))
+                    {
+                        return maNhanVien;
+                    }
+                }
+            }
+            return -1; // Trả về -1 nếu không tìm thấy
+        }
+       
+    
     }
 }
