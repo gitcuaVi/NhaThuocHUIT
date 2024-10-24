@@ -40,13 +40,17 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<Thuoc> Thuocs { get; set; } = null!;
         public virtual DbSet<TonKho> TonKhos { get; set; } = null!;
         public virtual DbSet<VaiTro> VaiTros { get; set; } = null!;
-
+        public DbSet<DonHangKhachHangViewModels> DonHangKhachHangViewModels { get; set; }
+        public DbSet<UpdateDonHang> UpdateDonHangs { get; set; }
+        public DbSet<DonHangDetailsViewModel> DonHangDetailsViewModels { get; set; }
+        public DbSet<ChiTietDonHangViewModel> ChiTietDonHangViewModels { get; set; }
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=LAPTOP-OGOI530P;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Data Source=THANHSANG;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
         }
 
@@ -63,7 +67,8 @@ namespace QuanLyNhaThuoc.Models
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
             });
-
+            modelBuilder.Entity<ChiTietDonHangViewModel>().HasNoKey();
+            modelBuilder.Entity<DonHangDetailsViewModel>().HasNoKey();
             modelBuilder.Entity<ChamCong>(entity =>
             {
                 entity.HasKey(e => new { e.MaChamCong, e.MaNhanVien, e.NgayChamCong })
@@ -92,6 +97,11 @@ namespace QuanLyNhaThuoc.Models
                     .HasConstraintName("FK_ChamCong_NhanVien");
             });
 
+
+          
+            modelBuilder.Entity<DonHangKhachHangViewModels>().HasNoKey();
+            modelBuilder.Entity<UpdateDonHang>().HasNoKey();
+
             modelBuilder.Entity<ChiTietDonHang>(entity =>
             {
                 entity.HasKey(e => e.MaChiTiet)
@@ -113,7 +123,7 @@ namespace QuanLyNhaThuoc.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ChiTietDonHang_MaThuoc");
             });
-
+       
             modelBuilder.Entity<ChiTietPn>(entity =>
             {
                 entity.HasKey(e => e.MaChiTietPn)
@@ -212,7 +222,7 @@ namespace QuanLyNhaThuoc.Models
 
                 entity.Property(e => e.TrangThai).HasMaxLength(50);
 
-                entity.HasOne(d => d.MaKhachHangNavigation)
+                entity.HasOne(d => d.KhachHang)
                     .WithMany(p => p.DonHangs)
                     .HasForeignKey(d => d.MaKhachHang)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -224,7 +234,16 @@ namespace QuanLyNhaThuoc.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DonHang_MaNhanVien");
             });
-
+            /*modelBuilder.Entity<DonHang>()
+                .HasMany(d => d.ChiTietDonHangs)
+                .WithOne(c => c.MaDonHangNavigation) // Sử dụng MaDonHangNavigation thay vì DonHang
+                .HasForeignKey(c => c.MaDonHang);*/
+          /*  modelBuilder.Entity<DonHang>()
+        .HasOne(d => d.KhachHang)
+        .WithMany()
+        .HasForeignKey(d => d.MaKhachHang);*/
+            base.OnModelCreating(modelBuilder);
+           
             modelBuilder.Entity<Faq>(entity =>
             {
                 entity.HasKey(e => e.MaCauHoi)

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using QuanLyNhaThuoc.Models;
 
 namespace QuanLyNhaThuoc.Models
 {
@@ -21,10 +24,14 @@ namespace QuanLyNhaThuoc.Models
         public string TrangThai { get; set; } = null!;
         public int MaNhanVien { get; set; }
         public int MaKhachHang { get; set; }
+        //public string TenKhachHang { get; set; }
 
-        public virtual KhachHang MaKhachHangNavigation { get; set; } = null!;
+        //public string SoDienThoai { get; set; }
+
+        public virtual KhachHang KhachHang { get; set; }
+        //public virtual KhachHang MaKhachHangNavigation { get; set; } = null!;
         public virtual NhanVien MaNhanVienNavigation { get; set; } = null!;
-        public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
+        public  ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
         public virtual ICollection<ThanhToan> ThanhToans { get; set; }
     }
 }
