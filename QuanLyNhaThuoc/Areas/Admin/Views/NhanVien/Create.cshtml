@@ -1,0 +1,73 @@
+﻿@model NhanVien
+
+@{
+    ViewData["Title"] = "Thêm Nhân Viên";
+}
+<head>
+    <!-- Các thẻ head khác -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha384-8YklhE9i4lGqlTLH+JnCXVqL4y1uF+qg2k2H+mW5uGBZ3rH41WFEj0t8J9b/cAnD" crossorigin="anonymous">
+    <link rel="stylesheet" href="~\wwwroot\css\site.css" /> <!-- Kết nối với CSS riêng -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLR4pF5Ag5N15S5Z2GMJZo9z5sqXb5RGA9Rv/zDMP6" crossorigin="anonymous"></script>
+</head>
+<div class="container my-4">
+    <h1 class="mb-4">Thêm Nhân Viên</h1>
+    <form asp-action="Create" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-6">
+            <label for="Ho" class="form-label">Họ</label>
+            <input type="text" class="form-control" id="Ho" name="Ho" required>
+        </div>
+        <div class="col-md-6">
+            <label for="Ten" class="form-label">Tên</label>
+            <input type="text" class="form-control" id="Ten" name="Ten" required>
+        </div>
+        <div class="col-md-6">
+            <label for="NgaySinh" class="form-label">Ngày Sinh</label>
+            <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" required>
+        </div>
+        <div class="col-md-6">
+            <label for="GioiTinh" class="form-label">Giới Tính</label>
+            <select class="form-select" id="GioiTinh" name="GioiTinh">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+            </select>
+        </div>
+        <div class="col-md-12">
+            <label for="DiaChi" class="form-label">Địa Chỉ</label>
+            <input type="text" class="form-control" id="DiaChi" name="DiaChi" required>
+        </div>
+        <div class="col-md-6">
+            <label for="ChucVu" class="form-label">Chức Vụ</label>
+            <select class="form-select" id="ChucVu" name="ChucVu">
+                <option value="Nhân viên Bán Hàng">Nhân viên Bán Hàng</option>
+                <option value="Nhân viên Kho">Nhân viên Kho</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="NgayTuyenDung" class="form-label">Ngày Tuyển Dụng</label>
+            <input type="date" class="form-control" id="NgayTuyenDung" name="NgayTuyenDung">
+        </div>
+        <div class="col-md-6">
+            <label for="MaNguoiDung" class="form-label">Mã Người Dùng</label>
+            <input type="number" class="form-control" id="MaNguoiDung" name="MaNguoiDung">
+        </div>
+        <div class="col-md-6">
+            <label for="MaCaLamViec" class="form-label">Mã Ca Làm Việc</label>
+            <input type="number" class="form-control" id="MaCaLamViec" name="MaCaLamViec">
+        </div>
+        <div class="col-md-6">
+            <label for="LuongCoBan1Ca" class="form-label">Lương Cơ Bản 1 Ca</label>
+            <input type="number" class="form-control" id="LuongCoBan1Ca" name="LuongCoBan1Ca">
+        </div>
+        <div class="col-md-6">
+            <label for="LuongTangCa1Gio" class="form-label">Lương Tăng Ca 1 Giờ</label>
+            <input type="number" class="form-control" id="LuongTangCa1Gio" name="LuongTangCa1Gio">
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-success">Thêm Nhân Viên</button>
+            <a href="/admin/NhanVien" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </form>
+</div>

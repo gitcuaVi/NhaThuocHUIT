@@ -1,87 +1,248 @@
 ﻿
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-}
-@model List<NguoiDung>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QL_NhaThuoc</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
-<h1> Quản lý người dùng</h1>
-<form method="get" class="form-inline mb-3">
-    <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm người dùng" value="@ViewBag.CurrentFilter" />
-    <select name="roleFilter" class="form-control ml-2">
-        <option value="">Lọc theo vai trò</option>
-    </select>
-    <select name="statusFilter" class="form-control ml-2">
-        <option value="">Lọc theo trạng thái</option>
-    </select>
-    <button type="submit" class="btn btn-primary ml-2">Lọc</button>
-</form>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-<div class="user-list-container" style="overflow-y:auto; max-height: 600px;">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th><input type="checkbox" id="select-all"></th>
-                <th>Mã Người Dùng</th>
-                <th>Tên Người Dùng</th>
-                <th>Email</th>
-                <th>Số Điện Thoại</th>
-                <th>Vai trò</th>
-                <th>Trạng Thái</th>
-                <th>Ngày Tạo</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td><input type="checkbox" class="user-select" value="@user.MaNguoiDung"></td>
-                    <td>@user.MaNguoiDung</td>
-                    <td>@user.TenNguoiDung</td>
-                    <td>@user.Email</td>
-                    <td>@user.SoDienThoai</td>
-                    <td>@user.MaVaiTro</td>
-                    <td>@user.TrangThai</td>
-                    <td>@user.NgayTao.ToString("dd/MM/yyyy")</td>
-                </tr>
+        .btn-primary, .btn-success, .btn-warning, .btn-danger {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-primary:hover, .btn-success:hover {
+                background-color: #218838;
             }
-        </tbody>
-    </table>
-</div>
 
-<div class="action-buttons">
-    <a asp-action="Create" asp-controller="NguoiDung" asp-area="Admin" class="btn btn-success">Thêm người dùng</a>
+            .btn-warning:hover {
+                background-color: goldenrod;
+            }
 
-    <button type="button" class="btn btn-warning" id="edit-user">Sửa</button>
-    <button type="button" class="btn btn-danger" id="delete-user">Xóa</button>
-</div>
+            .btn-danger:hover {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
 
-<script>
-    // Select/Deselect all users
-    document.getElementById('select-all').addEventListener('click', function () {
-        var checkboxes = document.querySelectorAll('.user-select');
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = event.target.checked;
+        .pagination .active > .page-link {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .custom-search-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .custom-search-icon i {
+                position: absolute;
+                right: 15px;
+            }
+
+        #edit-user, #delete-user {
+            font-size: 1.1rem;
+            padding: 10px 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="mb-4">Quản lý người dùng</h1>
+        <form method="get" class="row g-3 align-items-center mb-3">
+            @Html.AntiForgeryToken()
+            <div class="col-md-3">
+                <div class="custom-search-icon">
+                    <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm người dùng..." value="@ViewBag.CurrentFilter" />
+                    <i class="bi bi-search"></i> <!-- Bootstrap icon -->
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="roleFilter" class="form-control">
+                    <option value="">Lọc theo vai trò</option>
+                    @foreach (var role in ViewBag.RoleList)
+                    {
+                        <option value="@role.MaVaiTro">@role.TenVaiTro</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="statusFilter" class="form-control">
+                    <option value="">Lọc theo trạng thái</option>
+                    <option value="Active">Hoạt động</option>
+                    <option value="Inactive">Tạm khóa</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> <!-- Bootstrap search icon -->
+                </button>
+            </div>
+        </form>
+
+        <div class="user-list-container" style="overflow-y:auto; max-height: 600px;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all"></th>
+                        <th>Mã Người Dùng</th>
+                        <th>Tên Người Dùng</th>
+                        <th>Email</th>
+                        <th>Số Điện Thoại</th>
+                        <th>Vai trò</th>
+                        <th>Trạng Thái</th>
+                        <th>Ngày Tạo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td><input type="checkbox" class="user-select" value="@user.MaNguoiDung"></td>
+                            <td>@user.MaNguoiDung</td>
+                            <td>@user.TenNguoiDung</td>
+                            <td>@user.Email</td>
+                            <td>@user.SoDienThoai</td>
+                            <td>@user.MaVaiTro</td>
+                            <td>@user.TrangThai</td>
+                            <td>@user.NgayTao.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="action-buttons mt-3 d-flex justify-content-center">
+            <a href="/Admin/NguoiDung/Create" class="btn btn-success mx-3">
+                <i class="bi bi-person-plus"></i> Thêm người dùng
+            </a>
+            <button type="button" class="btn btn-warning mx-3 btn-lg" id="edit-user">
+                <i class="bi bi-pencil"></i> Sửa
+            </button>
+            <button type="button" class="btn btn-danger mx-3 btn-lg" id="delete-user">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+            <button type="button" class="btn btn-primary mx-3 btn-lg" id="reset-password">
+                <i class="bi bi-key"></i> Reset mật khẩu
+            </button>
+        </div>
+
+        <div class="pagination mt-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&searchString=@ViewBag.CurrentFilter&roleFilter=@ViewBag.RoleFilter&statusFilter=@ViewBag.StatusFilter">Trước</a>
+                        </li>
+                    }
+                    @for (var i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i&searchString=@ViewBag.CurrentFilter&roleFilter=@ViewBag.RoleFilter&statusFilter=@ViewBag.StatusFilter">@i</a>
+                        </li>
+                    }
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&searchString=@ViewBag.CurrentFilter&roleFilter=@ViewBag.RoleFilter&statusFilter=@ViewBag.StatusFilter">Sau</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Chọn tất cả người dùng
+        document.getElementById('select-all').addEventListener('click', function () {
+            var checkboxes = document.querySelectorAll('.user-select');
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = event.target.checked;
+            });
         });
-    });
 
-    // Edit selected user
-    document.getElementById('edit-user').addEventListener('click', function () {
-        let selected = document.querySelector('input.user-select:checked');
-        if (selected) {
-            window.location.href = '/Admin/NguoiDung/Edit/' + selected.value;
-        }
-    });
-
-    // Delete selected users
-    document.getElementById('delete-user').addEventListener('click', function () {
-        let selectedUsers = [...document.querySelectorAll('.user-select:checked')].map(cb => cb.value);
-        if (selectedUsers.length > 0) {
-            if (confirm('Bạn có chắc chắn muốn xóa những người dùng này?')) {
-                // Call API for deletion (implement API call in your controller)
+        // Sự kiện chỉnh sửa người dùng
+        document.getElementById('edit-user').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.user-select:checked');
+            if (selected.length == 1) {
+                window.location.href = '/Admin/NguoiDung/Edit/' + selected[0].value;
+            } else {
+                alert('Chỉ được chọn 1 người dùng để sửa.');
             }
-        }
-    });
-</script>
+        });
+
+        // Sự kiện xóa người dùng
+        document.getElementById('delete-user').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.user-select:checked');
+            let ids = Array.from(selected).map(el => el.value);
+
+            if (ids.length === 0) {
+                alert('Vui lòng chọn ít nhất một người dùng để xóa.');
+                return;
+            }
+
+            // Hiển thị ID được chọn trước khi gửi yêu cầu xóa
+            console.log("IDs selected for deletion: ", ids);
+
+            $.ajax({
+                url: '/Admin/NguoiDung/Delete',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    ids: ids
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Người dùng đã được xóa thành công. ID đã xóa: ' + ids.join(', '));
+                        location.reload(); 
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
+        });
+        document.getElementById('reset-password').addEventListener('click', function () {
+            let selected = document.querySelectorAll('input.user-select:checked');
+            let ids = Array.from(selected).map(el => el.value);
+
+            if (ids.length === 0) {
+                alert('Vui lòng chọn ít nhất một người dùng để reset mật khẩu.');
+                return;
+            }
+
+            $.ajax({
+                url: '/Admin/NguoiDung/ResetPassword',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    ids: ids
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Mật khẩu đã được reset thành công.');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
+        });
 
 
+    </script>
+</body>
+</html>

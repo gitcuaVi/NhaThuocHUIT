@@ -1,0 +1,90 @@
+﻿@model QuanLyNhaThuoc.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin người dùng nhân viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auUqz38rWp3yZ44mwWJ8MRAf8r79G5K5t1NVG/" crossorigin="anonymous">
+    <link rel="stylesheet" href="~\wwwroot\css\site.css" /> <!-- Kết nối với CSS riêng -->
+</head>
+
+<div class="container mt-4">
+    <form asp-action="Edit" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="TenNguoiDung">Tên người dùng</label>
+            <input type="text" class="form-control" id="TenNguoiDung" name="TenNguoiDung" value="@Model.TenNguoiDung" />
+            <div class="invalid-feedback" id="usernameError"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" />
+            <div class="invalid-feedback" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="SoDienThoai">Số điện thoại</label>
+            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" value="@Model.SoDienThoai" />
+            <div class="invalid-feedback" id="phoneError"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="TrangThai">Trạng thái</label>
+            <select class="form-control form-select" id="TrangThai" name="TrangThai">
+                <option value="Active" selected="@(Model.TrangThai == "Active" ? "selected" : null)">Hoạt động</option>
+                <option value="Inactive" selected="@(Model.TrangThai == "Inactive" ? "selected" : null)">Tạm khóa</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
+        <a asp-action="Index" class="btn btn-secondary mt-3">Hủy</a>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        var isValid = true;
+
+        // Reset lỗi trước khi kiểm tra lại
+        $("#usernameError").text("");
+        $("#phoneError").text("");
+        $("#emailError").text("");
+
+        // Kiểm tra tên người dùng
+        var username = $("#TenNguoiDung").val();
+        var usernameRegex = /^[\p{L}\s]+$/u;
+        if (!usernameRegex.test(username)) {
+            $("#usernameError").text("Tên người dùng không được chứa ký tự số hoặc ký tự đặc biệt.");
+            $("#TenNguoiDung").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#TenNguoiDung").removeClass("is-invalid");
+        }
+
+        // Kiểm tra số điện thoại
+        var phone = $("#SoDienThoai").val();
+        var phoneRegex = /^[0-9]{9,}$/; // Chỉ chấp nhận số, tối thiểu 9 ký tự
+        if (!phoneRegex.test(phone)) {
+            $("#phoneError").text("Số điện thoại phải là số và dài tối thiểu 9 ký tự.");
+            $("#SoDienThoai").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#SoDienThoai").removeClass("is-invalid");
+        }
+
+        // Kiểm tra email
+        var email = $("#Email").val();
+        var emailRegex = /^[^\s]+[^\s]+\.[^\s]+$/; // Kiểm tra định dạng email cơ bản
+        if (!emailRegex.test(email)) {
+            $("#emailError").text("Email không hợp lệ.");
+            $("#Email").addClass("is-invalid");
+            isValid = false;
+        } else {
+            $("#Email").removeClass("is-invalid");
+        }
+
+        return isValid; // Nếu tất cả điều kiện đều đúng, form sẽ được submit
+    }
+</script>

@@ -1,5 +1,6 @@
-﻿using QuanLyNhaThuoc.Models;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using QuanLyNhaThuoc.Models;
 
 namespace QuanLyNhaThuoc
 {
@@ -9,30 +10,57 @@ namespace QuanLyNhaThuoc
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Thêm DbContext vào DI container với chuỗi kết nối từ appsettings.json
+            // Configure database context
             builder.Services.AddDbContext<QL_NhaThuocContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("QL_NhaThuoc")));
 
-            // Thêm dịch vụ MVC
-            builder.Services.AddControllersWithViews();
+            // Add authentication services before building the app
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+     .AddCookie(options =>
+     {
+         options.LoginPath = "/Account/Login";
+         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+         options.SlidingExpiration = true;
+         options.AccessDeniedPath = "/Account/AccessDenied";
+     });
 
+
+            // Configure session services
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            // Add other necessary services
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+
+            // Build the app
             var app = builder.Build();
 
-            // Cấu hình HTTP request pipeline.
+            // Error handling and security features
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
+            // Middleware configuration
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            // Enable session middleware
+            app.UseSession();
+
+            // Authentication and authorization middleware
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            // Cấu hình route cho khu vực (Area)
+            // Endpoint routing
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

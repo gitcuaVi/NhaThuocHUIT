@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-container">
+    <h2 class="text-center">Login</h2>
+    <form method="post" asp-action="Login">
+        <div class="form-group">
+            <label for="username">Phone or Email</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Phone or Email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </div>
+        <div class="text-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    </form>
+</div>
+
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        if (!username || !password) {
+            e.preventDefault();
+            alert("Please fill in both fields.");
+        }
+    });
+</script>

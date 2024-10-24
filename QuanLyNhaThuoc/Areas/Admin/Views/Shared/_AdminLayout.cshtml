@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -36,8 +37,9 @@
             display: flex;
             justify-content: flex-end;
         }
-
-        </style>
+    </style>
+    <!-- Các thư viện bổ sung từ CDN -->
+    @RenderSection("Styles", required: false)
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -51,114 +53,28 @@
                 </a>
             </li>
             <!-- Right navbar links -->
-            
+
             <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fas fa-search"></i>
+                <!-- User Info Dropdown -->
+                <li class="nav-item dropdown user-panel-dropdown">
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
                     </a>
-                    <div class="navbar-search-block">
-                        <form class="form-inline">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right user-panel-dropdown-content">
+                        <a href="/Admin/User" class="dropdown-item">
+                            <i class="fas fa-user"></i> Thông tin cá nhân
+                        </a>
+
+                        <form id="logoutForm" method="post" action="/Account/Logout">
+                            @Html.AntiForgeryToken() <!-- Token chống CSRF -->
+                            <button type="submit" class="dropdown-item" onclick="return confirmLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </button>
                         </form>
+
                     </div>
                 </li>
-                <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="~/lib/Image/user3-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="~/lib/Image/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="~/lib/Image/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
-                </li>
-                <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
-                </li>
+
                 <!-- Fullscreen và Control Sidebar buttons -->
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -176,57 +92,53 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4 custom-sidebar">
             <!-- Brand Logo -->
-            <a href="../../index3.html" class="brand-link">
-                <img src="~/lib/Image/logo.png" alt="Admin Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <a href="/" class="brand-link">
+                <img src="~/lib/image/logo.png" alt="Admin Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Nhà Thuốc An Khang</span>
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
+                <!-- Sidebar user panel -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <img src="~/lib/Image/user3-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Admin</a>
+                        <a href="#" class="d-block"></a>
                     </div>
                 </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Quản lý kho -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-warehouse"></i>
-                                <p>
-                                    Quản lý kho
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/Kho/QuanLyNhap" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Quản lý nhập</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Kho/QuanLyXuat" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Quản lý xuất</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Kho/QuanLyTon" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Quản lý tồn kho</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Quản lý sản phẩm -->
+
+                      
+                            <!-- Các mục dành cho nhân viên -->
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-warehouse"></i>
+                                    <p>
+                                        Quản lý kho
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Kho/QuanLyNhap" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Quản lý nhập</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Kho/QuanLyXuat" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Quản lý xuất</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                                                   <!-- Quản lý sản phẩm -->
                         <li class="nav-item">
                             <a href="/Admin/Thuoc" class="nav-link">
                                 <i class="nav-icon fas fa-boxes"></i>
@@ -246,81 +158,80 @@
                                 <p>Quản lý danh mục</p>
                             </a>
                         </li>
-                        <!-- Quản lý đơn hàng -->
-                        <li class="nav-item">
-                            <a href="/DonHang" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>Quản lý đơn hàng</p>
-                            </a>
-                        </li>
-                        <!-- Thanh toán hóa đơn -->
-                        <li class="nav-item">
-                            <a href="/HoaDon/ThanhToan" class="nav-link">
-                                <i class="nav-icon fas fa-receipt"></i>
-                                <p>Thanh toán hóa đơn</p>
-                            </a>
-                        </li>
-                        <!-- Chatbot hỗ trợ khách hàng -->
-                        <li class="nav-item">
-                            <a href="/ChatBot" class="nav-link">
-                                <i class="nav-icon fas fa-robot"></i>
-                                <p>Chatbot hỗ trợ khách hàng</p>
-                            </a>
-                        </li>
-                        <!-- Chấm công -->
-                        <li class="nav-item">
-                            <a href="/ChamCong" class="nav-link">
-                                <i class="nav-icon fas fa-user-clock"></i>
-                                <p>Chấm công</p>
-                            </a>
-                        </li>
-                        <!-- Sao lưu và phục hồi -->
-                        <li class="nav-item">
-                            <a href="/BackupRestore" class="nav-link">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>Sao lưu và phục hồi</p>
-                            </a>
-                        </li>
-                        <!-- Phân quyền -->
-                        <li class="nav-item">
-                            <a href="/PhanQuyen" class="nav-link">
-                                <i class="nav-icon fas fa-user-shield"></i>
-                                <p>Phân quyền</p>
-                            </a>
-                        </li>
-                        <!-- Quản lý tài khoản -->
-                        <li class="nav-item">
-                            <a href="/Admin/NguoiDung" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>Quản lý tài khoản</p>
-                            </a>
-                        </li>
-                        <!-- Quản lý nhân viên -->
-                        <li class="nav-item">
-                            <a href="/Admin/NhanVien" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Quản lý nhân viên</p>
-                            </a>
-                        </li>
-                        <!-- Thống kê -->
-                        <li class="nav-item">
-                            <a href="/ThongKe" class="nav-link">
-                                <i class="nav-icon fas fa-chart-bar"></i>
-                                <p>Thống kê</p>
-                            </a>
-                        </li>
+                            <!-- Quản lý đơn hàng -->
+                            <li class="nav-item">
+                                <a href="/DonHang" class="nav-link">
+                                    <i class="nav-icon fas fa-shopping-cart"></i>
+                                    <p>Quản lý đơn hàng</p>
+                                </a>
+                            </li>
+                            <!-- Thanh toán hóa đơn -->
+                            <li class="nav-item">
+                                <a href="/HoaDon/ThanhToan" class="nav-link">
+                                    <i class="nav-icon fas fa-receipt"></i>
+                                    <p>Thanh toán hóa đơn</p>
+                                </a>
+                            </li>
+                            <!-- Chatbot hỗ trợ khách hàng -->
+                            <li class="nav-item">
+                                <a href="/ChatBot" class="nav-link">
+                                    <i class="nav-icon fas fa-robot"></i>
+                                    <p>Chatbot hỗ trợ khách hàng</p>
+                                </a>
+                            </li>
+                            <!-- Chấm công -->
+                            <li class="nav-item">
+                                <a href="/ChamCong" class="nav-link">
+                                    <i class="nav-icon fas fa-user-clock"></i>
+                                    <p>Chấm công</p>
+                                </a>
+                            </li>
+                            <!-- Sao lưu và phục hồi -->
+                            <li class="nav-item">
+                                <a href="/BackupRestore" class="nav-link">
+                                    <i class="nav-icon fas fa-database"></i>
+                                    <p>Sao lưu và phục hồi</p>
+                                </a>
+                            </li>
+ 
+                            <!-- Các mục dành cho Admin -->
+                            <li class="nav-item">
+                                <a href="/Admin/PhanQuyen" class="nav-link">
+                                    <i class="nav-icon fas fa-user-shield"></i>
+                                    <p>Phân quyền</p>
+                                </a>
+                            </li>
+                            <!-- Quản lý tài khoản -->
+                            <li class="nav-item">
+                                <a href="/Admin/NguoiDung" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>Quản lý tài khoản</p>
+                                </a>
+                            </li>
+                            <!-- Quản lý nhân viên -->
+                            <li class="nav-item">
+                                <a href="/Admin/NhanVien" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Quản lý nhân viên</p>
+                                </a>
+                            </li>
+                            <!-- Thống kê -->
+                            <li class="nav-item">
+                                <a href="/ThongKe" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-bar"></i>
+                                    <p>Thống kê</p>
+                                </a>
+                            </li>
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
-            <!-- /.sidebar -->
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @RenderBody()
         </div>
-        <!-- /.content-wrapper -->
+
         <!-- Main Footer -->
         <footer class="main-footer">
             <strong>&copy; 2024 <a href="/">Nhà Thuốc</a>.</strong>
@@ -331,30 +242,20 @@
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
-        <!-- /.control-sidebar -->
     </div>
 
     <!-- Scripts -->
-    <!-- jQuery từ CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap 5 Bundle (bao gồm Popper) từ CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE JS từ CDN -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
-    <!-- Các script bổ sung từ CDN -->
+    <!-- Các script bổ sung -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/js/bootstrap-colorpicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/jquery.bootstrap-duallistbox.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bs-stepper/1.7.0/js/bs-stepper.min.js"></script>
-
-    <!-- Script tùy chỉnh -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/demo.js"></script>
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
+<script>
+    function confirmLogout() {
+        // Hiển thị hộp thoại xác nhận
+        return confirm("Bạn có chắc chắn muốn đăng xuất không?");
+    }
+</script>

@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ThongTinCaNhanView
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Thông Tin Cá Nhân</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h4 class="text-muted">Thông Tin Người Dùng</h4>
+                            <p><strong>Tên Người Dùng:</strong> @Model.TenNguoiDung</p>
+                            <p><strong>Email:</strong> @Model.Email</p>
+                            <p><strong>Số Điện Thoại:</strong> @Model.SoDienThoai</p>
+                            <p><strong>Trạng Thái:</strong>
+                                <span class="badge @(Model.TrangThaiNguoiDung == "Hoạt Động" ? "badge-success" : "badge-danger")">
+                                    @Model.TrangThaiNguoiDung
+                                </span>
+
+
+                            </p>
+                        </div>
+
+                        @if (Model.MaNhanVien != null)
+                        {
+                            <div class="col-md-6 mb-4">
+                                <h4 class="text-muted">Thông Tin Nhân Viên</h4>
+                                <p><strong>Họ Tên:</strong> @Model.Ho @Model.TenNhanVien</p>
+                                <p><strong>Ngày Sinh:</strong> @Model.NgaySinh?.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Giới Tính:</strong> @Model.GioiTinh</p>
+                                <p><strong>Địa Chỉ:</strong> @Model.DiaChi</p>
+                                <p><strong>Chức Vụ:</strong> @Model.ChucVu</p>
+                                <p><strong>Ngày Tuyển Dụng:</strong> @Model.NgayTuyenDung?.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Lương Cơ Bản:</strong> @Model.LuongCoBan1Ca?.ToString("C0")</p>
+                                <p><strong>Lương Tăng Ca 1 Giờ:</strong> @Model.LuongTangCa1Gio?.ToString("C0")</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/Admin/User/Edit" class="btn btn-primary">Chỉnh sửa thông tin</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border-radius: 10px;
+    }
+    .card-header {
+        border-bottom: none;
+    }
+    .badge-success {
+        background-color: #28a745;
+    }
+    .badge-danger {
+        background-color: #dc3545;
+    }
+</style>
