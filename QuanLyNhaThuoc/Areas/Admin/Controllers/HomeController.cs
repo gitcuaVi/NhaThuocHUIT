@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyNhaThuoc.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {

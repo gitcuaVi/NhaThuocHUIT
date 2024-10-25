@@ -1,0 +1,66 @@
+﻿@model DonHangDetailsViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết đơn hàng @Model.MaDonHang</h2>
+
+<div>
+    <h4>Thông tin đơn hàng</h4>
+    <table class="table">
+        <tr>
+            <th>Mã đơn hàng</th>
+            <td>@Model.MaDonHang</td>
+        </tr>
+        <tr>
+            <th>Ngày đặt hàng</th>
+            <td>@Model.NgayDatHang.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <th>Địa chỉ giao hàng</th>
+            <td>@Model.DiaChi</td>
+        </tr>
+        <tr>
+            <th>Trạng thái</th>
+            <td>@Model.TrangThai</td>
+        </tr>
+        <tr>
+            <th>Tổng tiền</th>
+            <td>@Model.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <h4>Chi tiết đơn hàng</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Mã thuốc</th>
+                <th>Tên thuốc</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ChiTietDonHangs)
+            {
+                <tr>
+                    <td>@item.MaThuoc</td>
+                    <td>@item.TenThuoc</td>
+                    <td>@item.SoLuong</td>
+                    <td>@item.Gia.ToString("N0", new CultureInfo("vi-VN"))VND</td>
+                    <td>@item.ThanhTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a href="@Url.Action("Index", "DonHang", new { area = "Admin" })" class="btn btn-primary">Quay lại danh sách đơn hàng</a>
+</div>

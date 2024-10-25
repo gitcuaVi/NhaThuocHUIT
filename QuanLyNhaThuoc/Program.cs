@@ -2,10 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
 
+//using QuanLyNhaThuoc.Areas.Admin.Data;
+//using QuanLyNhaThuoc.Services;
+
 namespace QuanLyNhaThuoc
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +27,13 @@ namespace QuanLyNhaThuoc
          options.SlidingExpiration = true;
          options.AccessDeniedPath = "/Account/AccessDenied";
      });
+            /*// Đăng ký ApplicationDbContext với Entity Framework Core
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("QL_NhaThuoc")));
+            // Đăng ký service quản lý đơn hàng
+            builder.Services.AddScoped<DonHangService>();*/
+            // Thêm dịch vụ MVC
+            builder.Services.AddControllersWithViews();
 
 
             // Configure session services
@@ -74,5 +85,8 @@ namespace QuanLyNhaThuoc
 
             app.Run();
         }
+    
+
     }
+
 }
