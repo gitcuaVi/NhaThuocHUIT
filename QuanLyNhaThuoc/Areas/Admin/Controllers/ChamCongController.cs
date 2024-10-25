@@ -29,8 +29,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
-            // Lọc theo tháng và năm
             var query = db.ChamCongs.AsQueryable().Where(cc => cc.MaNhanVien == maNhanVien);
             if (month.HasValue && year.HasValue)
             {
