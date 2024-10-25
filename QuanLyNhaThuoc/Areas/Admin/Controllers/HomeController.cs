@@ -14,6 +14,11 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             return View();
         }
+        [Route("Account/AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
     }
 }

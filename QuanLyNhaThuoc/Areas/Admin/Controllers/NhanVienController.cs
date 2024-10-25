@@ -85,7 +85,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             new SqlParameter("@LuongTangCa1Gio", (object)LuongTangCa1Gio ?? DBNull.Value),
         };
 
-                // Gọi stored procedure để thêm nhân viên
+                // Gọi stored procedure 
                 db.Database.ExecuteSqlRaw("EXEC sp_ThemNhanVienMoi @Ho, @Ten, @NgaySinh, @GioiTinh, @DiaChi, @ChucVu, @NgayTuyenDung, @MaNguoiDung, @MaCaLamViec, @LuongCoBan1Ca, @LuongTangCa1Gio", parameters);
 
                 return RedirectToAction("Index");
@@ -110,7 +110,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             return View(nhanVien);
         }
 
-        // Phương thức POST để cập nhật thông tin nhân viên
         [Route("Edit/{id}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -124,7 +123,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     return NotFound();
                 }
 
-                // Thiết lập các tham số cho stored procedure
                 var parameters = new[]
                 {
             new SqlParameter("@MaNhanVien", id),
@@ -142,7 +140,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             new SqlParameter("@LuongTangCa1Gio", (object)LuongTangCa1Gio ?? DBNull.Value)
         };
 
-                // Gọi stored procedure để cập nhật nhân viên
                 db.Database.ExecuteSqlRaw("EXEC sp_CapNhatThongTinNhanVien @MaNhanVien, @Ho, @Ten, @NgaySinh, @GioiTinh, @DiaChi, @ChucVu, @NgayTuyenDung, @TrangThai, @MaNguoiDung, @MaCaLamViec, @LuongCoBan1Ca, @LuongTangCa1Gio", parameters);
 
                 return RedirectToAction("Index");
@@ -160,10 +157,9 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
-                // Thiết lập tham số cho stored procedure
+                // Thiết lập tham số 
                 var parameters = new SqlParameter("@MaNhanVien", maNhanVien);
 
-                // Gọi stored procedure để xóa nhân viên
                 var result = new SqlParameter("@ReturnVal", System.Data.SqlDbType.Int)
                 {
                     Direction = System.Data.ParameterDirection.Output
@@ -171,7 +167,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 db.Database.ExecuteSqlRaw("EXEC @ReturnVal = sp_XoaNhanVien @MaNhanVien", parameters, result);
 
-                // Kiểm tra kết quả trả về
                 if ((int)result.Value == 2)
                 {
                     return Json(new { success = false, message = "Nhân viên không ở trạng thái 'Đã nghỉ', không thể xóa." });

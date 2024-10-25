@@ -181,7 +181,7 @@
                         </li>
                             <!-- Chấm công -->
                             <li class="nav-item">
-                                <a href="/ChamCong" class="nav-link">
+                                <a href="/Admin/ChamCong" class="nav-link">
                                     <i class="nav-icon fas fa-user-clock"></i>
                                     <p>Chấm công</p>
                                 </a>
@@ -251,6 +251,8 @@
     <!-- Các script bổ sung -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>
 <script>
