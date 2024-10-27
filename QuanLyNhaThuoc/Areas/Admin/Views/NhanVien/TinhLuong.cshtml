@@ -1,0 +1,37 @@
+﻿@model QuanLyNhaThuoc.Models.Luong
+@{
+    ViewData["Title"] = "Tính lương";
+}
+<h2>Tính Lương</h2>
+
+<form asp-action="TinhLuong" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@ViewBag.MaNhanVien" />
+
+    <div class="form-group">
+        <label>Khấu Trừ</label>
+        <input asp-for="KhauTru" type="number" step="0.01" min="0" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Lương Thực Nhận</label>
+        <input asp-for="LuongThucNhan" type="number" step="0.01" min="0" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Ngày Trả Lương</label>
+        <input asp-for="NgayTraLuong" type="date" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Lương Thưởng (tùy chọn)</label>
+        <input asp-for="LuongThuong" type="number" step="0.01" min="0" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Ghi Chú</label>
+        <textarea asp-for="GhiChu" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Tính Lương</button>
+</form>

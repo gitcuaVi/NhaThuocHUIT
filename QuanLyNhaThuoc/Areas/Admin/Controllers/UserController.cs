@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models; 
 using System.Linq;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Authorize(Roles = "NhanVien")]
+   [Area("Admin")]
     [Route("Admin/[controller]")]
     public class UserController : Controller
     {

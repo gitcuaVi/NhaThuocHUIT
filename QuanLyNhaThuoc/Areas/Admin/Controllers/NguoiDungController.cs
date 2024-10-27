@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin, NhanVien")]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class NguoiDungController : Controller
@@ -23,30 +23,30 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         public IActionResult Index(string searchString, string roleFilter, string statusFilter, int page = 1, int pageSize = 6)
         {
             ViewBag.RoleList = db.VaiTros.ToList();
-            var users = from u in db.NguoiDungs select u;
+            var usersQuery = db.NguoiDungs.Include(u => u.MaVaiTroNavigation).AsQueryable();
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
-                users = users.Where(u => u.TenNguoiDung.Contains(searchString) || u.Email.Contains(searchString));
+                usersQuery = usersQuery.Where(u => u.TenNguoiDung.Contains(searchString) || u.Email.Contains(searchString));
             }
-            if (!String.IsNullOrEmpty(roleFilter) && int.TryParse(roleFilter, out int roleId))
+            if (!string.IsNullOrEmpty(roleFilter) && int.TryParse(roleFilter, out int roleId))
             {
-                users = users.Where(u => u.MaVaiTro == roleId);
+                usersQuery = usersQuery.Where(u => u.MaVaiTro == roleId);
+            }
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                usersQuery = usersQuery.Where(u => u.TrangThai == statusFilter);
             }
 
-            // Filter by status (Active/Inactive)
-            if (!String.IsNullOrEmpty(statusFilter))
-            {
-                users = users.Where(u => u.TrangThai == statusFilter);
-            }
-            int totalItems = users.Count();
-            users = users.Skip((page - 1) * pageSize).Take(pageSize);
+            int totalItems = usersQuery.Count();
 
+            var users = usersQuery.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-            return View(users.ToList());
+            return View(users);
         }
+
 
         [Route("Create")]
         [HttpGet]
@@ -86,36 +86,40 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-        //lấy tt
+            // Lấy thông tin người dùng
             var user = db.NguoiDungs.Find(id);
-
             if (user == null)
             {
                 return NotFound();
             }
 
+            // Lấy danh sách vai trò
+            ViewBag.RoleList = db.VaiTros.ToList(); // Giả sử bạn có bảng VaiTro trong cơ sở dữ liệu
+
             return View(user);
         }
+
 
         [Route("Edit/{id}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, string TenNguoiDung, string Email, string SoDienThoai, string TrangThai)
+        public IActionResult Edit(int id, string TenNguoiDung, string Email, string SoDienThoai, string TrangThai, int? MaVaiTro)
         {
             try
             {
-                // Thiết lập các tham số stored procedure
+                // Thiết lập các tham số cho stored procedure
                 var parameters = new[]
                 {
             new SqlParameter("@MaNguoiDung", id),
             new SqlParameter("@TenNguoiDung", (object)TenNguoiDung ?? DBNull.Value),
             new SqlParameter("@Email", (object)Email ?? DBNull.Value),
             new SqlParameter("@SoDienThoai", (object)SoDienThoai ?? DBNull.Value),
-            new SqlParameter("@TrangThai", (object)TrangThai ?? DBNull.Value)
+            new SqlParameter("@TrangThai", (object)TrangThai ?? DBNull.Value),
+            new SqlParameter("@MaVaiTro", MaVaiTro ?? (object)DBNull.Value)
         };
 
                 // Gọi stored procedure
-                db.Database.ExecuteSqlRaw("EXEC sp_CapNhatNguoiDungNhanVien @MaNguoiDung, @TenNguoiDung, @Email, @SoDienThoai, @TrangThai", parameters);
+                db.Database.ExecuteSqlRaw("EXEC sp_CapNhatNguoiDung @MaNguoiDung, @TenNguoiDung, @Email, @SoDienThoai, @TrangThai, @MaVaiTro", parameters);
 
                 return RedirectToAction("Index");
             }

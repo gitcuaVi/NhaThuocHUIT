@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin, NhanVien")]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class NhanVienController : Controller
@@ -180,9 +180,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Đã xảy ra lỗi khi xóa nhân viên." });
             }
         }
-
-
-
+        
     }
 }
 

@@ -8,7 +8,6 @@ namespace QuanLyNhaThuoc.Models
         public TonKho()
         {
             ChiTietPns = new HashSet<ChiTietPn>();
-            ChiTietPxes = new HashSet<ChiTietPx>();
         }
 
         public int MaTonKho { get; set; }
@@ -22,6 +21,5 @@ namespace QuanLyNhaThuoc.Models
 
         public virtual Thuoc MaThuocNavigation { get; set; } = null!;
         public virtual ICollection<ChiTietPn> ChiTietPns { get; set; }
-        public virtual ICollection<ChiTietPx> ChiTietPxes { get; set; }
     }
 }

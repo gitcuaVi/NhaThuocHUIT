@@ -11,7 +11,6 @@ namespace QuanLyNhaThuoc.Models
             DonHangs = new HashSet<DonHang>();
             Luongs = new HashSet<Luong>();
             PhieuNhaps = new HashSet<PhieuNhap>();
-            PhieuXuats = new HashSet<PhieuXuat>();
             SaoLuuVaPhucHois = new HashSet<SaoLuuVaPhucHoi>();
         }
 
@@ -35,7 +34,6 @@ namespace QuanLyNhaThuoc.Models
         public virtual ICollection<DonHang> DonHangs { get; set; }
         public virtual ICollection<Luong> Luongs { get; set; }
         public virtual ICollection<PhieuNhap> PhieuNhaps { get; set; }
-        public virtual ICollection<PhieuXuat> PhieuXuats { get; set; }
         public virtual ICollection<SaoLuuVaPhucHoi> SaoLuuVaPhucHois { get; set; }
     }
 }

@@ -10,52 +10,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .btn-primary, .btn-success, .btn-warning, .btn-danger {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-            .btn-primary:hover, .btn-success:hover {
-                background-color: #218838;
-            }
-
-            .btn-warning:hover {
-                background-color: goldenrod;
-            }
-
-            .btn-danger:hover {
-                background-color: #dc3545;
-                border-color: #dc3545;
-            }
-
-        .pagination .active > .page-link {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-        .custom-search-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-            .custom-search-icon i {
-                position: absolute;
-                right: 15px;
-            }
-
-        #edit-user, #delete-user {
-            font-size: 1.1rem;
-            padding: 10px 20px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="~/css/admincss.css" asp-append-version="true" />
+   
 </head>
 <body>
     <div class="container my-4">
@@ -114,7 +70,7 @@
                             <td>@user.TenNguoiDung</td>
                             <td>@user.Email</td>
                             <td>@user.SoDienThoai</td>
-                            <td>@user.MaVaiTro</td>
+                            <td>@user.MaVaiTroNavigation.TenVaiTro</td> 
                             <td>@user.TrangThai</td>
                             <td>@user.NgayTao.ToString("dd/MM/yyyy")</td>
                         </tr>
@@ -122,6 +78,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <div class="action-buttons mt-3 d-flex justify-content-center">
             <a href="/Admin/NguoiDung/Create" class="btn btn-success mx-3">

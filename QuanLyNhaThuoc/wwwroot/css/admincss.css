@@ -1,0 +1,42 @@
+﻿body {
+    background-color: #f8f9fa;
+}
+
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+    .btn-primary:hover, .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning:hover {
+        background-color: goldenrod;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+.pagination .active > .page-link {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.custom-search-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .custom-search-icon i {
+        position: absolute;
+        right: 15px;
+    }
+
+#edit-user, #delete-user {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+}

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Model\**" />
+    <Content Remove="Areas\Admin\Views\Model\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
+    <None Remove="Areas\Admin\Views\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.35" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.35">
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Model\" />
     <Folder Include="Service\" />
   </ItemGroup>
 

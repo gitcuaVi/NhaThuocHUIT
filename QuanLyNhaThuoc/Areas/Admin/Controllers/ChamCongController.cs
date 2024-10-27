@@ -10,7 +10,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
     [Authorize(Roles = "NhanVien")]
     [Area("Admin")]
-    [Route("Admin/[controller]")]
+    [Route("admin/[controller]")]
     public class ChamCongController : Controller
     {
         private readonly QL_NhaThuocContext db;
