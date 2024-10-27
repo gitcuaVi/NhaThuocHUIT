@@ -1,37 +1,38 @@
-﻿@model QuanLyNhaThuoc.Models.Luong
+﻿@model QuanLyNhaThuoc.Models.NhanVien
 @{
-    ViewData["Title"] = "Tính lương";
+    ViewData["Title"] = "Tính Lương Nhân Viên";
 }
-<h2>Tính Lương</h2>
+<div class="container my-4">
+    <h1 class="mb-4">Tính Lương Nhân Viên</h1>
+    <form method="post" asp-action="TinhLuong">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="maNhanVien" value="@ViewBag.MaNhanVien" />
 
-<form asp-action="TinhLuong" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="id" value="@ViewBag.MaNhanVien" />
+        <div class="mb-3">
+            <label for="ngayTraLuong" class="form-label">Ngày Trả Lương</label>
+            <input type="date" class="form-control" id="ngayTraLuong" name="ngayTraLuong" required />
+        </div>
 
-    <div class="form-group">
-        <label>Khấu Trừ</label>
-        <input asp-for="KhauTru" type="number" step="0.01" min="0" class="form-control" required />
-    </div>
+        <div class="mb-3">
+            <label for="soGioTangCa" class="form-label">Số Giờ Tăng Ca</label>
+            <input type="number" class="form-control" id="soGioTangCa" name="soGioTangCa" min="0" />
+        </div>
 
-    <div class="form-group">
-        <label>Lương Thực Nhận</label>
-        <input asp-for="LuongThucNhan" type="number" step="0.01" min="0" class="form-control" required />
-    </div>
+        <div class="mb-3">
+            <label for="luongThuong" class="form-label">Lương Thưởng</label>
+            <input type="number" class="form-control" id="luongThuong" name="luongThuong" step="0.01" />
+        </div>
 
-    <div class="form-group">
-        <label>Ngày Trả Lương</label>
-        <input asp-for="NgayTraLuong" type="date" class="form-control" required />
-    </div>
+        <div class="mb-3">
+            <label for="khauTru" class="form-label">Khấu Trừ</label>
+            <input type="number" class="form-control" id="khauTru" name="khauTru" step="0.01" required />
+        </div>
 
-    <div class="form-group">
-        <label>Lương Thưởng (tùy chọn)</label>
-        <input asp-for="LuongThuong" type="number" step="0.01" min="0" class="form-control" />
-    </div>
+        <div class="mb-3">
+            <label for="ghiChu" class="form-label">Ghi Chú</label>
+            <textarea class="form-control" id="ghiChu" name="ghiChu"></textarea>
+        </div>
 
-    <div class="form-group">
-        <label>Ghi Chú</label>
-        <textarea asp-for="GhiChu" class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Tính Lương</button>
-</form>
+        <button type="submit" class="btn btn-primary">Tính Lương</button>
+    </form>
+</div>

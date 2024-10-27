@@ -64,7 +64,7 @@
         $("#phoneError").text("");
         $("#emailError").text("");
 
-        // Kiểm tra tên người dùng
+        // Kiểm tra tên
         var username = $("#TenNguoiDung").val();
         var usernameRegex = /^[\p{L}\s]+$/u;
         if (!usernameRegex.test(username)) {
@@ -75,7 +75,7 @@
             $("#TenNguoiDung").removeClass("is-invalid");
         }
 
-        // Kiểm tra số điện thoại
+        // Kiểm tra sdt
         var phone = $("#SoDienThoai").val();
         var phoneRegex = /^[0-9]{9,}$/;
         if (!phoneRegex.test(phone)) {

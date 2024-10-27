@@ -25,8 +25,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index(string searchString, string sexFilter, string statusFilter, int page = 1, int pageSize = 6)
         {
-            // Fetch gender list for filtering
-            ViewBag.SexList = new List<string> { "Nam", "Nữ" };  // Example gender list
+            // lọc gt
+            ViewBag.SexList = new List<string> { "Nam", "Nữ" }; 
             var emp = from u in db.NhanViens select u;
 
             if (!string.IsNullOrEmpty(searchString))
@@ -43,7 +43,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 emp = emp.Where(u => u.TrangThai == statusFilter);
             }
 
-            // Pagination
+            // phan trang
             int totalItems = emp.Count();
             emp = emp.Skip((page - 1) * pageSize).Take(pageSize);
 
@@ -69,7 +69,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
-                // Thiết lập các tham số cho stored procedure
                 var parameters = new[]
                 {
             new SqlParameter("@Ho", Ho),
@@ -84,8 +83,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             new SqlParameter("@LuongCoBan1Ca", (object)LuongCoBan1Ca ?? DBNull.Value),
             new SqlParameter("@LuongTangCa1Gio", (object)LuongTangCa1Gio ?? DBNull.Value),
         };
-
-                // Gọi stored procedure 
+                //gọi pro
                 db.Database.ExecuteSqlRaw("EXEC sp_ThemNhanVienMoi @Ho, @Ten, @NgaySinh, @GioiTinh, @DiaChi, @ChucVu, @NgayTuyenDung, @MaNguoiDung, @MaCaLamViec, @LuongCoBan1Ca, @LuongTangCa1Gio", parameters);
 
                 return RedirectToAction("Index");
@@ -107,6 +105,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            // Truyền mã nhân viên sang view
             return View(nhanVien);
         }
 
@@ -180,7 +179,91 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Đã xảy ra lỗi khi xóa nhân viên." });
             }
         }
-        
+        [Route("TinhLuong")]
+        [HttpGet]
+        public IActionResult TinhLuong(int maNhanVien)
+        {
+            // Lấy tt nhân viên theo mã
+            var nhanVien = db.NhanViens.Find(maNhanVien);
+            if (nhanVien == null)
+            {
+                return NotFound();
+            }
+
+            // Truyền mã nhân viên sang view
+            ViewBag.MaNhanVien = maNhanVien;
+            return View();
+        }
+
+        [Route("TinhLuong")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult TinhLuong(int maNhanVien, DateTime ngayTraLuong, decimal khauTru, int soGioTangCa = 0, decimal? luongThuong = null, string ghiChu = "")
+        {
+            try
+            {
+                var parameters = new[]
+                {
+            new SqlParameter("@MaNhanVien", maNhanVien),
+            new SqlParameter("@KhauTru", khauTru),
+            new SqlParameter("@NgayTraLuong", ngayTraLuong),
+            new SqlParameter("@SoGioTangCa", soGioTangCa),
+            new SqlParameter("@LuongThuong", (object)luongThuong ?? DBNull.Value),
+            new SqlParameter("@GhiChu", (object)ghiChu ?? DBNull.Value)
+        };
+
+                // Gọi pro
+                db.Database.ExecuteSqlRaw("EXEC TinhLuong @MaNhanVien, @KhauTru, @NgayTraLuong, @SoGioTangCa, @LuongThuong, @GhiChu", parameters);
+
+                return RedirectToAction("Index", new { successMessage = "Tính lương thành công!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi tính lương.");
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi khi tính lương.";
+                return View();
+            }
+        }
+        [Route("BangLuong")]
+        [HttpGet]
+        public IActionResult XemBangLuong(int page = 1, int pageSize = 6, string filterMonth = "")
+        {
+            var bangLuong = from l in db.Luongs
+                            join n in db.NhanViens on l.MaNhanVien equals n.MaNhanVien
+                            select new
+                            {
+                                l.MaNhanVien,
+                                n.Ho,
+                                n.Ten,
+                                l.LuongThang,
+                                l.SoCaLamViec,
+                                l.LuongThucNhan,
+                                l.KhauTru,
+                                l.LuongThuong,
+                                l.SoGioTangCa,
+                                l.NgayTraLuong,
+                                l.GhiChu
+                            };
+
+            // Lọc theo tháng
+            if (!string.IsNullOrEmpty(filterMonth))
+            {
+                DateTime selectedMonth = DateTime.ParseExact(filterMonth, "yyyy-MM", null);
+                bangLuong = bangLuong.Where(l => l.LuongThang.Year == selectedMonth.Year && l.LuongThang.Month == selectedMonth.Month);
+            }
+
+            // Phan trang
+            int totalItems = bangLuong.Count();
+            bangLuong = bangLuong.Skip((page - 1) * pageSize).Take(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.FilterMonth = filterMonth;
+
+            return View(bangLuong.ToList());
+        }
+
+
     }
 }
 

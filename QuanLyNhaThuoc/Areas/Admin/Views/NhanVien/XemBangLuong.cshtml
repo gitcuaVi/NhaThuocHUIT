@@ -1,0 +1,74 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewBag.Title = "Bảng Lương Nhân Viên";
+}
+<link rel="stylesheet" href="~/css/admincss.css" asp-append-version="true" />
+<h2>Bảng Lương Nhân Viên</h2>
+
+<form method="get" action="@Url.Action("XemBangLuong")">
+    <label for="filterMonth">Chọn tháng:</label>
+    <input type="month" id="filterMonth" name="filterMonth" value="@ViewBag.FilterMonth" />
+    <button type="submit">Lọc</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã Nhân Viên</th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Lương Tháng</th>
+            <th>Số Ca Làm Việc</th>
+            <th>Khấu Trừ</th>
+            <th>Lương Thưởng</th>
+            <th>Số Giờ Tăng Ca</th>
+            <th>Ngày Trả Lương</th>
+            <th>Lương Thực Nhận</th>
+            <th>Ghi Chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNhanVien</td>
+                <td>@item.Ho</td>
+                <td>@item.Ten</td>
+                <td>@item.LuongThang.ToString("MM-yyyy")</td>
+                <td>@item.SoCaLamViec</td>
+                <td>@string.Format("{0:N0} VND", item.KhauTru)</td>
+                <td>@string.Format("{0:N0} VND", item.LuongThuong)</td>
+                <td>@item.SoGioTangCa</td>
+                <td>@item.NgayTraLuong.ToString("dd-MM-yyyy")</td>
+                <td>@string.Format("{0:N0} VND", item.LuongThucNhan)</td>
+                <td>@item.GhiChu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="pagination mt-3">
+    <nav aria-label="Page navigation" class="mt-3">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage - 1, filterMonth = ViewBag.FilterMonth })">Trước</a>
+                </li>
+            }
+            @for (var i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = i, filterMonth = ViewBag.FilterMonth })">@i</a>
+                </li>
+            }
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage + 1, filterMonth = ViewBag.FilterMonth })">Sau</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

@@ -5,18 +5,13 @@
 @using System.Linq;
 
 <div class="container mt-5">
-    <!-- Phần Chấm Công -->
     <h2 class="text-center">Chấm Công</h2>
     <div class="text-center">
         <button id="btnChamCongVao" class="btn btn-success">Chấm Công Vào</button>
         <button id="btnChamCongRa" class="btn btn-danger">Chấm Công Ra</button>
     </div>
     <div id="message" class="mt-3"></div>
-
-    <!-- Phần Lịch Sử Chấm Công -->
     <h3 class="text-center mt-5">Lịch Sử Chấm Công</h3>
-
-    <!-- Bảng hiển thị lịch sử chấm công -->
     <table class="table table-bordered table-striped mt-3">
         <thead>
             <tr>
@@ -66,24 +61,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Xử lý chấm công vào
             $("#btnChamCongVao").click(function () {
                 $.post('@Url.Action("ChamCongVao", "ChamCong")', function (data) {
-                    console.log(data);  // In phản hồi từ server ra console để kiểm tra
+                    console.log(data);  
                     $("#message").html(data.message).removeClass().addClass(data.success ? "alert alert-success" : "alert alert-danger");
                 }).fail(function () {
-                    // Thêm trường hợp lỗi khi không nhận được phản hồi
                     $("#message").html("Không thể kết nối đến server.").removeClass().addClass("alert alert-danger");
                 });
             });
-
-            // Xử lý chấm công ra
             $("#btnChamCongRa").click(function () {
                 $.post('@Url.Action("ChamCongRa", "ChamCong")', function (data) {
-                    console.log(data);  // In phản hồi từ server ra console để kiểm tra
+                    console.log(data);
                     $("#message").html(data.message).removeClass().addClass(data.success ? "alert alert-success" : "alert alert-danger");
                 }).fail(function () {
-                    // Thêm trường hợp lỗi khi không nhận được phản hồi
                     $("#message").html("Không thể kết nối đến server.").removeClass().addClass("alert alert-danger");
                 });
             });
