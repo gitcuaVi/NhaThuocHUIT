@@ -20,7 +20,6 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
         public virtual DbSet<ChiTietPn> ChiTietPns { get; set; } = null!;
-        public virtual DbSet<ChiTietPx> ChiTietPxes { get; set; } = null!;
         public virtual DbSet<DanhMuc> DanhMucs { get; set; } = null!;
         public virtual DbSet<DonHang> DonHangs { get; set; } = null!;
         public virtual DbSet<Faq> Faqs { get; set; } = null!;
@@ -33,7 +32,6 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<NhanVien> NhanViens { get; set; } = null!;
         public virtual DbSet<PhanQuyen> PhanQuyens { get; set; } = null!;
         public virtual DbSet<PhieuNhap> PhieuNhaps { get; set; } = null!;
-        public virtual DbSet<PhieuXuat> PhieuXuats { get; set; } = null!;
         public virtual DbSet<QuyenTruyCap> QuyenTruyCaps { get; set; } = null!;
         public virtual DbSet<SaoLuuVaPhucHoi> SaoLuuVaPhucHois { get; set; } = null!;
         public virtual DbSet<ThanhToan> ThanhToans { get; set; } = null!;
@@ -164,40 +162,6 @@ namespace QuanLyNhaThuoc.Models
                     .HasConstraintName("FK_ChiTietPN_MaTonKho");
             });
 
-            modelBuilder.Entity<ChiTietPx>(entity =>
-            {
-                entity.HasKey(e => e.MaChiTietPx)
-                    .HasName("PK__ChiTietP__651D0AC186DEEEE9");
-
-                entity.ToTable("ChiTietPX");
-
-                entity.HasIndex(e => new { e.MaThuoc, e.MaPhieuXuat }, "UQ_ChiTietPX_MaThuoc_MaPhieuXuat")
-                    .IsUnique();
-
-                entity.Property(e => e.MaChiTietPx).HasColumnName("MaChiTietPX");
-
-                entity.Property(e => e.DonGiaXuat).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.DonVi).HasMaxLength(10);
-
-                entity.HasOne(d => d.MaPhieuXuatNavigation)
-                    .WithMany(p => p.ChiTietPxes)
-                    .HasForeignKey(d => d.MaPhieuXuat)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChiTietPX_MaPhieuXuat");
-
-                entity.HasOne(d => d.MaThuocNavigation)
-                    .WithMany(p => p.ChiTietPxes)
-                    .HasForeignKey(d => d.MaThuoc)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChiTietPX_MaThuoc");
-
-                entity.HasOne(d => d.MaTonKhoNavigation)
-                    .WithMany(p => p.ChiTietPxes)
-                    .HasForeignKey(d => d.MaTonKho)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChiTietPX_MaTonKho");
-            });
 
             modelBuilder.Entity<DanhMuc>(entity =>
             {
@@ -486,32 +450,6 @@ namespace QuanLyNhaThuoc.Models
                     .HasConstraintName("FK_PhieuNhap_MaNhanVien");
             });
 
-            modelBuilder.Entity<PhieuXuat>(entity =>
-            {
-                entity.HasKey(e => e.MaPhieuXuat)
-                    .HasName("PK__PhieuXua__26C4B5A2917AC412");
-
-                entity.ToTable("PhieuXuat");
-
-                entity.HasIndex(e => e.MaPhieuXuat, "UQ_PhieuXuat_MaPhieuXuat")
-                    .IsUnique();
-
-                entity.Property(e => e.GhiChu).HasMaxLength(255);
-
-                entity.Property(e => e.NgayXuat)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.NoiNhan).HasMaxLength(255);
-
-                entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
-
-                entity.HasOne(d => d.MaNhanVienNavigation)
-                    .WithMany(p => p.PhieuXuats)
-                    .HasForeignKey(d => d.MaNhanVien)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PhieuXuat_MaNhanVien");
-            });
 
             modelBuilder.Entity<QuyenTruyCap>(entity =>
             {

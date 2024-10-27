@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyNhaThuoc.Models
 {
@@ -8,13 +9,11 @@ namespace QuanLyNhaThuoc.Models
         public TonKho()
         {
             ChiTietPns = new HashSet<ChiTietPn>();
-            ChiTietPxes = new HashSet<ChiTietPx>();
         }
 
         public int MaTonKho { get; set; }
         public int SoLuongTon { get; set; }
         public int SoLuongCanhBao { get; set; }
-        public int SoLuongHienTai { get; set; }
         public int SoLuongToiDa { get; set; }
         public string? TrangThai { get; set; }
         public DateTime? NgayGioCapNhat { get; set; }
@@ -22,6 +21,8 @@ namespace QuanLyNhaThuoc.Models
 
         public virtual Thuoc MaThuocNavigation { get; set; } = null!;
         public virtual ICollection<ChiTietPn> ChiTietPns { get; set; }
-        public virtual ICollection<ChiTietPx> ChiTietPxes { get; set; }
+
+        [NotMapped] // if WarningMessage is not a database column
+        public string WarningMessage { get; set; }//new 27/10
     }
 }

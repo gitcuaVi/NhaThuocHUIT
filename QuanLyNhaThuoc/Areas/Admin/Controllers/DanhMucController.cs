@@ -109,7 +109,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 var idList = string.Join(",", ids);
 
                 // Gọi stored procedure xóa nhiều sản phẩm cùng lúc
-                _context.Database.ExecuteSqlRaw($"EXEC sp_XoaLoaiSanPham @Ids = '{idList}'");
+                _context.Database.ExecuteSqlRaw($"EXEC sp_XoaDanhMuc @Ids = '{idList}'");
 
                 return Json(new { success = true, message = "Các loại sản phẩm đã được xóa thành công." });
             }
