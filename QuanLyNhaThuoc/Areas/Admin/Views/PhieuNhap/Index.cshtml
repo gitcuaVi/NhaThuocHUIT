@@ -20,7 +20,7 @@
         <h1 class="mb-4">Quản lý Phiếu Nhập</h1>
 
         <div class="d-flex justify-content-end mb-3">
-            <a asp-action="Create" class="btn btn-success">
+            <a asp-action="CreatePhieuNhap" class="btn btn-success">
                 <i class="bi bi-plus-circle"></i> Thêm Phiếu Nhập
             </a>
         </div>
@@ -50,7 +50,6 @@
                         <th>Ngày Nhập</th>
                         <th>Nhà Cung Cấp</th>
                         <th>Tổng Tiền</th>
-                        <th>Ghi Chú</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +62,6 @@
                             <td>@pn.NgayNhap?.ToString("dd/MM/yyyy")</td>
                             <td>@pn.NhaCungCap</td>
                             <td>@pn.TongTien.ToString("N0")</td>
-                            <td>@pn.GhiChu</td>
                         </tr>
                     }
                 </tbody>

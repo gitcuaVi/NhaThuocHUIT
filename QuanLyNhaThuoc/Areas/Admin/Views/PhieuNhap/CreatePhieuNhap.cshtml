@@ -1,0 +1,56 @@
+﻿@model PhieuNhapViewModel
+
+<div class="container">
+    <h2>Tạo Phiếu Nhập Mới</h2>
+    <form asp-action="CreatePhieuNhap" method="post">
+        <div class="form-group">
+            <label for="MaNhanVien">Nhân Viên</label>
+            <select name="maNhanVien" class="form-control" required>
+                <option value="">-- Chọn Nhân Viên --</option>
+                @foreach (var nv in ViewBag.NhanViens)
+                {
+                    <option value="@nv.MaNhanVien">@nv.HoTen</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="TongTien">Tổng Tiền</label>
+            <input type="number" name="tongTien" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="NgayNhap">Ngày Nhập</label>
+            <input type="date" name="ngayNhap" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="GhiChu">Ghi Chú</label>
+            <input type="text" name="ghiChu" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="NhaCungCap">Nhà Cung Cấp</label>
+            <input type="text" name="nhaCungCap" class="form-control" required />
+        </div>
+
+        <h3>Chi Tiết Phiếu Nhập</h3>
+        <div id="chiTietPnContainer">
+            <div class="form-group">
+                <label>Chi Tiết 1:</label>
+                <select name="chiTietPns[0].maThuoc" class="form-control" required>
+                    <option value="">-- Chọn Thuốc --</option>
+                    @foreach (var t in ViewBag.Thuocs)
+                    {
+                        <option value="@t.MaThuoc">@t.TenThuoc</option>
+                    }
+                </select>
+                <input type="number" name="chiTietPns[0].soLuong" placeholder="Số Lượng" class="form-control" required />
+                <input type="number" name="chiTietPns[0].donGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required />
+                <input type="number" name="chiTietPns[0].maTonKho" placeholder="Mã Tồn Kho" class="form-control" required />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Tạo Phiếu Nhập</button>
+    </form>
+</div>
