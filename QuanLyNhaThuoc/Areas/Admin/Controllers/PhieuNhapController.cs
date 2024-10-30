@@ -85,19 +85,19 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 // Gọi stored procedure
                 var parameters = new[]
                 {
-            new SqlParameter("@MaNhanVien", maNhanVien),
-            new SqlParameter("@TongTien", tongTien),
-            new SqlParameter("@NgayNhap", ngayNhap),
-            new SqlParameter("@GhiChu", ghiChu ?? (object)DBNull.Value),
-            new SqlParameter("@NhaCungCap", nhaCungCap),
-            new SqlParameter("@ChiTietPns", SqlDbType.Structured)
-            {
-                TypeName = "dbo.ChiTietPnType",
-                Value = chiTietPnTable
-            }
-        };
-
+                new SqlParameter("@MaNhanVien", maNhanVien),
+                new SqlParameter("@TongTien", tongTien != 0 ? tongTien : (object)DBNull.Value),
+                new SqlParameter("@NgayNhap", ngayNhap),
+                new SqlParameter("@GhiChu", ghiChu ?? (object)DBNull.Value),
+                new SqlParameter("@NhaCungCap", nhaCungCap),
+                new SqlParameter("@ChiTietPns", SqlDbType.Structured)
+                {
+                    TypeName = "dbo.ChiTietPnType",
+                    Value = chiTietPnTable
+                }
+            };
                 _context.Database.ExecuteSqlRaw("EXEC dbo.sp_InsertPhieuNhap @MaNhanVien, @TongTien, @NgayNhap, @GhiChu, @NhaCungCap, @ChiTietPns", parameters);
+
 
                 return Ok("Phiếu nhập đã được tạo thành công.");
             }

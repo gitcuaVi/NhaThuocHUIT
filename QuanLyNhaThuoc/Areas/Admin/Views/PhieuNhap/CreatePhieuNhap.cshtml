@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <label for="TongTien">Tổng Tiền</label>
-            <input type="number" name="tongTien" class="form-control" required />
+            <input type="number" name="tongTien" id="tongTien" class="form-control" value="0" readonly />
         </div>
 
         <div class="form-group">
@@ -45,8 +45,8 @@
                         <option value="@t.MaThuoc">@t.TenThuoc</option>
                     }
                 </select>
-                <input type="number" name="chiTietPns[0].soLuong" placeholder="Số Lượng" class="form-control" required />
-                <input type="number" name="chiTietPns[0].donGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required />
+                <input type="number" name="chiTietPns[0].soLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
+                <input type="number" name="chiTietPns[0].donGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required onchange="calculateTotal()" />
                 <input type="number" name="chiTietPns[0].maTonKho" placeholder="Mã Tồn Kho" class="form-control" required />
             </div>
         </div>
@@ -54,3 +54,20 @@
         <button type="submit" class="btn btn-primary mt-3">Tạo Phiếu Nhập</button>
     </form>
 </div>
+
+<script>
+    function calculateTotal() {
+        let total = 0;
+        const chiTietPnContainer = document.getElementById("chiTietPnContainer");
+        const details = chiTietPnContainer.querySelectorAll(".form-group");
+
+        details.forEach((detail, index) => {
+            const soLuong = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].soLuong']`).value) || 0;
+            const donGiaXuat = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].donGiaXuat']`).value) || 0;
+            total += soLuong * donGiaXuat;
+        });
+
+        document.getElementById("tongTien").value = total;
+        console.log("Tổng tiền hiện tại:", total); // Kiểm tra giá trị tổng tiền trong console
+    }
+</script>
