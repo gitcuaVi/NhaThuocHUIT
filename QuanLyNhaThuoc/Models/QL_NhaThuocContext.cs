@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
 
 namespace QuanLyNhaThuoc.Models
 {
@@ -15,7 +16,7 @@ namespace QuanLyNhaThuoc.Models
             : base(options)
         {
         }
-
+        public DbSet<ProductViewModel> ViewSanPhamByDanhMuc { get; set; }
         public virtual DbSet<CaLamViec> CaLamViecs { get; set; } = null!;
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
@@ -54,6 +55,26 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ProductViewModel>().HasNoKey();
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.MaDanhMuc)
+                .IsRequired();
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.TenLoai)
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.TenThuoc)
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.DonGia)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.UrlAnh)
+                .HasMaxLength(500);
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)
@@ -238,7 +259,7 @@ namespace QuanLyNhaThuoc.Models
 
                 entity.Property(e => e.DonGia).HasColumnType("decimal(18, 0)");
 
-                entity.Property(e => e.DonVi).HasMaxLength(10);
+               
 
                 entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
 
@@ -501,6 +522,7 @@ namespace QuanLyNhaThuoc.Models
                 entity.Property(e => e.SoLuongTon).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.TenThuoc).HasMaxLength(255);
+                entity.Property(e => e.DonVi).HasMaxLength(255);
 
                 entity.HasOne(d => d.MaLoaiSanPhamNavigation)
                     .WithMany(p => p.Thuocs)

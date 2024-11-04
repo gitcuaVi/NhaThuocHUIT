@@ -1,0 +1,16 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
+}
+
+@if (Model != null)
+{
+    <h1> Tủ thuốc gia đình</h1>
+    @await Html.PartialAsync("_ProductList", Model)
+}
+else
+{
+    <p>No products available.</p>
+}
+

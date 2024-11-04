@@ -1,0 +1,147 @@
+﻿/* Custom Styles */
+.discount-banner {
+    background-color: #f06292;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.navbar-custom {
+    background-color: #4CAF50;
+}
+
+    .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .location-text, .navbar-custom .hotline {
+        color: #fff;
+    }
+
+    .navbar-custom .hotline {
+        color: #ffd600;
+        font-weight: bold;
+    }
+
+.search-bar {
+    width: 300px;
+}
+
+.secondary-navbar {
+    background-color: #4CAF50;
+    padding: 10px 0;
+}
+
+    .secondary-navbar .nav-link {
+        color: #fff;
+        padding: 5px 15px;
+        font-weight: bold;
+    }
+
+        .secondary-navbar .nav-link:hover {
+            color: #ffd600;
+        }
+
+.footer {
+    background-color: #f9f9f9;
+    padding: 40px 0;
+    font-size: 14px;
+}
+
+    .footer h6 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .footer .contact-number a {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .footer .social-icons a {
+        font-size: 24px;
+        margin: 0 8px;
+        color: #000;
+    }
+
+    .footer .certifications img {
+        height: 40px;
+        margin: 5px;
+    }
+
+    .footer .partners img {
+        height: 35px;
+        margin: 5px;
+    }
+
+    .footer .partners {
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+    }
+/* CSS for Hover Dropdown */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.secondary-navbar .dropdown-menu {
+    background-color: #4CAF50;
+    border: none;
+}
+
+.secondary-navbar .dropdown-item {
+    color: #fff;
+}
+
+    .secondary-navbar .dropdown-item:hover {
+        background-color: #ffd600;
+        color: #4CAF50;
+    }
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.dropdown-menu {
+    display: none;
+}
+
+    .dropdown-menu a {
+        color: #333;
+        text-decoration: none;
+        padding: 8px 15px;
+        display: block;
+    }
+
+        .dropdown-menu a:hover {
+            background-color: #f8f9fa;
+        }
+.footer-extra {
+    background-color: #def9da;
+    color: #333;
+}
+
+    .footer-extra .footer-benefits {
+        display: flex;
+    }
+
+    .footer-extra .benefit-item {
+        max-width: 150px;
+    }
+
+    .footer-extra .icon-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .footer-extra .footer-store-info {
+        font-size: 16px;
+        color: #333;
+    }
+
+        .footer-extra .footer-store-info button {
+            font-size: 14px;
+        }

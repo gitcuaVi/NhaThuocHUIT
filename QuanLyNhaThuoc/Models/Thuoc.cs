@@ -20,6 +20,7 @@ namespace QuanLyNhaThuoc.Models
         public decimal DonGia { get; set; }
         public int? SoLuongTon { get; set; }
         public int? MaLoaiSanPham { get; set; }
+        public string? DonVi{ get; set; }
 
         public virtual LoaiSanPham? MaLoaiSanPhamNavigation { get; set; }
         public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }

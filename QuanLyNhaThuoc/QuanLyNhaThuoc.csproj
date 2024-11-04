@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Views\Model\**" />
+    <Compile Remove="Service\**" />
     <Content Remove="Areas\Admin\Views\Model\**" />
+    <Content Remove="Service\**" />
     <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
+    <EmbeddedResource Remove="Service\**" />
     <None Remove="Areas\Admin\Views\Model\**" />
+    <None Remove="Service\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
+    <Folder Include="Areas\KhachHang\Data\" />
   </ItemGroup>
 
 </Project>
