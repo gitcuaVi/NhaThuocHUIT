@@ -36,38 +36,64 @@
 
         <h3>Chi Tiết Phiếu Nhập</h3>
         <div id="chiTietPnContainer">
-            <div class="form-group">
+            <!-- Dùng mẫu chi tiết phiếu nhập với chỉ số động -->
+            <div class="chiTietPn-row form-group" data-index="0">
                 <label>Chi Tiết 1:</label>
-                <select name="chiTietPns[0].maThuoc" class="form-control" required>
+                <select name="chiTietPns[0].MaThuoc" class="form-control" required>
                     <option value="">-- Chọn Thuốc --</option>
                     @foreach (var t in ViewBag.Thuocs)
                     {
                         <option value="@t.MaThuoc">@t.TenThuoc</option>
                     }
                 </select>
-                <input type="number" name="chiTietPns[0].soLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
-                <input type="number" name="chiTietPns[0].donGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required onchange="calculateTotal()" />
-                <input type="number" name="chiTietPns[0].maTonKho" placeholder="Mã Tồn Kho" class="form-control" required />
+                <input type="number" name="chiTietPns[0].SoLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
+                <input type="number" name="chiTietPns[0].DonGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required onchange="calculateTotal()" />
             </div>
         </div>
 
+        <button type="button" class="btn btn-secondary mt-3" onclick="addChiTietPn()">Thêm Chi Tiết</button>
         <button type="submit" class="btn btn-primary mt-3">Tạo Phiếu Nhập</button>
     </form>
 </div>
 
 <script>
+    // Tính tổng tiền dựa trên chi tiết
     function calculateTotal() {
         let total = 0;
         const chiTietPnContainer = document.getElementById("chiTietPnContainer");
-        const details = chiTietPnContainer.querySelectorAll(".form-group");
+        const details = chiTietPnContainer.querySelectorAll(".chiTietPn-row");
 
         details.forEach((detail, index) => {
-            const soLuong = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].soLuong']`).value) || 0;
-            const donGiaXuat = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].donGiaXuat']`).value) || 0;
+            const soLuong = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].SoLuong']`).value) || 0;
+            const donGiaXuat = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].DonGiaXuat']`).value) || 0;
             total += soLuong * donGiaXuat;
         });
 
         document.getElementById("tongTien").value = total;
-        console.log("Tổng tiền hiện tại:", total); // Kiểm tra giá trị tổng tiền trong console
+    }
+
+    // Hàm thêm chi tiết phiếu nhập
+    function addChiTietPn() {
+        const chiTietPnContainer = document.getElementById("chiTietPnContainer");
+        const newIndex = chiTietPnContainer.querySelectorAll(".chiTietPn-row").length;
+
+        const newDetail = document.createElement("div");
+        newDetail.classList.add("chiTietPn-row", "form-group");
+        newDetail.setAttribute("data-index", newIndex);
+
+        newDetail.innerHTML = `
+                <label>Chi Tiết ${newIndex + 1}:</label>
+                <select name="chiTietPns[${newIndex}].MaThuoc" class="form-control" required>
+                    <option value="">-- Chọn Thuốc --</option>
+    @foreach (var t in ViewBag.Thuocs)
+    {
+                            <option value="@t.MaThuoc">@t.TenThuoc</option>
+    }
+                </select>
+                <input type="number" name="chiTietPns[${newIndex}].SoLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
+                <input type="number" name="chiTietPns[${newIndex}].DonGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required onchange="calculateTotal()" />
+            `;
+
+        chiTietPnContainer.appendChild(newDetail);
     }
 </script>

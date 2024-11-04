@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuanLyNhaThuoc.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using QuanLyNhaThuoc.Models;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
@@ -21,13 +24,9 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var thuocList = await _context.Thuocs
-                                          .Include(t => t.HinhAnhs) 
-                                          .ToListAsync();
+            var thuocList = await _context.Thuocs.Include(t => t.HinhAnhs).ToListAsync();
             return View(thuocList);
         }
-
-
 
         [HttpGet("Create")]
         public IActionResult Create()
@@ -41,15 +40,34 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
- 
-                _context.Thuocs.Add(thuoc);
-                await _context.SaveChangesAsync();  
+                // Gọi stored procedure để thêm thuốc và tồn kho
+                var parameters = new[]
+                {
+            new SqlParameter("@TenThuoc", thuoc.TenThuoc),
+            new SqlParameter("@HanSuDung", SqlDbType.Date) { Value = thuoc.HanSuDung ?? (object)DBNull.Value },
+            new SqlParameter("@DonGia", thuoc.DonGia),
+            new SqlParameter("@SoLuongTon", thuoc.SoLuongTon),
+            new SqlParameter("@MaLoaiSanPham", thuoc.MaLoaiSanPham),
+            new SqlParameter("@DonVi", thuoc.DonVi),
+            new SqlParameter("@SoLuongCanhBao", 10),
+            new SqlParameter("@SoLuongToiDa", 100)
+        };
 
+                // Thêm thuốc và lấy mã thuốc mới
+                await _context.Database.ExecuteSqlRawAsync("EXEC sp_ThemThuocVaTonKho @TenThuoc, @HanSuDung, @DonGia, @SoLuongTon, @MaLoaiSanPham, @DonVi, @SoLuongCanhBao, @SoLuongToiDa", parameters);
+
+                // Lấy mã thuốc mới nhất
+                thuoc.MaThuoc = await _context.Thuocs
+                    .Where(t => t.TenThuoc == thuoc.TenThuoc && t.HanSuDung == thuoc.HanSuDung)
+                    .Select(t => t.MaThuoc)
+                    .FirstOrDefaultAsync();
+
+                // Thêm hình ảnh nếu có
                 if (ImageFiles != null && ImageFiles.Count > 0)
                 {
                     foreach (var imageFile in ImageFiles)
                     {
-                        if (imageFile != null && imageFile.Length > 0)
+                        if (imageFile.Length > 0)
                         {
                             var fileName = Path.GetFileName(imageFile.FileName);
                             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
@@ -59,17 +77,16 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                                 await imageFile.CopyToAsync(fileStream);
                             }
 
-
                             var hinhAnh = new HinhAnh
                             {
-                                MaThuoc = thuoc.MaThuoc,  
+                                MaThuoc = thuoc.MaThuoc, 
                                 UrlAnh = "/images/" + fileName
                             };
                             _context.HinhAnhs.Add(hinhAnh);
                         }
                     }
 
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(); 
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -83,9 +100,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var thuoc = await _context.Thuocs
-                .Include(t => t.HinhAnhs) 
-                .FirstOrDefaultAsync(t => t.MaThuoc == id);
+            var thuoc = await _context.Thuocs.Include(t => t.HinhAnhs).FirstOrDefaultAsync(t => t.MaThuoc == id);
 
             if (thuoc == null)
             {
@@ -101,18 +116,17 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
-                // Gọi stored procedure xóa thuốc
-                await _context.Database.ExecuteSqlRawAsync("sp_XoaThuoc @p0", id);
+                // Gọi stored procedure xóa thuốc và tồn kho liên quan
+                await _context.Database.ExecuteSqlRawAsync("EXEC sp_XoaThuocTonKho @p0", id);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
             {
-                // Xử lý lỗi nếu có vấn đề khi xóa
-                ModelState.AddModelError("", "Không thể xóa thuốc này. Vui lòng thử lại.");
+                // Bắt lỗi và trả về thông báo lỗi chi tiết
+                ModelState.AddModelError("", $"Không thể xóa thuốc này: {ex.Message}");
                 return RedirectToAction(nameof(Index));
             }
         }
-
 
     }
 }

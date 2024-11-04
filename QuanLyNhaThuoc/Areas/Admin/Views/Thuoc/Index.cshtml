@@ -78,6 +78,7 @@
                         <th><input type="checkbox" id="select-all"></th>
                         <th>Tên Thuốc</th>
                         <th>Hạn Sử Dụng</th>
+                        <th>Đơn Vị Tính</th>
                         <th>Đơn Giá</th>
                         <th>Số Lượng Tồn</th>
                         <th>Hình Ảnh</th>
@@ -90,7 +91,8 @@
                             <td><input type="checkbox" class="drug-select" value="@item.MaThuoc"></td>
                             <td>@item.TenThuoc</td>
                             <td>@item.HanSuDung?.ToString("dd/MM/yyyy")</td>
-                            <td>@item.DonGia.ToString("N0")</td> <!-- Định dạng số tiền -->
+                            <td>@item.DonVi</td>
+                            <td>@item.DonGia.ToString("N0")</td> 
                             <td>@item.SoLuongTon</td>
                             <td>
                                 @if (item.HinhAnhs.Any())

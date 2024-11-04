@@ -534,6 +534,8 @@ namespace QuanLyNhaThuoc.Models
 
                 entity.Property(e => e.TenThuoc).HasMaxLength(255);
 
+                entity.Property(e => e.DonVi).HasMaxLength(255);
+
                 entity.HasOne(d => d.MaLoaiSanPhamNavigation)
                     .WithMany(p => p.Thuocs)
                     .HasForeignKey(d => d.MaLoaiSanPham)

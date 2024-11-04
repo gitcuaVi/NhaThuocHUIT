@@ -1,36 +1,40 @@
 ﻿@model QuanLyNhaThuoc.Models.LoaiSanPham
 
 @{
-    ViewData["Title"] = "Create LoaiSanPham";
+    ViewData["Title"] = "Tạo Loại Sản Phẩm Mới";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Create LoaiSanPham</h1>
+<div class="container mt-5 p-4 border rounded shadow-sm bg-light">
+    <h2 class="text-center mb-4">Tạo Loại Sản Phẩm Mới</h2>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TenLoai" class="control-label"></label>
-                <input asp-for="TenLoai" class="form-control" />
-                <span asp-validation-for="TenLoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaDanhMuc" class="control-label"></label>
-                <select asp-for="MaDanhMuc" class="form-control" asp-items="ViewBag.MaDanhMuc"></select>
-                <span asp-validation-for="MaDanhMuc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        <!-- Tên Loại Field -->
+        <div class="form-group mb-3">
+            <label asp-for="TenLoai" class="form-label">Tên Loại</label>
+            <input asp-for="TenLoai" class="form-control" placeholder="Nhập tên loại sản phẩm" required />
+            <span asp-validation-for="TenLoai" class="text-danger"></span>
+        </div>
+
+        <!-- Danh Mục Field -->
+        <div class="form-group mb-3">
+            <label asp-for="MaDanhMuc" class="form-label">Danh Mục</label>
+            <select asp-for="MaDanhMuc" class="form-select" asp-items="ViewBag.MaDanhMuc" required>
+                <option value="">-- Chọn Danh Mục --</option>
+            </select>
+            <span asp-validation-for="MaDanhMuc" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Tạo</button>
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
