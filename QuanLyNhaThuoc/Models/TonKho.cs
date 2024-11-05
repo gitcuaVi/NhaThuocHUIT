@@ -22,6 +22,7 @@ namespace QuanLyNhaThuoc.Models
         public virtual Thuoc MaThuocNavigation { get; set; } = null!;
         public virtual ICollection<ChiTietPn> ChiTietPns { get; set; }
 
+
         [NotMapped] // if WarningMessage is not a database column
         public string WarningMessage { get; set; }//new 27/10
     }

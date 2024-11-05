@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin,NhanVien")]
+   [Area("Admin")]
+   
     public class HomeController : Controller
     {
         [HttpGet]
@@ -14,7 +15,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             return View();
         }
-        [Route("Account/AccessDenied")]
+        [Route("Home/AccessDenied")]
         public IActionResult AccessDenied()
         {
             return View();

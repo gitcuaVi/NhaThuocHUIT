@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class DonHangController : Controller

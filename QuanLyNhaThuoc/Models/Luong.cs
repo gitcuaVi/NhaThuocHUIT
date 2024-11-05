@@ -12,6 +12,7 @@ namespace QuanLyNhaThuoc.Models
         public DateTime NgayTraLuong { get; set; }
         public string GhiChu { get; set; } = null!;
         public int SoCaLamViec { get; set; }
+        public int SoGioTangCa { get; set; }
         public DateTime LuongThang { get; set; }
         public decimal? LuongThuong { get; set; }
 

@@ -1,0 +1,75 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="secondary-navbar">
+    <div class="container">
+        <ul class="navbar-nav d-flex flex-row justify-content-around">
+            <!-- Thực Phẩm Chức Năng -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="thuc-pham-chuc-nang" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Thực Phẩm Chức Năng
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="thuc-pham-chuc-nang">
+                    @foreach (var item in (List<DanhMuc>)ViewData["DanhMucThucPhamChucNang"])
+                    {
+                        <li><a class="dropdown-item" href="#">@item.TenDanhMuc</a></li>
+                    }
+                </ul>
+            </li>
+
+            <!-- Thiết Bị Y Tế -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="thiet-bi-y-te" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Thiết Bị Y Tế
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="thiet-bi-y-te">
+                    @foreach (var item in (List<DanhMuc>)ViewData["DanhMucThietBiYTe"])
+                    {
+                        <li><a class="dropdown-item" href="#">@item.TenDanhMuc</a></li>
+                    }
+                </ul>
+            </li>
+
+            <!-- Dược Mỹ Phẩm -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="duoc-my-pham" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dược Mỹ Phẩm
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="duoc-my-pham">
+                    @foreach (var item in (List<DanhMuc>)ViewData["DanhMucDuocMyPham"])
+                    {
+                        <li><a class="dropdown-item" href="#">@item.TenDanhMuc</a></li>
+                    }
+                </ul>
+            </li>
+
+            <!-- Chăm Sóc Cá Nhân -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="cham-soc-ca-nhan" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Chăm Sóc Cá Nhân
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="cham-soc-ca-nhan">
+                    @foreach (var item in (List<DanhMuc>)ViewData["DanhMucChamSocCaNhan"])
+                    {
+                        <li><a class="dropdown-item" href="#">@item.TenDanhMuc</a></li>
+                    }
+                </ul>
+            </li>
+
+            <!-- Chăm Sóc Trẻ Em -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="cham-soc-tre-em" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Chăm Sóc Trẻ Em
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="cham-soc-tre-em">
+                    @foreach (var item in (List<DanhMuc>)ViewData["DanhMucChamSocTreEm"])
+                    {
+                        <li><a class="dropdown-item" href="#">@item.TenDanhMuc</a></li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+

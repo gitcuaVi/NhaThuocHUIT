@@ -25,7 +25,7 @@ namespace QuanLyNhaThuoc
          options.LoginPath = "/Account/Login";
          options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
          options.SlidingExpiration = true;
-         options.AccessDeniedPath = "/Account/AccessDenied";
+         options.AccessDeniedPath = "/Home/AccessDenied";
      });
             /*// Đăng ký ApplicationDbContext với Entity Framework Core
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -82,7 +82,7 @@ namespace QuanLyNhaThuoc
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
+           
             app.Run();
         }
     

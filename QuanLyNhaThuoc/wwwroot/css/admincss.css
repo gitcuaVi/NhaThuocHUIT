@@ -1,0 +1,129 @@
+﻿body {
+    background-color: #f8f9fa;
+}
+
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+    .btn-primary:hover, .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning:hover {
+        background-color: goldenrod;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+.pagination .active > .page-link {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.custom-search-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .custom-search-icon i {
+        position: absolute;
+        right: 15px;
+    }
+
+#edit-user, #delete-user {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+}
+/* CSS cho bảng */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* CSS cho phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+    .pagination a {
+        padding: 8px 16px;
+        margin: 0 5px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+
+    .pagination span {
+        margin: 0 5px;
+        font-weight: bold;
+    }
+
+/* CSS cho form lọc tháng */
+form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+    form label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    form input[type="month"] {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    form button {
+        margin-left: 10px;
+        padding: 6px 12px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+

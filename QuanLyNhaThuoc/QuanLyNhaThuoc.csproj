@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Model\**" />
+    <Compile Remove="Service\**" />
+    <Content Remove="Areas\Admin\Views\Model\**" />
+    <Content Remove="Service\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Areas\Admin\Views\Model\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.35" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.35">
       <PrivateAssets>all</PrivateAssets>
@@ -21,8 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Model\" />
-    <Folder Include="Service\" />
+    <Folder Include="Areas\KhachHang\Data\" />
   </ItemGroup>
 
 </Project>

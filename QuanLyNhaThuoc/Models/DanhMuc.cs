@@ -12,6 +12,7 @@ namespace QuanLyNhaThuoc.Models
 
         public int MaDanhMuc { get; set; }
         public string TenDanhMuc { get; set; } = null!;
+        public int LoaiMenu { get; set; }
 
         public virtual ICollection<LoaiSanPham> LoaiSanPhams { get; set; }
     }

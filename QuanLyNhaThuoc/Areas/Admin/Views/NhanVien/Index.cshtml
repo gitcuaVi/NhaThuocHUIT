@@ -11,66 +11,20 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .btn-primary, .btn-success, .btn-warning, .btn-danger {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-            .btn-primary:hover, .btn-success:hover {
-                background-color: #218838;
-            }
-
-            .btn-warning:hover {
-                background-color: goldenrod;
-            }
-
-            .btn-danger:hover {
-                background-color: #dc3545;
-                border-color: #dc3545;
-            }
-
-        .pagination .active > .page-link {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-        .custom-search-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-            .custom-search-icon i {
-                position: absolute;
-                right: 15px;
-            }
-
-        #edit-user, #delete-user {
-            font-size: 1.1rem;
-            padding: 10px 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/admincss.css" asp-append-version="true" />
+   
 </head>
 <div class="container my-4">
     <h1 class="mb-4">Quản lý nhân viên</h1>
     <form method="get" class="row g-3 align-items-center mb-3">
         @Html.AntiForgeryToken()
 
-        <!-- Search bar -->
         <div class="col-md-3">
             <div class="custom-search-icon">
                 <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm nhân viên..." value="@ViewBag.CurrentFilter" />
                 <i class="bi bi-search"></i>
             </div>
         </div>
-
-        <!-- Filter by Gender -->
         <div class="col-md-3">
             <select name="sexFilter" class="form-control">
                 <option value="">Lọc theo giới tính</option>
@@ -78,8 +32,6 @@
                 <option value="Nữ">Nữ</option>
             </select>
         </div>
-
-        <!-- Filter by Status -->
         <div class="col-md-3">
             <select name="statusFilter" class="form-control">
                 <option value="">Lọc theo trạng thái</option>
@@ -87,8 +39,6 @@
                 <option value="Đã Nghĩ">Đã Nghĩ</option>
             </select>
         </div>
-
-        <!-- Submit Button -->
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">
                 <i class="bi bi-search"></i> Tìm kiếm
@@ -96,7 +46,6 @@
         </div>
     </form>
 
-    <!-- Employee list with checkboxes -->
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -132,7 +81,15 @@
     </div>
 
     <div class="action-buttons mt-3 d-flex justify-content-center">
-       
+        <a href="@Url.Action("XemBangLuong", "NhanVien")" class="btn btn-primary">
+            <i class="fas fa-table"></i> Xem Bảng Lương
+        </a>
+
+
+        <button type="button" class="btn btn-primary mx-3" id="calculate-salary">
+            <i class="bi bi-calculator"></i> Tính Lương
+        </button>
+
         <a href="/Admin/NhanVien/Create" class="btn btn-success mx-3">
             <i class="bi bi-person-plus"></i> Thêm nhân viên
         </a>
@@ -146,10 +103,9 @@
         <button type="button" class="btn btn-danger mx-3 btn-lg" id="delete-user">
             <i class="bi bi-trash-fill"></i> Xóa
         </button>
+      
     </div>
 
-
-    <!-- Pagination -->
     <div class="pagination mt-3">
         <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-center">
@@ -226,5 +182,13 @@
             });
         }
     });
-   
+    document.getElementById('calculate-salary').addEventListener('click', function () {
+        let selected = document.querySelectorAll('input.user-select:checked');
+        if (selected.length == 1) {
+            window.location.href = '/Admin/NhanVien/TinhLuong?maNhanVien=' + selected[0].value;
+        } else {
+            alert('Chỉ được chọn 1 nhân viên để tính lương.');
+        }
+    });
+
 </script>

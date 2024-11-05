@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
@@ -7,9 +8,11 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class ThuocController : Controller

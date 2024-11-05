@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
 
 namespace QuanLyNhaThuoc.Models
 {
@@ -15,7 +16,7 @@ namespace QuanLyNhaThuoc.Models
             : base(options)
         {
         }
-
+        public DbSet<ProductViewModel> ViewSanPhamByDanhMuc { get; set; }
         public virtual DbSet<CaLamViec> CaLamViecs { get; set; } = null!;
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
@@ -30,9 +31,7 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<Luong> Luongs { get; set; } = null!;
         public virtual DbSet<NguoiDung> NguoiDungs { get; set; } = null!;
         public virtual DbSet<NhanVien> NhanViens { get; set; } = null!;
-        public virtual DbSet<PhanQuyen> PhanQuyens { get; set; } = null!;
         public virtual DbSet<PhieuNhap> PhieuNhaps { get; set; } = null!;
-        public virtual DbSet<QuyenTruyCap> QuyenTruyCaps { get; set; } = null!;
         public virtual DbSet<SaoLuuVaPhucHoi> SaoLuuVaPhucHois { get; set; } = null!;
         public virtual DbSet<ThanhToan> ThanhToans { get; set; } = null!;
         public virtual DbSet<Thuoc> Thuocs { get; set; } = null!;
@@ -56,6 +55,26 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ProductViewModel>().HasNoKey();
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.MaDanhMuc)
+                .IsRequired();
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.TenLoai)
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.TenThuoc)
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.DonGia)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<ProductViewModel>()
+                .Property(v => v.UrlAnh)
+                .HasMaxLength(500);
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)
@@ -161,8 +180,6 @@ namespace QuanLyNhaThuoc.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ChiTietPN_MaTonKho");
             });
-
-
             modelBuilder.Entity<DanhMuc>(entity =>
             {
                 entity.HasKey(e => e.MaDanhMuc);
@@ -242,7 +259,7 @@ namespace QuanLyNhaThuoc.Models
 
                 entity.Property(e => e.DonGia).HasColumnType("decimal(18, 0)");
 
-                entity.Property(e => e.DonVi).HasMaxLength(10);
+               
 
                 entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
 
@@ -406,23 +423,6 @@ namespace QuanLyNhaThuoc.Models
                     .HasConstraintName("FK_NhanVien_MaNguoiDung");
             });
 
-            modelBuilder.Entity<PhanQuyen>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("PhanQuyen");
-
-                entity.HasOne(d => d.MaQuyenNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.MaQuyen)
-                    .HasConstraintName("FK_PhanQuyen_Quyen");
-
-                entity.HasOne(d => d.MaVaiTroNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.MaVaiTro)
-                    .HasConstraintName("FK_PhanQuyen_VaiTro");
-            });
-
             modelBuilder.Entity<PhieuNhap>(entity =>
             {
                 entity.HasKey(e => e.MaPhieuNhap)
@@ -449,18 +449,6 @@ namespace QuanLyNhaThuoc.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PhieuNhap_MaNhanVien");
             });
-
-
-            modelBuilder.Entity<QuyenTruyCap>(entity =>
-            {
-                entity.HasKey(e => e.MaQuyen)
-                    .HasName("PK__QuyenTru__1D4B7ED44F6F0300");
-
-                entity.ToTable("QuyenTruyCap");
-
-                entity.Property(e => e.TenQuyen).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<SaoLuuVaPhucHoi>(entity =>
             {
                 entity.HasKey(e => e.MaSaoLuu)
@@ -533,6 +521,7 @@ namespace QuanLyNhaThuoc.Models
                 entity.Property(e => e.SoLuongTon).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.TenThuoc).HasMaxLength(255);
+                entity.Property(e => e.DonVi).HasMaxLength(255);
 
                 entity.Property(e => e.DonVi).HasMaxLength(255);
 

@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using QuanLyNhaThuoc.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class LoaiSanPhamController : Controller
