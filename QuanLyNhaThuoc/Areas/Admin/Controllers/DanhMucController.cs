@@ -40,8 +40,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 try
                 {
-                    var parameters = new[] { danhMuc.TenDanhMuc };
-                    _context.Database.ExecuteSqlRaw("EXEC CreateDanhMuc @p0", parameters);
+                    var parameters = new object[] { danhMuc.TenDanhMuc, danhMuc.LoaiMenu };
+                    _context.Database.ExecuteSqlRaw("EXEC CreateDanhMuc @p0, @p1", parameters);
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -52,6 +52,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
             return View(danhMuc);
         }
+
 
         [HttpGet("Edit/{id}")]
         public IActionResult Edit(int id)
@@ -77,8 +78,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 try
                 {
-                    var parameters = new object[] { danhMuc.MaDanhMuc, danhMuc.TenDanhMuc };
-                    _context.Database.ExecuteSqlInterpolated($"EXEC UpdateDanhMuc {danhMuc.MaDanhMuc}, {danhMuc.TenDanhMuc}");
+                    var parameters = new object[] { danhMuc.MaDanhMuc, danhMuc.TenDanhMuc, danhMuc.LoaiMenu };
+                    _context.Database.ExecuteSqlInterpolated($"EXEC UpdateDanhMuc {danhMuc.MaDanhMuc}, {danhMuc.TenDanhMuc}, {danhMuc.LoaiMenu}");
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -95,6 +96,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
             return View(danhMuc);
         }
+
 
         [HttpPost("Delete")]
         [ValidateAntiForgeryToken]

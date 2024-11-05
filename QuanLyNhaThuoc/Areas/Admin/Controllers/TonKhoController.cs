@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class TonKhoController : Controller

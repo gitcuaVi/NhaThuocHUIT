@@ -16,6 +16,12 @@
             <span asp-validation-for="TenDanhMuc" class="text-danger"></span>
         </div>
 
+        <div class="form-group mb-3">
+            <label asp-for="LoaiMenu" class="form-label">Loại Menu</label>
+            <input asp-for="LoaiMenu" class="form-control" placeholder="Nhập loại menu" required />
+            <span asp-validation-for="LoaiMenu" class="text-danger"></span>
+        </div>
+
         <!-- Submit Button -->
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-primary">Tạo</button>

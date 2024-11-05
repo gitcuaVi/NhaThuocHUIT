@@ -15,5 +15,5 @@ namespace QuanLyNhaThuoc.Models
         public int LoaiMenu { get; set; }
 
         public virtual ICollection<LoaiSanPham> LoaiSanPhams { get; set; }
-    }
+    }   
 }
