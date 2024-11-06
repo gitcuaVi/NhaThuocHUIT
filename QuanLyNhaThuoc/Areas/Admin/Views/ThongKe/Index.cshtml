@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <!-- Row to align buttons horizontally -->
+    <div class="row justify-content-center">
+        <!-- Nút Thống Kê Đơn Hàng -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("IndexDonHang", "ThongKe")" class="btn btn-primary w-100">Thống Kê Đơn Hàng</a>
+        </div>
+
+        <!-- Nút Thống Kê Phiếu Nhập -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("IndexPhieuNhap", "ThongKe")" class="btn btn-success w-100">Thống Kê Phiếu Nhập</a>
+        </div>
+    </div>
+</div>
+
+<!-- Add custom styles for spacing and alignment -->
+<style>
+    .container {
+        padding-top: 50px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .col-md-4 {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn {
+        font-size: 18px;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        /* Optional: You can add hover effects for better interactivity */
+        .btn:hover {
+            opacity: 0.9;
+        }
+</style>

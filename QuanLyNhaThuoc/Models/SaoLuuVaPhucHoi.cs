@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuanLyNhaThuoc.Models
 {
@@ -14,5 +15,7 @@ namespace QuanLyNhaThuoc.Models
         public string? TenFileSaoLuu { get; set; }
 
         public virtual NhanVien? MaNhanVienNavigation { get; set; }
+      
+       
     }
 }
