@@ -21,13 +21,13 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             _context = context;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Thiết lập giấy phép sử dụng EPPlus
         }
-        /*[HttpGet]
+        [HttpGet]
         // Trang chính
         public async Task<IActionResult> Index()
         {
         
             return View();
-        }*/
+        }
         [HttpPost]
         public async Task<IActionResult> IndexDonHang()
         {
