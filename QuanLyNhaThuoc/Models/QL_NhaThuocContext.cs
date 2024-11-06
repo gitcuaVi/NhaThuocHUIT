@@ -46,13 +46,16 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<UpdateDonHang> UpdateDonHangs { get; set; }
         public DbSet<DonHangDetailsViewModel> DonHangDetailsViewModels { get; set; }
         public DbSet<ChiTietDonHangViewModel> ChiTietDonHangViewModels { get; set; }
-       
+        public DbSet<ThongKeDonHangView> vw_ThongKeDonHang { get; set; }
+        public DbSet<ThongKePhieuNhapView> vw_ThongKePhieuNhap { get; set; }
+        public DbSet<BangTamTKDH> BangTamTKDHs { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=LAPTOP-OGOI530P;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Data Source=THANHSANG;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
         }
 
@@ -76,6 +79,10 @@ namespace QuanLyNhaThuoc.Models
             });
             modelBuilder.Entity<ChiTietDonHangViewModel>().HasNoKey();
             modelBuilder.Entity<DonHangDetailsViewModel>().HasNoKey();
+            modelBuilder.Entity<ThongKeDonHangView>().HasNoKey();
+            modelBuilder.Entity<BangTamTKDH>().HasNoKey();
+            
+            modelBuilder.Entity<ThongKePhieuNhapView>().HasNoKey();
             modelBuilder.Entity<ChamCong>(entity =>
             {
                 entity.HasKey(e => new { e.MaChamCong, e.MaNhanVien, e.NgayChamCong })

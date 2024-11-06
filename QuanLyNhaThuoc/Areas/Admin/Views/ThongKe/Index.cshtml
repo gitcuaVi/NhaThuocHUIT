@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <!-- Nút Thống Kê Đơn Hàng -->
+    <div class="form-group">
+        <a href="@Url.Action("IndexDonHang", "ThongKe")" class="btn btn-primary">Thống Kê Đơn Hàng</a>
+    </div>
+
+    <!-- Nút Thống Kê Phiếu Nhập -->
+    <div class="form-group">
+        <a href="@Url.Action("IndexPhieuNhap", "ThongKe")" class="btn btn-success">Thống Kê Phiếu Nhập</a>
+    </div>
+</div>
+

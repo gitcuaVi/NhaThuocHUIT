@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Model\**" />
+    <Compile Remove="Service\**" />
+    <Content Remove="Areas\Admin\Views\Model\**" />
+    <Content Remove="Service\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Areas\Admin\Views\Model\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="7.4.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.35" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.35">
       <PrivateAssets>all</PrivateAssets>
@@ -18,11 +30,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Model\" />
-    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>
