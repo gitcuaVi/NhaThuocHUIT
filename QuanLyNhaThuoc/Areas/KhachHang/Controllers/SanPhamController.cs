@@ -23,21 +23,29 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             return PartialView();
         }
 
-        [HttpGet]
-        public IActionResult GetProductsByDanhMuc(int maDanhMuc = 17)
+        [HttpGet("DanhMuc/{maDanhMuc:int}")]
+        public IActionResult Index(int maDanhMuc)
         {
             var products = db.Thuocs
-                .Include(t => t.HinhAnhs)
+                .Include(t => t.MaLoaiSanPhamNavigation)
                 .Where(t => t.MaLoaiSanPhamNavigation.MaDanhMuc == maDanhMuc)
-                .Select(t => new ProductViewModel
+                .Select(t => new
                 {
-                    TenThuoc = t.TenThuoc,
-                    DonGia = t.DonGia,
-                    UrlAnh = t.HinhAnhs.FirstOrDefault().UrlAnh,
-                    DonVi = t.DonVi
-                }).ToList();
+                    t.MaThuoc,
+                    t.TenThuoc,
+                    t.DonGia,
+                    t.SoLuongTon,
+                    t.DonVi,
+                    HinhAnhUrl = t.HinhAnhs.Select(h => h.UrlAnh).FirstOrDefault()
+                })
+                .ToList();
 
-            return PartialView("_ProductList", products);
+            ViewData["SelectDanhMuc"] = db.DanhMucs
+                .Where(d => d.MaDanhMuc == maDanhMuc)
+                .Select(d => d.TenDanhMuc)
+                .FirstOrDefault();
+
+            return View(products);
         }
     }
 }
