@@ -1,27 +1,5 @@
-﻿@model IEnumerable<dynamic>
-
-@{
-    ViewData["Title"] = "Danh Mục Thuốc - " + ViewData["SelectDanhMuc"];
-    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
-}
-
-<h2>@ViewData["Title"]</h2>
-
-<div class="product-list">
-    @foreach (var product in Model)
-    {
-        <div class="product-item">
-            <a href="/KhachHang/Thuoc/Details/@product.MaThuoc">
-                <div class="item-img">
-                    <img src="@product.HinhAnhUrl ?? " /path/to/default-image.jpg"" alt="@product.TenThuoc" width="100" height="100" />
-                </div>
-                <div class="text-prod">
-                    <h3>@product.TenThuoc</h3>
-                    <span><b class="P_disprice">@product.DonGia.ToString("N0")₫</b> / @product.DonVi</span>
-                    <p>In Stock: @product.SoLuongTon</p>
-                </div>
-            </a>
-            <button class="click-buy btn-add">Thêm vào giỏ thuốc</button>
-        </div>
-    }
+﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+@using QuanLyNhaThuoc.Areas.KhachHang.Models
+<div class="product-section container mt-4">
+    @await Html.PartialAsync("_DanhSachSanPhamPartial", ViewData["Products"])
 </div>

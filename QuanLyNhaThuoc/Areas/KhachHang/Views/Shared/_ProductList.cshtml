@@ -8,7 +8,7 @@
     @foreach (var product in Model)
     {
         <div class="product-item">
-            <img src="@product.UrlAnh ?? " no-image.jpg"" alt="@product.TenThuoc ?? " No name"" class="product-image" />
+            <img src="@product.HinhAnhDauTien ?? " no-image.jpg"" alt="@product.TenThuoc ?? " No name"" class="product-image" />
             <h4>@product.TenThuoc ?? "No name"</h4>
             <p>Đơn giá: @product.DonGia</p>
             <p>Đơn vị: @product.DonVi ?? "N/A"</p>

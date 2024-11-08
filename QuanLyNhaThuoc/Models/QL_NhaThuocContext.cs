@@ -52,32 +52,13 @@ namespace QuanLyNhaThuoc.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=THANHSANG;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Data Source=LAPTOP-OGOI530P;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductViewModel>().HasNoKey();
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.MaDanhMuc)
-                .IsRequired();
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.TenLoai)
-                .HasMaxLength(255);
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.TenThuoc)
-                .HasMaxLength(255);
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.DonGia)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.UrlAnh)
-                .HasMaxLength(500);
+            modelBuilder.Entity<ProductViewModel>().HasNoKey();      
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)
