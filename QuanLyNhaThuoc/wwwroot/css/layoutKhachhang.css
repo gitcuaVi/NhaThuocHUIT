@@ -1,4 +1,4 @@
-﻿/* Custom Styles */
+﻿/* Custom Banner Styles */
 .discount-banner {
     background-color: #f06292;
     color: #fff;
@@ -7,11 +7,15 @@
     font-weight: bold;
 }
 
+/* Navbar Styles */
 .navbar-custom {
     background-color: #4CAF50;
 }
 
-    .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .location-text, .navbar-custom .hotline {
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link,
+    .navbar-custom .location-text,
+    .navbar-custom .hotline {
         color: #fff;
     }
 
@@ -20,10 +24,12 @@
         font-weight: bold;
     }
 
+/* Search Bar */
 .search-bar {
     width: 300px;
 }
 
+/* Secondary Navbar Styles */
 .secondary-navbar {
     background-color: #4CAF50;
     padding: 10px 0;
@@ -39,6 +45,44 @@
             color: #ffd600;
         }
 
+/* Dropdown Hover Styles */
+.dropdown:hover .dropdown-menu,
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.secondary-navbar .dropdown-menu {
+    background-color: #4CAF50;
+    border: none;
+}
+
+.secondary-navbar .dropdown-item {
+    color: #fff;
+}
+
+    .secondary-navbar .dropdown-item:hover {
+        background-color: #ffd600;
+        color: #4CAF50;
+    }
+
+/* Default Dropdown Menu Styles */
+.dropdown-menu {
+    display: none;
+}
+
+    .dropdown-menu a {
+        color: #333;
+        text-decoration: none;
+        padding: 8px 15px;
+        display: block;
+    }
+
+        .dropdown-menu a:hover {
+            background-color: #f8f9fa;
+        }
+
+/* Footer Styles */
 .footer {
     background-color: #f9f9f9;
     padding: 40px 0;
@@ -76,43 +120,8 @@
         border-top: 1px solid #ddd;
         padding-top: 10px;
     }
-/* CSS for Hover Dropdown */
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
 
-.secondary-navbar .dropdown-menu {
-    background-color: #4CAF50;
-    border: none;
-}
-
-.secondary-navbar .dropdown-item {
-    color: #fff;
-}
-
-    .secondary-navbar .dropdown-item:hover {
-        background-color: #ffd600;
-        color: #4CAF50;
-    }
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-}
-
-.dropdown-menu {
-    display: none;
-}
-
-    .dropdown-menu a {
-        color: #333;
-        text-decoration: none;
-        padding: 8px 15px;
-        display: block;
-    }
-
-        .dropdown-menu a:hover {
-            background-color: #f8f9fa;
-        }
+/* Footer Extra Styles */
 .footer-extra {
     background-color: #def9da;
     color: #333;

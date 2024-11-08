@@ -1,5 +1,4 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.Models.DanhMuc>
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +21,7 @@
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand" href="#">
-                <img src="~/lib/Image/logo2.png" alt="Logo" style="height: 40px;"> 
+                <img src="~/lib/Image/logo2.png" alt="Logo" style="height: 40px;">
             </a>
 
             <!-- Location & Search Bar -->
@@ -49,7 +48,7 @@
         </div>
     </nav>
 
-   
+
     <div class="secondary-navbar">
         <div class="container">
             <ul class="navbar-nav d-flex flex-row justify-content-around">
@@ -66,22 +65,21 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="3">Dược Mỹ Phẩm</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="2"></div>
+                    <div class="dropdown-menu danh-muc-container" data-loai-menu="3"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="4">Chăm Sóc Cá Nhân</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="2"></div>
+                    <div class="dropdown-menu danh-muc-container" data-loai-menu="4"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="5">Chăm Sóc Trẻ Em</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="2"></div>
+                    <div class="dropdown-menu danh-muc-container" data-loai-menu="5"></div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       >Góc Sức Khỏe</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="2"></div>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-loai-menu="6">Góc Sức Khỏe</a>
+                    <div class="dropdown-menu danh-muc-container" data-loai-menu="6"></div>
                 </li>
             </ul>
         </div>
@@ -206,7 +204,7 @@
             </div>
         </div>
     </footer>
-   
+
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -220,7 +218,7 @@
 
                 if (!dropdownMenu.hasClass('loaded')) {
                     $.ajax({
-                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")',
+                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")', // Replace with your URL
                         data: { loaiMenu: loaiMenu },
                         success: function (data) {
                             dropdownMenu.html(data).addClass('loaded').show();
@@ -229,6 +227,7 @@
                 }
             });
         });
+
     </script>
 </body>
 </html>

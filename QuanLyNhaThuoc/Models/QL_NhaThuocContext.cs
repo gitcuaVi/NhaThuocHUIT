@@ -58,26 +58,9 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductViewModel>().HasNoKey();
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.MaDanhMuc)
-                .IsRequired();
+            modelBuilder.Entity<ProductViewModel>().HasNoKey(); 
 
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.TenLoai)
-                .HasMaxLength(255);
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.TenThuoc)
-                .HasMaxLength(255);
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.DonGia)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<ProductViewModel>()
-                .Property(v => v.UrlAnh)
-                .HasMaxLength(500);
+           
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)
