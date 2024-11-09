@@ -1,0 +1,31 @@
+﻿
+@model QuanLyNhaThuoc.Areas.KhachHang.Models.ThongTinKhachHangViewModel
+
+@{
+    ViewData["Title"] = "Thông tin người dùng";
+}
+<link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />
+
+<h2 class="profile-header">Thông tin người dùng</h2>
+
+<div class="profile-container">
+    <div class="profile-info">
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Số điện thoại:</strong> @Model.SoDienThoai</p>
+        <p><strong>Tên khách hàng:</strong> @Model.TenKhachHang</p>
+        <p><strong>Giới tính:</strong> @Model.GioiTinh</p>
+        <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+        <p><strong>Ngày sinh:</strong> @Model.NgaySinh.ToString("dd/MM/yyyy")</p>
+        <p><strong>Điểm:</strong> @Model.Diem</p>
+    </div>
+
+    <div class="profile-actions">
+        <form method="post" asp-action="Logout" class="logout-form">
+            <button type="submit" class="btn btn-logout">Đăng xuất</button>
+        </form>
+
+        <a href="@Url.Action("Edit", "Profile")" class="btn btn-edit">Chỉnh sửa thông tin</a>
+        <a href="@Url.Action("ChangePassword", "Profile")" class="btn btn-change-password">Đổi mật khẩu</a>
+    </div>
+</div>
+

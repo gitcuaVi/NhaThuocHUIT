@@ -77,8 +77,8 @@
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 10px;
-    padding-left: 40px; /* Thụt vào 1 cm từ bên trái */
-    padding-right: 40px; /* Thụt vào 1 cm từ bên trái */
+    padding-left: 40px; 
+    padding-right: 40px; 
 }
 
 /* Category Section Styling */

@@ -17,3 +17,59 @@
 .badge-danger {
     background-color: #dc3545;
 }
+.profile-header {
+    font-size: 2em;
+    color: #4CAF50;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.profile-container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+    .profile-info p {
+        margin: 10px 0;
+    }
+
+.profile-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+}
+
+.btn-logout {
+    background-color: #f44336;
+}
+
+.btn-edit {
+    background-color: #4CAF50;
+}
+
+.btn-change-password {
+    background-color: #2196F3;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
