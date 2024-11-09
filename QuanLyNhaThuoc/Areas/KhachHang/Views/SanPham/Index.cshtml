@@ -1,5 +1,9 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
-@using QuanLyNhaThuoc.Areas.KhachHang.Models
+﻿@using QuanLyNhaThuoc.Areas.KhachHang.Models
+@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+
+<link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
+
 <div class="product-section container mt-4">
-    @await Html.PartialAsync("_DanhSachSanPhamPartial", ViewData["Products"])
+    <!-- Sử dụng Partial view để hiển thị danh sách sản phẩm -->
+    @await Html.PartialAsync("_DanhSachSanPhamDanhMucPartial", ViewData["Products"] as IEnumerable<ProductViewModel>)
 </div>

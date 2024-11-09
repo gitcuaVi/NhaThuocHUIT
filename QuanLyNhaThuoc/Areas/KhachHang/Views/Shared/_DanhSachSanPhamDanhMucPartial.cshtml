@@ -1,0 +1,123 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+
+<link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
+
+
+<div class="container mt-4">
+    <h4>@Model.Count() Sản phẩm vitamin và khoáng chất</h4>
+
+    <div class="filter-container">
+        <button class="filter-btn">Lọc</button>
+        <div class="filter-popup">
+            <div class="filter-header">
+                <h3>Lọc sản phẩm</h3>
+                <button class="close-popup">Đóng</button>
+            </div>
+
+            <div class="filter-section">
+                <h4>Loại sản phẩm</h4>
+                <select id="productType" name="productType">
+                    <option value="">Chọn loại sản phẩm</option>
+                    @foreach (var type in ViewData["ProductTypes"] as IEnumerable<LoaiSanPham>)
+                    {
+                        <option value="@type.TenLoai">@type.TenLoai</option>
+                    }
+                </select>
+            </div>
+
+
+            <div class="filter-section">
+                <h4>Giá</h4>
+                <div class="price-range">
+                    <label for="minPriceInput">Giá tối thiểu:</label>
+                    <input type="number" id="minPriceInput" placeholder="Nhập giá tối thiểu" />
+                    <label for="maxPriceInput">Giá tối đa:</label>
+                    <input type="number" id="maxPriceInput" placeholder="Nhập giá tối đa" />
+                </div>
+            </div>
+
+
+            <div class="filter-actions">
+                <button class="reset-filters">Chọn lại</button>
+                <button class="apply-filters">Xem kết quả</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="product-type-filter mb-4">
+        <span>Chọn vitamin và khoáng chất theo loại sản phẩm:</span>
+        @foreach (var type in ViewData["ProductTypes"] as IEnumerable<LoaiSanPham>)
+        {
+            <button class="btn btn-outline-primary product-type-btn" data-type="@type.TenLoai">@type.TenLoai</button>
+        }
+    </div>
+
+    <!-- Phần danh sách sản phẩm -->
+    <div class="product-grid row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-3 col-lg-3 mb-4">
+                <div class="product-item card">
+                    <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                    <div class="card-body">
+                        <h5 class="card-title text-left">@product.TenThuoc</h5>
+                        <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
+                        <button class="btn btn-primary add-to-cart">Thêm vào giỏ thuốc</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.querySelector('.filter-btn').addEventListener('click', function () {
+        document.querySelector('.filter-popup').style.display = 'block';
+    });
+
+    document.querySelector('.close-popup').addEventListener('click', function () {
+        document.querySelector('.filter-popup').style.display = 'none';
+    });
+
+    // Apply filters when "Xem kết quả" button is clicked
+    document.querySelector('.apply-filters').addEventListener('click', function () {
+        const minPrice = document.getElementById('minPriceInput').value;
+        const maxPrice = document.getElementById('maxPriceInput').value;
+        const productType = document.getElementById('productType').value;
+
+        const url = new URL(window.location.href);
+
+        // Set minPrice and maxPrice if they are entered
+        if (minPrice) url.searchParams.set('minPrice', minPrice);
+        if (maxPrice) url.searchParams.set('maxPrice', maxPrice);
+        if (productType) url.searchParams.set('productType', productType);
+
+        window.location.href = url.toString();
+    });
+
+    // Reset filters
+    document.querySelector('.reset-filters').addEventListener('click', function () {
+        document.getElementById('minPriceInput').value = '';
+        document.getElementById('maxPriceInput').value = '';
+        document.getElementById('productType').value = '';
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete('minPrice');
+        url.searchParams.delete('maxPrice');
+        url.searchParams.delete('productType');
+
+        window.location.href = url.toString();
+    });
+    document.querySelectorAll('.product-type-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const selectedType = this.getAttribute('data-type');
+
+            // Update the product type dropdown value
+            document.getElementById('productType').value = selectedType;
+
+            // Trigger the "apply filters" button click to reload the page with the selected filter
+            document.querySelector('.apply-filters').click();
+        });
+    });
+</script>

@@ -20,16 +20,29 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int categoryId)
+        public async Task<IActionResult> Index(int categoryId, decimal? minPrice, decimal? maxPrice, string productType)
         {
-            var param = new SqlParameter("@MaDanhMuc", categoryId);
+            var paramCategoryId = new SqlParameter("@MaDanhMuc", categoryId);
+            var paramMinPrice = new SqlParameter("@MinPrice", minPrice ?? (object)DBNull.Value);
+            var paramMaxPrice = new SqlParameter("@MaxPrice", maxPrice ?? (object)DBNull.Value);
+            var paramProductType = new SqlParameter("@ProductType", string.IsNullOrEmpty(productType) ? (object)DBNull.Value : productType);
 
             var products = await db.Set<ProductViewModel>()
-                .FromSqlRaw("EXEC sp_GetAllProductsByCategory @MaDanhMuc", param)
+                .FromSqlRaw("EXEC sp_GetAllProductsByCategoryAndFilters @MaDanhMuc, @MinPrice, @MaxPrice, @ProductType",
+                            paramCategoryId, paramMinPrice, paramMaxPrice, paramProductType)
                 .ToListAsync();
 
+            var productTypes = await db.LoaiSanPhams
+                .Where(l => l.MaDanhMuc == categoryId)
+                .ToListAsync();
+
+            ViewData["ProductTypes"] = productTypes;
+
             ViewData["Products"] = products;
+
             return View();
         }
+
+
     }
 }
