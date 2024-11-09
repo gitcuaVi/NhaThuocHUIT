@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
 using QuanLyNhaThuoc.Models;
@@ -17,11 +18,28 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             db = context;
         }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            int maDanhMuc1 = 40;
+            int maDanhMuc2 = 41;
+
+            var param1 = new SqlParameter("@MaDanhMuc", maDanhMuc1);
+            var param2 = new SqlParameter("@MaDanhMuc", maDanhMuc2);
+
+            var products1 = await db.Set<ProductViewModel>()
+                .FromSqlRaw("EXEC sp_GetAllProductsByCategory @MaDanhMuc", param1)
+                .ToListAsync();
+
+            var products2 = await db.Set<ProductViewModel>()
+                .FromSqlRaw("EXEC sp_GetAllProductsByCategory @MaDanhMuc", param2)
+                .ToListAsync();
+
+            ViewData["Products1"] = products1;
+            ViewData["Products2"] = products2;
+
             return View();
         }
+
     }
 }

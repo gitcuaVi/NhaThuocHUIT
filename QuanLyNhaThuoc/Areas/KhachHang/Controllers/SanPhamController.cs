@@ -18,7 +18,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             db = context;
         }
-
+       
         [HttpGet]
         public async Task<IActionResult> Index(int categoryId, decimal? minPrice, decimal? maxPrice, string productType)
         {

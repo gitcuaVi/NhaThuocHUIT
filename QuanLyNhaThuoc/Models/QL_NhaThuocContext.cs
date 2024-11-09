@@ -38,7 +38,8 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<TonKho> TonKhos { get; set; } = null!;
         public virtual DbSet<VaiTro> VaiTros { get; set; } = null!;
         public DbSet<ThongTinCaNhanView> ThongTinCaNhanView { get; set; }
-      
+        public DbSet<ThongTinKhachHangViewModel> ThongTinKhachHangViewModel { get; set; }
+
         public DbSet<DonHangKhachHangViewModels> DonHangKhachHangViewModels { get; set; }
         public DbSet<UpdateDonHang> UpdateDonHangs { get; set; }
         public DbSet<DonHangDetailsViewModel> DonHangDetailsViewModels { get; set; }
@@ -58,7 +59,12 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<ProductViewModel>().HasNoKey();      
+
+            modelBuilder.Entity<ProductViewModel>().HasNoKey();
+            modelBuilder.Entity<ThongTinKhachHangViewModel>().HasNoKey();
+
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)

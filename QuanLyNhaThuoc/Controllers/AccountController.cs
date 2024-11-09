@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
+
 
 namespace QuanLyNhaThuoc.Controllers
 {
@@ -140,7 +142,8 @@ namespace QuanLyNhaThuoc.Controllers
             }
             return -1; // Trả về -1 nếu không tìm thấy
         }
-       
-    
+
+
+
     }
 }

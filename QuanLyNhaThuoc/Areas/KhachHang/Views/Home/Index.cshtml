@@ -1,16 +1,112 @@
 ﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
-}
+@using QuanLyNhaThuoc.Areas.KhachHang.Models
+<link rel="stylesheet" href="~/css/layotsanpham.css" asp-append-version="true" />
+<div class="container">
+<div class="container mt-4">
+    <div class="row">
+        <!-- Main Carousel Banner (Left Side) -->
+        <div class="col-md-8">
+            <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
 
-@if (Model != null)
-{
-    <h1> Tủ thuốc gia đình</h1>
-    @await Html.PartialAsync("_ProductList", Model)
-}
-else
-{
-    <p>No products available.</p>
-}
+                <!-- Carousel Images -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="~/images/642f4e63c4a35b1dc7db1d1f52220eff.jpg" class="d-block w-100" alt="Banner 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="~/images/a6b5c8ff6d53e09edb4e1e07ec2fa17e.png" class="d-block w-100" alt="Banner 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="~/images/deae9c8b58d4e583afa3b7110c1b0d42.png" class="d-block w-100" alt="Banner 3">
+                    </div>
+                </div>
 
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Side Small Banners -->
+        <div class="col-md-4">
+            <div class="small-banner mb-3">
+                <img src="~/images/chat.jpg" class="img-fluid" alt="Small Banner 1">
+            </div>
+            <div class="small-banner">
+                <img src="~/images/deal.png" class="img-fluid" alt="Small Banner 2">
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="category-section">
+        <div class="category-item">
+            <img src="~/images/my-pham-86x86-86x86.png" alt="Dược mỹ phẩm">
+            <p>Dược mỹ phẩm</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/Sunscreen-108x108.jpg" alt="Kem chống nắng">
+            <p>Kem chống nắng</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/Condom-108x108.jpg" alt="Bao cao su">
+            <p>Bao cao su</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/Tang-cuong-sinh-ly-85x85-85x85-1.png" alt="Tăng sinh lý, bổ thận">
+            <p>Tăng sinh lý, bổ thận</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/cham-soc-ca-nhan-86x86.png" alt="Chăm sóc cá nhân">
+            <p>Chăm sóc cá nhân</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/cham-soc-tre-em-86x86 (1).png" alt="Chăm sóc trẻ em">
+            <p>Chăm sóc trẻ em</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/dung-cu-y-te-86x86.png" alt="Dụng cụ y tế">
+            <p>Dụng cụ y tế</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/Ho-hap-85x85-1-85x85.png" alt="Bổ phế, hô hấp">
+            <p>Bổ phế, hô hấp</p>
+        </div>
+        <div class="category-item">
+            <img src="~/images/1bbcc5b18479ba45468a25a7492aae42.png" alt="Hỗ trợ tim mạch">
+            <p>Hỗ trợ tim mạch</p>
+        </div>
+    </div>
+
+
+<!-- Product Sections -->
+<div class="product-section container mt-4">
+    <h2 class="section-title">Tủ thuốc gia đình</h2>
+    @await Html.PartialAsync("_DanhSachSanPhamPartial", ViewData["Products1"])
+</div>
+
+<div class="product-section container mt-4">
+    <h2 class="section-title">Sản phẩm khác</h2>
+    @await Html.PartialAsync("_DanhSachSanPhamPartial", ViewData["Products2"])
+</div>
+</div>
+<script>
+    // Optional: Enable auto-sliding
+    document.addEventListener('DOMContentLoaded', function () {
+        var productCarousel = new bootstrap.Carousel('#productCarousel', {
+            interval: 5000 // 5 seconds
+        });
+    });
+</script>
