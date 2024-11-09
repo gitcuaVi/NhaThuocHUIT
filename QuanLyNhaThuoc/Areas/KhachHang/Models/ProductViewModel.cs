@@ -7,6 +7,5 @@
         public decimal DonGia { get; set; }
         public string DonVi { get; set; }
         public string HinhAnhDauTien { get; set; } 
-        public string HinhAnhDauTien { get; set; } 
     }
 }
