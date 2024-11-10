@@ -1,8 +1,14 @@
 ﻿@model IEnumerable<QuanLyNhaThuoc.Models.DanhMuc>
 
-<ul class="dropdown-menu show-on-hover">
+ <ul class="dropdown-menu show-on-hover">
     @foreach (var item in Model)
     {
-        <li><a class="dropdown-item" href="@Url.Action("Index", "SanPham", new { categoryId = item.MaDanhMuc })">@item.TenDanhMuc</a></li>
+        <li>
+            <a class="dropdown-item "  href="@Url.Action("Index", "SanPham", new { categoryId = item.MaDanhMuc })" >@item.TenDanhMuc</a>
+            
+        
+        </li>
+       
     }
 </ul>
+

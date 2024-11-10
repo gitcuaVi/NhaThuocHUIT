@@ -23,5 +23,20 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             return View();
         }
+        [HttpGet("Gioithieu")]
+        public async Task<IActionResult> Gioithieu()
+        {
+            return View();
+        }
+        [HttpGet("BanDieuHanh")]
+        public async Task<IActionResult> BanDieuHanh()
+        {
+            return View();
+        }
+        [HttpGet("ChinhSach")]
+        public async Task<IActionResult> ChinhSach()
+        {
+            return View();
+        }
     }
 }

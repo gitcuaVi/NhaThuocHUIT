@@ -12,7 +12,9 @@
 }
 
     .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .location-text, .navbar-custom .hotline {
-        color: #fff;
+        color: #fff; /* Màu chữ */
+        
+        
     }
 
     .navbar-custom .hotline {
@@ -37,6 +39,7 @@
 
         .secondary-navbar .nav-link:hover {
             color: #ffd600;
+             
         }
 
 .footer {
@@ -76,6 +79,8 @@
         border-top: 1px solid #ddd;
         padding-top: 10px;
     }
+
+
 /* CSS for Hover Dropdown */
 .dropdown:hover .dropdown-menu {
     display: block;
@@ -94,25 +99,43 @@
         background-color: #ffd600;
         color: #4CAF50;
     }
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
+.nav-item.dropdown {
+    position: relative;
 }
 
 .dropdown-menu {
-    display: none;
+    display: none; /* Ẩn mặc định */
+    position: absolute;
+    top: 100%; /* Đặt ngay bên dưới nút chính */
+    left: 0;
+    min-width: 200px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 1000;
 }
 
-    .dropdown-menu a {
-        color: #333;
-        text-decoration: none;
-        padding: 8px 15px;
-        display: block;
+/* Hiển thị dropdown khi hover vào menu chính */
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+/* Các mục trong dropdown */
+.dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .dropdown-item:hover {
+        background-color: #007bff; /* Màu nền khi hover */
+        color: #ffffff; /* Màu chữ khi hover */
     }
 
-        .dropdown-menu a:hover {
-            background-color: #f8f9fa;
-        }
 .footer-extra {
     background-color: #def9da;
     color: #333;
@@ -145,3 +168,399 @@
         .footer-extra .footer-store-info button {
             font-size: 14px;
         }
+
+/*Sangggggggggggggggggggggggggggggggggggggg*/
+/* Thiết lập chung cho menu Góc Sức Khỏe */
+.nav-item-gocsuckhoe {
+    position: relative;
+}
+.nav-link {
+    color: #fff; /* Màu chữ */
+    font-weight: bold;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+    .nav-link:hover {
+        color: #007bff; /* Màu chữ khi hover */
+    }
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.nav-link-gocsuckhoe {
+    color: #fff; /* Màu chữ */
+    font-weight: bold;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+    .nav-link-gocsuckhoe:hover {
+        color: #007bff; /* Màu chữ khi hover */
+    }
+
+/* Dropdown menu Góc Sức Khỏe */
+.dropdown-menu-gocsuckhoe {
+    display: none; /* Ẩn mặc định */
+    position: absolute;
+    top: 100%; /* Đặt ngay bên dưới nút chính */
+    left: 0;
+    min-width: 200px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+/* Hiển thị dropdown khi hover vào menu chính */
+.nav-item-gocsuckhoe:hover .dropdown-menu-gocsuckhoe {
+    display: block;
+}
+
+/* Các mục trong dropdown */
+.dropdown-item-gocsuckhoe {
+    padding: 10px 20px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .dropdown-item-gocsuckhoe:hover {
+        background-color: #007bff; /* Màu nền khi hover */
+        color: #ffffff; /* Màu chữ khi hover */
+    }
+/*css ve nha thuoc an khang*/
+
+.container {
+    padding-top: 0px;
+}
+
+  
+    .container .row {
+        margin-bottom: 30px;
+    }
+
+        /* Styling for the text and links to ensure consistent spacing */
+        .container .row h6 {
+            margin-top: 50px;
+            margin-bottom: 15px; /* Space between section heading and content */
+        }
+
+
+
+
+.social-icons img {
+    margin-right: 10px; 
+}
+
+
+.certifications img {
+    margin-right: 15px; 
+}
+
+
+.partners img {
+    margin-right: 15px; 
+    margin-top: 10px; 
+}
+
+
+.container .row.text-center p {
+    font-size: 14px; 
+    line-height: 1.5; 
+}
+
+.container .row a {
+    display: block; 
+    color: #333; 
+    text-decoration: none; 
+    margin-bottom: 16px; 
+}
+
+    .container .row a:hover {
+        text-decoration: underline; 
+        color: #0056b3; 
+    }
+
+
+/* Breadcrumb styling */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    font-size: 14px;
+    color: #4CAF50; /* Adjust breadcrumb link color */
+}
+
+    .breadcrumb li {
+        list-style: none;
+        display: inline;
+        margin-right: 5px;
+    }
+
+        .breadcrumb li a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .breadcrumb li .right-breadcrumb {
+            width: 12px;
+            height: 12px;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+
+/* Tabs section styling */
+.tabs {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    padding: 0;
+    margin: 0;
+}
+
+    .tabs .tab-link {
+        padding: 10px 0;
+        color: #333;
+        font-weight: normal;
+    }
+
+        .tabs .tab-link a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .tabs .tab-link.title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .tabs .tab-link.current a {
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+/* Tab content styling */
+.tab-content {
+    margin-left: 200px;
+    padding: 20px;
+}
+
+    .tab-content h1.blog-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .tab-content h2 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    .tab-content .content p {
+        line-height: 1.6;
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 15px;
+    }
+
+        .tab-content .content p a {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
+/* Additional styling */
+.f-w-500 {
+    font-weight: 500;
+}
+
+.ppc-typography-heading4 {
+    margin-top: 30px;
+}
+
+.paragraph-padding {
+    padding-left: 10px;
+}
+
+/* General spacing and alignment */
+.warranty {
+    display: flex;
+    padding-left: 50px;
+}
+
+    .warranty .tabs {
+        margin-right: 20px;
+    }
+
+.tab-content.current {
+    flex-grow: 1;
+}
+
+.paragraph {
+    margin-top: 15px;
+}
+/*css Ban dieu hanh*/
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    color: #4CAF50;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+/* Top Section */
+.manage__top {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .manage__top h2 {
+        font-size: 28px;
+        color: #4CAF50;
+        margin-bottom: 10px;
+    }
+
+    .manage__top p {
+        font-size: 16px;
+        color: #666;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+/* Main Content */
+.manage__main {
+    margin-bottom: 40px;
+}
+
+    .manage__main h2 {
+        font-size: 24px;
+        color: #4CAF50;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+/* Profile List */
+.manage-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.profile {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 320px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+    .profile:hover {
+        transform: translateY(-5px);
+    }
+
+.profile-img img {
+    width: 100%;
+    height: auto;
+}
+
+.profile-content {
+    padding: 15px;
+}
+
+.txt-name {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
+.txt-postision {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.txt-ct p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Read More Button */
+.box-click .readmore {
+    display: inline-block;
+    color: #007bff;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Criteria Section */
+.manage__criteria {
+    margin-top: 40px;
+    text-align: center;
+}
+
+    .manage__criteria h2 {
+        font-size: 24px;
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+.criteria-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-criteria {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    .img-criteria img {
+        max-width: 150px;
+        border-radius: 8px;
+    }
+
+    .img-criteria p {
+        font-size: 16px;
+        color: #333;
+        margin-top: 10px;
+    }
+
+.criteria-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+    .criteria-list li {
+        font-size: 15px;
+        color: #555;
+        margin-bottom: 10px;
+        padding-left: 20px;
+        text-align: left;
+        max-width: 600px;
+    }

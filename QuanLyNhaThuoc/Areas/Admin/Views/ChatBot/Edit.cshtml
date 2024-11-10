@@ -4,9 +4,9 @@
     ViewData["Title"] = "Edit FAQ";
 }
 
-<h1>Edit FAQ</h1>
 
-<h4>Thông tin câu hỏi thường gặp</h4>
+
+<h1>Thông tin câu hỏi thường gặp</h1>
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -15,19 +15,19 @@
             <input type="hidden" asp-for="MaCauHoi" />
 
             <div class="form-group">
-                <label asp-for="CauHoiThuongGap" class="control-label"></label>
-                <input asp-for="CauHoiThuongGap" class="form-control" />
+                <label asp-for="CauHoiThuongGap" class="control-label">Câu Hỏi Thường Gặp</label>
+                <input asp-for="CauHoiThuongGap" class="form-control" placeholder="Nhập Câu Hỏi Thường Gặp" required />
                 <span asp-validation-for="CauHoiThuongGap" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="CauTraLoiTuongUng" class="control-label"></label>
-                <input asp-for="CauTraLoiTuongUng" class="form-control" />
+                <label asp-for="CauTraLoiTuongUng" class="control-label">Câu Trả Lời Tương Ứng</label>
+                <input asp-for="CauTraLoiTuongUng" class="form-control" placeholder="Nhập Trả Lời Tương Ứng" required />
                 <span asp-validation-for="CauTraLoiTuongUng" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="DanhMucCauHoi" class="control-label"></label>
+                <label asp-for="DanhMucCauHoi" class="control-label">Danh Mục Câu Hỏi</label>
                 <select asp-for="DanhMucCauHoi" class="form-control">
                     <option value="">-- Chọn danh mục --</option>
                     <option value="Tìm kiếm thuốc">Tìm kiếm thuốc</option>
@@ -47,21 +47,18 @@
                 <span asp-validation-for="DanhMucCauHoi" class="text-danger"></span>
             </div>
 
-           @*  <div class="form-group">
-                <label asp-for="NgayCapNhatCauHoi" class="control-label"></label>
-                <input asp-for="NgayCapNhatCauHoi" class="form-control" type="date" />
-                <span asp-validation-for="NgayCapNhatCauHoi" class="text-danger"></span>
-            </div> *@
+      
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Quay Lại</a>
+
 </div>
 
 @section Scripts {

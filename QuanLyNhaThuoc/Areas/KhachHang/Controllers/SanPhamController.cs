@@ -17,13 +17,13 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             db = context;
         }
 
-        [HttpGet]
+        [HttpGet("Partial_TuThuocGiaDinh")]
         public IActionResult Partial_TuThuocGiaDinh()
         {
             return PartialView();
         }
 
-        [HttpGet]
+        [HttpGet("GetProductsByDanhMuc")]
         public IActionResult GetProductsByDanhMuc(int maDanhMuc = 17)
         {
             var products = db.Thuocs
