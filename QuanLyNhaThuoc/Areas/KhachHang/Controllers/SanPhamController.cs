@@ -18,7 +18,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             db = context;
         }
-       
+
         [HttpGet]
         public async Task<IActionResult> Index(int categoryId, decimal? minPrice, decimal? maxPrice, string productType)
         {
@@ -42,21 +42,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return View();
         }
-
-
-        [HttpGet("GetProductsByDanhMuc")]
-        public IActionResult GetProductsByDanhMuc(int maDanhMuc = 17)
-        {
-            var products = db.Thuocs
-                .Include(t => t.HinhAnhs)
-                .Where(t => t.MaLoaiSanPhamNavigation.MaDanhMuc == maDanhMuc)
-                .Select(t => new ProductViewModel
-                {
-                    TenThuoc = t.TenThuoc,
-                    DonGia = t.DonGia,
-                    UrlAnh = t.HinhAnhs.FirstOrDefault().UrlAnh,
-                    DonVi = t.DonVi
-                }).ToList();
-
     }
+
 }
