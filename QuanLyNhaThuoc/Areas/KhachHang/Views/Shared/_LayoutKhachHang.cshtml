@@ -7,6 +7,7 @@
     <title>Pharmacy Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/layoutKhachhang.css" />
+    <link rel="stylesheet" href="~/css/chatt.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 </head>
@@ -132,6 +133,23 @@
                     <button class="btn btn-success mt-2">Xem danh sách nhà thuốc</button>
                 </div>
             </div>
+            <!-- Nút chat -->
+            <div class="chat-button" onclick="openChat()">
+                <img src="~/images/chatbot.jpg" alt="Chat Icon" />
+            </div>
+
+            <!-- Khung chat -->
+            <div class="chat-box" id="chatBox" style="display:none;">
+                <h3>Nhà Thuốc An Khang</h3>
+                <p>Xin chào! Nhà Thuốc An Khang rất vui được hỗ trợ bạn.</p>
+                <div id="chatContent">
+                    <!-- Các tin nhắn sẽ hiển thị ở đây -->
+                </div>
+                <input type="text" id="user-input" placeholder="Nhập tin nhắn..." />
+                <button onclick="sendMessage()">Gửi</button>
+            </div>
+
+
         </div>
 
         <div class="container">
@@ -213,6 +231,7 @@
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/chat.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
