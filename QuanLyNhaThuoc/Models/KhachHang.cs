@@ -8,6 +8,7 @@ namespace QuanLyNhaThuoc.Models
         public KhachHang()
         {
             DonHangs = new HashSet<DonHang>();
+            GioHangs = new HashSet<GioHang>(); // Add this line
         }
 
         public int MaKhachHang { get; set; }
@@ -21,5 +22,8 @@ namespace QuanLyNhaThuoc.Models
 
         public virtual NguoiDung? MaNguoiDungNavigation { get; set; }
         public virtual ICollection<DonHang> DonHangs { get; set; }
+
+        // Add the collection for GioHang
+        public virtual ICollection<GioHang> GioHangs { get; set; } // Add this property
     }
 }

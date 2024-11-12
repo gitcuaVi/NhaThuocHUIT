@@ -252,9 +252,6 @@ namespace QuanLyNhaThuoc.Models
                 entity.ToTable("GioHang");
 
                 entity.Property(e => e.DonGia).HasColumnType("decimal(18, 0)");
-
-               
-
                 entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
 
                 entity.HasOne(d => d.MaThuocNavigation)
@@ -262,7 +259,15 @@ namespace QuanLyNhaThuoc.Models
                     .HasForeignKey(d => d.MaThuoc)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GioHang_MaThuoc");
+
+                // Adding foreign key relationship for MaKhachHang
+                entity.HasOne(d => d.MaKhachHangNavigation)
+                    .WithMany(p => p.GioHangs)
+                    .HasForeignKey(d => d.MaKhachHang)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GioHang_KhachHang");
             });
+
 
             modelBuilder.Entity<HinhAnh>(entity =>
             {
