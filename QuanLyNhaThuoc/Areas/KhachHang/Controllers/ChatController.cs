@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             db = context;
         }
-
         [HttpPost]
         [Route("GetFaqAnswer")]
         public async Task<JsonResult> GetFaqAnswer([FromBody] string userQuestion)
@@ -29,49 +29,42 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     return Json(new { success = false, responseMessage = "Vui lòng nhập câu hỏi." });
                 }
 
-                var normalizedUserQuestion = userQuestion.Trim().ToLower();
-                var responseMessage = "Xin lỗi, chúng tôi không thể tìm thấy câu trả lời chính xác cho câu hỏi của bạn. Đây là một số câu trả lời gần đúng:";
+                // Gọi stored procedure để tìm câu trả lời
+                var responseMessage = await GetFaqAnswerFromProcedure(userQuestion);
 
-                // Tìm câu hỏi hoàn toàn khớp
-                var exactMatch = await db.Faqs
-                                         .Where(f => f.CauHoiThuongGap.ToLower() == normalizedUserQuestion)
-                                         .Select(f => f.CauTraLoiTuongUng)
-                                         .FirstOrDefaultAsync();
-
-                // Nếu tìm thấy câu hỏi hoàn toàn khớp, trả về câu trả lời tương ứng
-                if (exactMatch != null)
-                {
-                    return Json(new { success = true, responseMessage = exactMatch });
-                }
-
-                // Nếu không có kết quả hoàn toàn khớp, tìm câu hỏi gần đúng
-                var similarMatches = await db.Faqs
-                                             .Where(f => f.CauHoiThuongGap.ToLower().Contains(normalizedUserQuestion))
-                                             .Select(f => f.CauTraLoiTuongUng)
-                                             .Take(3) // Lấy tối đa 3 câu trả lời gần đúng
-                                             .ToListAsync();
-
-                // Nếu có các câu hỏi gần đúng, trả về các câu trả lời này
-                if (similarMatches.Any())
-                {
-                    responseMessage += string.Join("\n- ", similarMatches.Select(answer => $"- {answer}"));
-                    return Json(new { success = true, responseMessage });
-                }
-
-                // Nếu không tìm thấy kết quả nào, trả về câu trả lời mặc định
-                return Json(new { success = true, responseMessage = "Xin lỗi, chúng tôi không thể tìm thấy câu trả lời phù hợp cho câu hỏi của bạn." });
+                return Json(new { success = true, responseMessage });
             }
             catch (Exception ex)
             {
-                // Ghi log chi tiết lỗi để kiểm tra
                 Console.WriteLine("Lỗi khi xử lý yêu cầu: " + ex.Message);
                 return Json(new { success = false, responseMessage = "Đã xảy ra lỗi khi xử lý yêu cầu." });
             }
         }
 
+        private async Task<string> GetFaqAnswerFromProcedure(string userQuestion)
+        {
+            using (var command = db.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "dbo.GetFaqAnswer";
+                command.CommandType = CommandType.StoredProcedure;
 
+                // Thêm tham số đầu vào cho stored procedure
+                var param = new SqlParameter("@UserQuestion", SqlDbType.NVarChar) { Value = userQuestion };
+                command.Parameters.Add(param);
+
+                db.Database.OpenConnection();
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        return reader["ResponseMessage"].ToString();
+                    }
+                }
+
+                return "Xin lỗi, chúng tôi không thể tìm thấy câu trả lời phù hợp cho câu hỏi của bạn.";
+            }
+        }
     }
-
-
 }
 

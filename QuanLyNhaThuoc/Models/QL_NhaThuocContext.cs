@@ -17,6 +17,8 @@ namespace QuanLyNhaThuoc.Models
         {
         }
         public DbSet<ProductViewModel> ViewSanPhamByDanhMuc { get; set; }
+        public DbSet<ProductViewDetailsModel> ViewSanPhamByid { get; set; }
+
         public virtual DbSet<CaLamViec> CaLamViecs { get; set; } = null!;
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
@@ -60,7 +62,9 @@ namespace QuanLyNhaThuoc.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<ProductViewModel>().HasNoKey();      
+            modelBuilder.Entity<ProductViewModel>().HasNoKey();
+            
+            modelBuilder.Entity<ProductViewDetailsModel>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
             modelBuilder.Entity<ThongTinKhachHangViewModel>().HasNoKey();

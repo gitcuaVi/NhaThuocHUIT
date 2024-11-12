@@ -70,6 +70,7 @@ namespace QuanLyNhaThuoc
             // Authentication and authorization middleware
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseResponseCaching();
 
             // Endpoint routing
             app.UseEndpoints(endpoints =>
