@@ -104,7 +104,7 @@ input#user-input {
     color: #333;
 }
 
-button {
+.buttoon-chat {
     padding: 10px;
     background-color: #4CAF50;
     border: none;
@@ -117,10 +117,10 @@ button {
     width: 100%;
 }
 
-    button:hover {
-        background-color: #4CAF50;
-    }
+.buttoon-chat:hover {
+    background-color: #4CAF50;
+}
 
-    button:active {
-        transform: scale(0.95);
-    }
+.buttoon-chat:active {
+    transform: scale(0.95);
+}
