@@ -1,0 +1,126 @@
+﻿
+.chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    padding: 15px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .chat-button:hover {
+        background-color: #4CAF50;
+        transform: scale(1.1);
+    }
+
+    .chat-button img {
+        width: 40px;
+        height: 40px;
+    }
+
+.chat-box {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    max-height: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.chat-box h3 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    margin: 0;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #4CAF50;
+}
+
+#chatContent {
+    padding: 15px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 350px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    #chatContent p {
+        margin: 10px 0;
+        word-wrap: break-word;
+    }
+
+
+        #chatContent p.user-message {
+            align-self: flex-start;
+            background-color: #e6f7ff;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+
+        #chatContent p.bot-message {
+            align-self: flex-end;
+            background-color: #ffebd8;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+
+input#user-input {
+    padding: 10px;
+    width: calc(100% - 20px);
+    border: none;
+    border-top: 2px solid #e6e6e6;
+    border-radius: 0 0 10px 10px;
+    font-size: 14px;
+    margin: 0;
+    outline: none;
+    color: #333;
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 5px;
+    width: 100%;
+}
+
+    button:hover {
+        background-color: #4CAF50;
+    }
+
+    button:active {
+        transform: scale(0.95);
+    }
