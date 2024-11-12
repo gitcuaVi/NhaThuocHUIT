@@ -186,6 +186,135 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             return View();
         }
 
+        [HttpGet("EditProfile")]
+        public IActionResult EditProfile()
+        {
+            var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (maNguoiDungClaim != null)
+            {
+                int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+
+                SqlParameter param = new SqlParameter("@MaNguoiDung", SqlDbType.Int) { Value = maNguoiDung };
+
+                var userInfo = _context.ThongTinKhachHangViewModel
+                    .FromSqlRaw("EXEC sp_HienThiThongTinKhachHang @MaNguoiDung", param)
+                    .AsEnumerable()
+                    .FirstOrDefault();
+
+                if (userInfo != null)
+                {
+                    return View(userInfo);
+                }
+                else
+                {
+                    return NotFound("Không tìm thấy thông tin khách hàng.");
+                }
+            }
+            return RedirectToAction("Login");
+        }
+
+        [HttpPost("EditProfile")]
+        public async Task<IActionResult> EditProfile(ThongTinKhachHangViewModel model)
+        {
+            var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (maNguoiDungClaim != null)
+            {
+                int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+
+                var parameters = new[]
+                {
+            new SqlParameter("@MaNguoiDung", maNguoiDung),
+            new SqlParameter("@Email", model.Email ?? (object)DBNull.Value),
+            new SqlParameter("@SoDienThoai", model.SoDienThoai ?? (object)DBNull.Value),
+            new SqlParameter("@TenKhachHang", model.TenKhachHang ?? (object)DBNull.Value),
+            new SqlParameter("@GioiTinh", model.GioiTinh ?? (object)DBNull.Value),
+            new SqlParameter("@DiaChi", model.DiaChi ?? (object)DBNull.Value),
+            new SqlParameter("@NgaySinh", model.NgaySinh ?? (object)DBNull.Value)
+        };
+
+                await _context.Database.ExecuteSqlRawAsync("EXEC sp_CapNhatThongTinKhachHang @MaNguoiDung, @Email, @SoDienThoai, @TenKhachHang, @GioiTinh, @DiaChi, @NgaySinh", parameters);
+
+                return RedirectToAction("Profile");
+            }
+
+            return RedirectToAction("Login");
+        }
+        [HttpGet("ChangePassword")]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Mật khẩu mới và mật khẩu xác nhận không khớp.");
+                return View();
+            }
+
+            var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (maNguoiDungClaim != null)
+            {
+                int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+
+                try
+                {
+                    // Kiểm tra mật khẩu hiện tại của người dùng
+                    var paramUsername = new SqlParameter("@Username", User.Identity.Name);
+                    var paramCurrentPassword = new SqlParameter("@Password", currentPassword);
+
+                    using (var connection = (SqlConnection)_context.Database.GetDbConnection())
+                    {
+                        await connection.OpenAsync();
+                        using (var command = new SqlCommand("sp_LoginKhachHang", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add(paramUsername);
+                            command.Parameters.Add(paramCurrentPassword);
+
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                if (await reader.ReadAsync())
+                                {
+                                    // Mật khẩu hiện tại chính xác, tiến hành cập nhật mật khẩu mới
+                                    var paramMaNguoiDung = new SqlParameter("@MaNguoiDung", maNguoiDung);
+                                    var paramNewPassword = new SqlParameter("@Password", newPassword);
+
+                                    await _context.Database.ExecuteSqlRawAsync(
+                                        "EXEC sp_DoiMatKhau @MaNguoiDung, @Password",
+                                        paramMaNguoiDung, paramNewPassword);
+
+                                    ViewBag.Message = "Đổi mật khẩu thành công.";
+                                    return RedirectToAction("Profile");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("CurrentPassword", "Mật khẩu hiện tại không đúng.");
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, "Đã xảy ra lỗi khi đổi mật khẩu.");
+                }
+            }
+            return View();
+        }
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login", "UserDH");
+        }
 
     }
 }

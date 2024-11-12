@@ -1,62 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Đăng Ký";
+    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
 }
-<link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
-<h2 class="form-header">Đăng Ký Tài Khoản</h2>
 
-<form asp-action="Register" method="post" id="registerForm" onsubmit="return validateForm()">
-    <div class="form-group">
-        <label for="TenKhachHang">Tên Khách Hàng</label>
-        <input id="TenKhachHang" name="tenKhachHang" class="form-control" required />
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+
+<div class="register-container">
+    <div class="card shadow-lg">
+        <h2 class="form-header text-center">Đăng Ký Tài Khoản</h2>
+        <form asp-action="Register" method="post" id="registerForm" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="TenKhachHang"><i class="fas fa-user"></i> Tên Khách Hàng</label>
+                <input id="TenKhachHang" name="tenKhachHang" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="GioiTinh"><i class="fas fa-venus-mars"></i> Giới Tính</label>
+                <select id="GioiTinh" name="gioiTinh" class="form-control" required>
+                    <option value="">Chọn giới tính</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="DiaChi"><i class="fas fa-map-marker-alt"></i> Địa Chỉ</label>
+                <input id="DiaChi" name="diaChi" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="SoDienThoai"><i class="fas fa-phone"></i> Số Điện Thoại</label>
+                <input id="SoDienThoai" name="soDienThoai" class="form-control" type="tel" pattern="^\d{10}$" title="Số điện thoại phải có 10 chữ số" required />
+            </div>
+
+            <div class="form-group">
+                <label for="NgaySinh"><i class="fas fa-calendar-alt"></i> Ngày Sinh</label>
+                <input id="NgaySinh" name="ngaySinh" class="form-control" type="date" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Email"><i class="fas fa-envelope"></i> Email</label>
+                <input id="Email" name="email" class="form-control" type="email" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Password"><i class="fas fa-lock"></i> Mật Khẩu</label>
+                <input id="Password" name="password" class="form-control" type="password" required />
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword"><i class="fas fa-lock"></i> Nhập Lại Mật Khẩu</label>
+                <input id="ConfirmPassword" name="confirmPassword" class="form-control" type="password" required />
+            </div>
+
+            <div class="button-group mt-4">
+                <button type="submit" class="btn btn-primary w-100">Đăng Ký</button>
+                <a href="~/KhachHang/UserDH/Login" class="btn btn-secondary w-100">Quay Lại Đăng Nhập</a>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label for="GioiTinh">Giới Tính</label>
-        <select id="GioiTinh" name="gioiTinh" class="form-control" required>
-            <option value="">Chọn giới tính</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="DiaChi">Địa Chỉ</label>
-        <input id="DiaChi" name="diaChi" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="SoDienThoai">Số Điện Thoại</label>
-        <input id="SoDienThoai" name="soDienThoai" class="form-control" type="tel" pattern="^\d{10}$" title="Số điện thoại phải có 10 chữ số" required />
-    </div>
-
-    <div class="form-group">
-        <label for="NgaySinh">Ngày Sinh</label>
-        <input id="NgaySinh" name="ngaySinh" class="form-control" type="date" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Email">Email</label>
-        <input id="Email" name="email" class="form-control" type="email" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Password">Mật Khẩu</label>
-        <input id="Password" name="password" class="form-control" type="password" required />
-    </div>
-
-    <div class="form-group">
-        <label for="ConfirmPassword">Nhập Lại Mật Khẩu</label>
-        <input id="ConfirmPassword" name="confirmPassword" class="form-control" type="password" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Đăng Ký</button>
-</form>
+</div>
 
 <script>
     function validateForm() {
         var password = document.getElementById("Password").value;
         var confirmPassword = document.getElementById("ConfirmPassword").value;
-
         if (password !== confirmPassword) {
             alert("Mật khẩu và xác nhận mật khẩu không khớp.");
             return false;

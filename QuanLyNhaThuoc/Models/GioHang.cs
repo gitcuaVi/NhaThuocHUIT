@@ -10,7 +10,9 @@ namespace QuanLyNhaThuoc.Models
         public decimal DonGia { get; set; }
         public decimal TongTien { get; set; }
         public int MaThuoc { get; set; }
+        public int MaKhachHang { get; set; }
 
         public virtual Thuoc MaThuocNavigation { get; set; } = null!;
+        public virtual Thuoc MaKhachHangNavigation { get; set; } = null!;
     }
 }

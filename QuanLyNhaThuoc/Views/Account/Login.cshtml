@@ -7,21 +7,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Nhà Thuốc An Khang</title>
+    <title>Admin Login - Nhà Thuốc An Khang</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome (for icons) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <!-- Custom CSS for Admin -->
+    <link rel="stylesheet" href="~/css/LoginAd.css" asp-append-version="true" />
 </head>
 <body>
 
     <div class="login-container">
         <div class="login-form col-md-4">
-            <h2>Đăng Nhập</h2>
-            <form method="post" action="/Account/Login">
+            <h2 class="text-center">Admin Login</h2>
+            <form method="post" action="/Account/Login" onsubmit="return validateForm()">
                 <input type="hidden" name="returnUrl" value="@returnUrl" />
 
                 <div class="form-group">
@@ -50,5 +50,19 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        function validateForm() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "" || password === "") {
+                alert("Vui lòng nhập tên đăng nhập và mật khẩu.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

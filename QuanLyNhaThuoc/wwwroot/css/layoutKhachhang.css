@@ -1,11 +1,17 @@
-﻿/* Custom Banner Styles */
-.discount-banner {
-    background-color: #f06292;
-    color: #fff;
+﻿﻿ /* discount banner */
+.carousel-item {
     text-align: center;
-    padding: 10px 0;
+    color: #fff;
     font-weight: bold;
+    background-color: #f06292;
 }
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    opacity: 0.8;
+}
+
 
 /* Navbar Styles */
 .navbar-custom {
@@ -14,9 +20,6 @@
 
     .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .location-text, .navbar-custom .hotline {
         color: #fff; /* Màu chữ */
-        
-        
-
     }
 
     .navbar-custom .hotline {
@@ -35,52 +38,61 @@
     padding: 10px 0;
 }
 
-    .secondary-navbar .nav-link {
+    .secondary-navbar .nav-link,
+    .secondary-navbar .nav-link-gocsuckhoe {
         color: #fff;
-        padding: 5px 15px;
         font-weight: bold;
+        padding: 10px 15px;
+        line-height: 1.5; /* Ensures uniform vertical alignment */
+        text-decoration: none;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center; /* Centers items vertically */
     }
 
-        .secondary-navbar .nav-link:hover {
-            color: #ffd600;
-             
+        /* Hover color for all menu links */
+        .secondary-navbar .nav-link:hover,
+        .secondary-navbar .nav-link-gocsuckhoe:hover {
+            color: #007bff;
         }
 
-/* Dropdown Hover Styles */
-.dropdown:hover .dropdown-menu,
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-}
-
-.secondary-navbar .dropdown-menu {
-    background-color: #4CAF50;
-    border: none;
-}
-
-.secondary-navbar .dropdown-item {
-    color: #fff;
-}
-
-    .secondary-navbar .dropdown-item:hover {
-        background-color: #ffd600;
-        color: #4CAF50;
+    /* Dropdown menu styles */
+    .secondary-navbar .dropdown-menu,
+    .secondary-navbar .dropdown-menu-gocsuckhoe {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 200px;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        z-index: 1000;
     }
 
-/* Default Dropdown Menu Styles */
-.dropdown-menu {
-    display: none;
-}
-
-    .dropdown-menu a {
-        color: #333;
-        text-decoration: none;
-        padding: 8px 15px;
+    /* Show dropdown menu on hover */
+    .secondary-navbar .nav-item.dropdown:hover .dropdown-menu,
+    .nav-item-gocsuckhoe:hover .dropdown-menu-gocsuckhoe {
         display: block;
     }
 
-        .dropdown-menu a:hover {
-            background-color: #f8f9fa;
+    /* Dropdown menu item styles */
+    .secondary-navbar .dropdown-item,
+    .secondary-navbar .dropdown-item-gocsuckhoe {
+        padding: 10px 20px;
+        color: #333;
+        font-size: 14px;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        /* Hover effect for dropdown items */
+        .secondary-navbar .dropdown-item:hover,
+        .secondary-navbar .dropdown-item-gocsuckhoe:hover {
+            background-color: #c6ee9a;
+            color: #ffffff;
         }
 
 /* Footer Styles */
@@ -122,60 +134,7 @@
         padding-top: 10px;
     }
 
-/* CSS for Hover Dropdown */
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
 
-.secondary-navbar .dropdown-menu {
-    background-color: #4CAF50;
-    border: none;
-}
-
-.secondary-navbar .dropdown-item {
-    color: #fff;
-}
-
-    .secondary-navbar .dropdown-item:hover {
-        background-color: #ffd600;
-        color: #4CAF50;
-    }
-.nav-item.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none; /* Ẩn mặc định */
-    position: absolute;
-    top: 100%; /* Đặt ngay bên dưới nút chính */
-    left: 0;
-    min-width: 200px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    z-index: 1000;
-}
-
-/* Hiển thị dropdown khi hover vào menu chính */
-.nav-item:hover .dropdown-menu {
-    display: block;
-}
-
-/* Các mục trong dropdown */
-.dropdown-item {
-    padding: 10px 20px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-    .dropdown-item:hover {
-        background-color: #007bff; /* Màu nền khi hover */
-        color: #ffffff; /* Màu chữ khi hover */
-    }
 
 .footer-extra {
     background-color: #def9da;
@@ -209,127 +168,96 @@
         .footer-extra .footer-store-info button {
             font-size: 14px;
         }
-
-/*Sangggggggggggggggggggggggggggggggggggggg*/
-/* Thiết lập chung cho menu Góc Sức Khỏe */
-.nav-item-gocsuckhoe {
-    position: relative;
-}
-.nav-link {
-    color: #fff; /* Màu chữ */
-    font-weight: bold;
-    padding: 10px 15px;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-    .nav-link:hover {
-        color: #007bff; /* Màu chữ khi hover */
-    }
-
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-}
-
-.nav-link-gocsuckhoe {
-    color: #fff; /* Màu chữ */
-    font-weight: bold;
-    padding: 10px 15px;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-    .nav-link-gocsuckhoe:hover {
-        color: #007bff; /* Màu chữ khi hover */
-    }
-
-/* Dropdown menu Góc Sức Khỏe */
-.dropdown-menu-gocsuckhoe {
-    display: none; /* Ẩn mặc định */
-    position: absolute;
-    top: 100%; /* Đặt ngay bên dưới nút chính */
-    left: 0;
-    min-width: 200px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    z-index: 1000;
-}
-
-/* Hiển thị dropdown khi hover vào menu chính */
-.nav-item-gocsuckhoe:hover .dropdown-menu-gocsuckhoe {
-    display: block;
-}
-
-/* Các mục trong dropdown */
-.dropdown-item-gocsuckhoe {
-    padding: 10px 20px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-    .dropdown-item-gocsuckhoe:hover {
-        background-color: #007bff; /* Màu nền khi hover */
-        color: #ffffff; /* Màu chữ khi hover */
-    }
-/*css ve nha thuoc an khang*/
-
+/* General container and row styling */
 .container {
     padding-top: 0px;
 }
 
-  
     .container .row {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
-        /* Styling for the text and links to ensure consistent spacing */
+        /* Bold section headings */
         .container .row h6 {
             margin-top: 50px;
-            margin-bottom: 15px; /* Space between section heading and content */
+            margin-bottom: 15px;
+            font-weight: bold; /* Make section titles bold */
+            color: #000; /* Set heading color to black */
         }
 
+        /* Text and link colors */
+        .container .row p,
+        .container .row a {
+            color: #000; /* Black color for regular text */
+            text-decoration: none;
+            margin-bottom: 16px;
+        }
 
+            .container .row a:hover {
+                text-decoration: underline;
+                color: #0056b3;
+            }
 
-
-.social-icons img {
-    margin-right: 10px; 
+/* Phone numbers styling */
+.contact-number {
+    color: #0056b3; /* Blue color for phone numbers */
+    font-weight: bold;
 }
 
-
-.certifications img {
-    margin-right: 15px; 
-}
-
-
-.partners img {
-    margin-right: 15px; 
-    margin-top: 10px; 
-}
-
-
-.container .row.text-center p {
-    font-size: 14px; 
-    line-height: 1.5; 
-}
-
-.container .row a {
-    display: block; 
-    color: #333; 
-    text-decoration: none; 
-    margin-bottom: 16px; 
-}
-
-    .container .row a:hover {
-        text-decoration: underline; 
-        color: #0056b3; 
+    .contact-number:hover {
+        color: #003366;
     }
 
+/* Social media icons styling */
+.social-icons a {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 24px; /* Increase icon size */
+    color: #000; /* Black color for icons */
+    text-decoration: none;
+}
+
+    .social-icons a:hover {
+        color: #0056b3;
+    }
+
+/* Adjust Zalo icon alignment with Facebook and YouTube */
+.social-icons img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+/* Certification icons */
+.certifications img {
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+/* Partners section styling */
+.partners img {
+    margin-right: 15px;
+    margin-top: 10px;
+    vertical-align: middle;
+}
+
+/* Fine-tuning for centered text */
+.container .row.text-center p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.container .col-lg-3 a {
+    display: block; /* Make each link block-level to stack vertically */
+    color: #000; /* Black text color */
+    text-decoration: none;
+    margin-bottom: 10px; /* Space between links */
+}
+
+    .container .col-lg-3 a:hover {
+        color: #0056b3; /* Hover color for links */
+        text-decoration: underline;
+    }
 
 /* Breadcrumb styling */
 .breadcrumb {
@@ -465,19 +393,21 @@ body {
     color: #4CAF50;
     line-height: 1.6;
     background-color: #f8f9fa;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
 }
+
 
 /* Top Section */
 .manage__top {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 0;
 }
 
     .manage__top h2 {
         font-size: 28px;
         color: #4CAF50;
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
 
     .manage__top p {
@@ -489,14 +419,14 @@ body {
 
 /* Main Content */
 .manage__main {
-    margin-bottom: 40px;
+    margin-bottom: 0;
 }
 
     .manage__main h2 {
         font-size: 24px;
         color: #4CAF50;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
 /* Profile List */

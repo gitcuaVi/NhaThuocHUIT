@@ -1,0 +1,47 @@
+﻿.register-container {
+    max-width: 500px;
+    margin: auto;
+    padding-top: 50px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.form-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+    .button-group .btn {
+        flex: 1;
+    }
+
+.btn-primary {
+    background-color: #4CAF50;
+    border-color: #007bff;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }

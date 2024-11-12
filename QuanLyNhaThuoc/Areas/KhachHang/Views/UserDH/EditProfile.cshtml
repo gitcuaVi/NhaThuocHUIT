@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Chỉnh sửa thông tin người dùng";
+    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
+}
+
+@model QuanLyNhaThuoc.Areas.KhachHang.Models.ThongTinKhachHangViewModel
+
+<link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMQuOl98e9y5vHTPZz9f4S4hfY73a3GbQeYURhx" crossorigin="anonymous" />
+
+<div class="profile-container">
+    <div class="profile-card">
+        <h2 class="profile-header text-center">Chỉnh sửa thông tin người dùng</h2>
+
+        <form asp-action="EditProfile" method="post" class="profile-form">
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email:</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Số điện thoại:</label>
+                <input asp-for="SoDienThoai" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Tên khách hàng:</label>
+                <input asp-for="TenKhachHang" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-venus-mars"></i> Giới tính:</label>
+                <select asp-for="GioiTinh" class="form-control">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> Địa chỉ:</label>
+                <input asp-for="DiaChi" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-calendar-alt"></i> Ngày sinh:</label>
+                <input asp-for="NgaySinh" class="form-control" type="date" />
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+                <a href="@Url.Action("Profile")" class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Hủy
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+

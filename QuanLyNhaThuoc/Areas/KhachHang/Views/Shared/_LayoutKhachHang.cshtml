@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +12,18 @@
 </head>
 <body>
     <!-- Discount Banner -->
-    <div class="discount-banner">
-        TRAO HOA SỨC KHỎE - TƯƠI TRẺ MỖI NGÀY GIẢM ĐẾN 49% <button class="btn btn-light btn-sm ms-2">XEM NGAY</button>
+    <div id="discountBannerCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/images/21481b827dcf2d53dd6827cdc4cf7ab4.png" alt="Slide 1">
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/21481b827dcf2d53dd6827cdc4cf7ab4.png" alt="Slide 2">
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/21481b827dcf2d53dd6827cdc4cf7ab4.png" alt="Slide 3">
+            </div>
+        </div>
     </div>
 
     <!-- Primary Navbar -->
@@ -22,7 +32,6 @@
             <!-- Logo -->
             <a class="navbar-brand" href="/KhachHang/Home">
                 <img src="~/lib/Image/logo2.png" alt="Logo" style="height: 40px;">
-
             </a>
 
             <!-- Location & Search Bar -->
@@ -56,27 +65,27 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="1">Thực Phẩm Chức Năng</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="1"></div>
+                    <div class=" danh-muc-container" data-loai-menu="1"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="2">Thiết Bị Y Tế</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="2"></div>
+                    <div class=" danh-muc-container" data-loai-menu="2"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="3">Dược Mỹ Phẩm</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="3"></div>
+                    <div class=" danh-muc-container" data-loai-menu="3"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="4">Chăm Sóc Cá Nhân</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="4"></div>
+                    <div class=" danh-muc-container" data-loai-menu="4"></div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        data-loai-menu="5">Chăm Sóc Trẻ Em</a>
-                    <div class="dropdown-menu danh-muc-container" data-loai-menu="5"></div>
+                    <div class=" danh-muc-container" data-loai-menu="5"></div>
                 </li>
 
                 <li class="nav-item-gocsuckhoe dropdown">
@@ -84,7 +93,7 @@
                     <div class="dropdown-menu-gocsuckhoe danh-muc-container">
                         <a class="dropdown-item-gocsuckhoe" href="/KhachHang/GocSucKhoe/Blogsuckhoe">Blog Sức Khỏe</a>
                         <a class="dropdown-item-gocsuckhoe" href="/KhachHang/GocSucKhoe/Tracuubenh">Tra Cứu Bệnh</a>
-                    </div> 
+                    </div>
                 </li>
             </ul>
         </div>
