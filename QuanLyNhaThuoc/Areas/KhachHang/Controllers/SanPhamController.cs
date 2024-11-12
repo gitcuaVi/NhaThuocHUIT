@@ -42,6 +42,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return View();
         }
+        
     }
-
 }
+
