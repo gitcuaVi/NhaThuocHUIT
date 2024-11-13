@@ -8,6 +8,8 @@ using Microsoft.Data.SqlClient;
 using QuanLyNhaThuoc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging;
+using QuanLyNhaThuoc.Areas.Admin.Controllers;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -20,6 +22,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         public UserDHController(QL_NhaThuocContext context)
         {
             _context = context;
+            
         }
 
         // Trang hiển thị thông tin người dùng
@@ -62,14 +65,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             return View();
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(
-    string tenKhachHang,
-    string gioiTinh,
-    string diaChi,
-    string soDienThoai,
-    DateTime ngaySinh,
-    string email,
-    string password,
+        public async Task<IActionResult> Register(string tenKhachHang,string gioiTinh,string diaChi,string soDienThoai,DateTime ngaySinh,string email,string password,
     string confirmPassword)
         {
             if (password != confirmPassword)
@@ -248,65 +244,45 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
         [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmNewPassword)
         {
-            if (newPassword != confirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "Mật khẩu mới và mật khẩu xác nhận không khớp.");
-                return View();
-            }
-
             var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
 
             if (maNguoiDungClaim != null)
             {
                 int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+                if (newPassword != confirmNewPassword)
+                {
+                    ModelState.AddModelError("ConfirmNewPassword", "Mật khẩu mới và mật khẩu xác nhận không khớp.");
+                }
+                var parameters = new[]
+                {
+            new SqlParameter("@MaNguoiDung", maNguoiDung),
+            new SqlParameter("@OldPassword", oldPassword),
+            new SqlParameter("@NewPassword", newPassword),
+            new SqlParameter("@ConfirmNewPassword", confirmNewPassword)
+        };
 
                 try
                 {
-                    // Kiểm tra mật khẩu hiện tại của người dùng
-                    var paramUsername = new SqlParameter("@Username", User.Identity.Name);
-                    var paramCurrentPassword = new SqlParameter("@Password", currentPassword);
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC sp_DoiMatKhau @MaNguoiDung, @OldPassword, @NewPassword, @ConfirmNewPassword",
+                        parameters);
 
-                    using (var connection = (SqlConnection)_context.Database.GetDbConnection())
-                    {
-                        await connection.OpenAsync();
-                        using (var command = new SqlCommand("sp_LoginKhachHang", connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(paramUsername);
-                            command.Parameters.Add(paramCurrentPassword);
-
-                            using (var reader = await command.ExecuteReaderAsync())
-                            {
-                                if (await reader.ReadAsync())
-                                {
-                                    // Mật khẩu hiện tại chính xác, tiến hành cập nhật mật khẩu mới
-                                    var paramMaNguoiDung = new SqlParameter("@MaNguoiDung", maNguoiDung);
-                                    var paramNewPassword = new SqlParameter("@Password", newPassword);
-
-                                    await _context.Database.ExecuteSqlRawAsync(
-                                        "EXEC sp_DoiMatKhau @MaNguoiDung, @Password",
-                                        paramMaNguoiDung, paramNewPassword);
-
-                                    ViewBag.Message = "Đổi mật khẩu thành công.";
-                                    return RedirectToAction("Profile");
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("CurrentPassword", "Mật khẩu hiện tại không đúng.");
-                                }
-                            }
-                        }
-                    }
+                    // Successfully updated password
+                    TempData["SuccessMessage"] = "Mật khẩu đã được thay đổi thành công.";
+                    return RedirectToAction("ChangePassword");
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Đã xảy ra lỗi khi đổi mật khẩu.");
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi khi thay đổi mật khẩu: " + ex.Message;
                 }
             }
-            return View();
+
+            return RedirectToAction("ChangePassword");
         }
+
+
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
