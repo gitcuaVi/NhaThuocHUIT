@@ -9,7 +9,7 @@ namespace QuanLyNhaThuoc.Models
         {
             ChiTietDonHangs = new HashSet<ChiTietDonHang>();
             ChiTietPns = new HashSet<ChiTietPn>();
-            GioHangs = new HashSet<GioHang>();
+            ChiTietGioHangs = new HashSet<ChiTietGioHang>();
             HinhAnhs = new HashSet<HinhAnh>();
             TonKhos = new HashSet<TonKho>();
         }
@@ -25,7 +25,7 @@ namespace QuanLyNhaThuoc.Models
         public virtual LoaiSanPham? MaLoaiSanPhamNavigation { get; set; }
         public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
         public virtual ICollection<ChiTietPn> ChiTietPns { get; set; }
-        public virtual ICollection<GioHang> GioHangs { get; set; }
+        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public virtual ICollection<HinhAnh> HinhAnhs { get; set; }  
         public virtual ICollection<TonKho> TonKhos { get; set; }
     }

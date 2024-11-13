@@ -18,7 +18,8 @@ namespace QuanLyNhaThuoc.Models
         }
         public DbSet<ProductViewModel> ViewSanPhamByDanhMuc { get; set; }
         public DbSet<ProductViewDetailsModel> ViewSanPhamByid { get; set; }
-
+        public virtual DbSet<GioHang> GioHangs { get; set; } = null!;
+        public virtual DbSet<ChiTietGioHang> ChiTietGioHangs { get; set; } = null!;
         public virtual DbSet<CaLamViec> CaLamViecs { get; set; } = null!;
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
@@ -26,7 +27,6 @@ namespace QuanLyNhaThuoc.Models
         public virtual DbSet<DanhMuc> DanhMucs { get; set; } = null!;
         public virtual DbSet<DonHang> DonHangs { get; set; } = null!;
         public virtual DbSet<Faq> Faqs { get; set; } = null!;
-        public virtual DbSet<GioHang> GioHangs { get; set; } = null!;
         public virtual DbSet<HinhAnh> HinhAnhs { get; set; } = null!;
         public virtual DbSet<KhachHang> KhachHangs { get; set; } = null!;
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; } = null!;
@@ -255,14 +255,7 @@ namespace QuanLyNhaThuoc.Models
 
                 entity.ToTable("GioHang");
 
-                entity.Property(e => e.DonGia).HasColumnType("decimal(18, 0)");
                 entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
-
-                entity.HasOne(d => d.MaThuocNavigation)
-                    .WithMany(p => p.GioHangs)
-                    .HasForeignKey(d => d.MaThuoc)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GioHang_MaThuoc");
 
                 // Adding foreign key relationship for MaKhachHang
                 entity.HasOne(d => d.MaKhachHangNavigation)
@@ -271,7 +264,28 @@ namespace QuanLyNhaThuoc.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GioHang_KhachHang");
             });
+            modelBuilder.Entity<ChiTietGioHang>(entity =>
+            {
+                entity.HasKey(e => e.MaChiTietGioHang)
+                    .HasName("PK_ChiTietGioHang");
 
+                entity.ToTable("ChiTietGioHang");
+
+                entity.Property(e => e.SoLuong)
+                    .IsRequired();
+
+                entity.HasOne(e => e.GioHangNavigation)
+                    .WithMany(gh => gh.ChiTietGioHangs)
+                    .HasForeignKey(e => e.MaGioHang)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChiTietGioHang_GioHang");
+
+                entity.HasOne(e => e.Thuoc)
+                    .WithMany(t => t.ChiTietGioHangs)
+                    .HasForeignKey(e => e.MaThuoc)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChiTietGioHang_Thuoc");
+            });
 
             modelBuilder.Entity<HinhAnh>(entity =>
             {
