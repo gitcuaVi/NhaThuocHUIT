@@ -47,7 +47,10 @@
             <!-- Right-side Options -->
             <ul class="navbar-nav ms-auto d-flex align-items-center">
                 <li class="nav-item me-3">
-                    <a class="nav-link" href="#"><i class="bi bi-bag-fill"></i> Giỏ hàng</a>
+                    <a class="nav-link" href="/KhachHang/SanPham/Cart">
+                        <i class="bi bi-bag-fill"></i> Giỏ hàng
+                        <span class="cart-count">0</span>
+                    </a>
                 </li>
                 <li class="nav-item me-3">
                     <a class="nav-link" href="/KhachHang/UserDH/Profile">Tài khoản & đơn hàng</a>
@@ -252,7 +255,7 @@
 
                 if (!dropdownMenu.hasClass('loaded')) {
                     $.ajax({
-                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")', // Replace with your URL
+                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")',
                         data: { loaiMenu: loaiMenu },
                         success: function (data) {
                             dropdownMenu.html(data).addClass('loaded').show();
@@ -261,6 +264,7 @@
                 }
             });
         });
+
 
     </script>
 </body>

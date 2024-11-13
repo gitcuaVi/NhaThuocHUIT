@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
+using System.Security.Claims;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -42,7 +43,58 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return View();
         }
-        
+
+        private int GetMaKhachHangFromClaims()
+        {
+            var maKhachHangClaim = User.FindFirst("MaKhachHang")?.Value;
+            return int.TryParse(maKhachHangClaim, out var maKhachHang) ? maKhachHang : -1;
+        }
+
+
+
+
+        [HttpPost("AddToCart")]
+        public async Task<IActionResult> AddToCart(int maThuoc, int soLuong)
+        {
+            try
+            {
+                int maKhachHang = GetMaKhachHangFromClaims();
+
+                await db.Database.ExecuteSqlRawAsync("EXEC sp_AddToCart @MaKhachHang, @MaThuoc, @SoLuong",
+                    new SqlParameter("@MaKhachHang", maKhachHang),
+                    new SqlParameter("@MaThuoc", maThuoc),
+                    new SqlParameter("@SoLuong", soLuong)
+                );
+
+                return Json(new { success = true, message = "Thêm vào giỏ hàng thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+        [HttpGet("Cart")]
+        public async Task<IActionResult> Cart()
+        {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            if (maKhachHang == -1)
+            {
+                return RedirectToAction("Login", "UserDH");
+            }
+
+            var paramMaKhachHang = new SqlParameter("@MaKhachHang", maKhachHang);
+            var cartItems = await db.Set<GioHangViewModel>()
+                .FromSqlRaw("EXEC sp_GetGioHangByKhachHang @MaKhachHang", paramMaKhachHang)
+                .ToListAsync();
+
+            return View(cartItems);
+        }
+
+
+
     }
 }
 
