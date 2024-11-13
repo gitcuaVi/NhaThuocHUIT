@@ -1,0 +1,18 @@
+﻿@model QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewDetailsModel
+
+@{
+    ViewData["Title"] = "Chi Tiết Thuốc";
+}
+
+<h1>@Model.TenThuoc</h1>
+
+<div>
+    <img src="@Model.HinhAnh" alt="Hình ảnh của @Model.TenThuoc" width="200" />
+</div>
+
+<div>
+    <p><strong>Đơn giá:</strong> @Model.DonGia VND</p>
+    <p><strong>Đơn vị:</strong> @Model.DonVi</p>
+</div>
+
+<a href="@Url.Action("Index", "SanPham", new { area = "KhachHang" })">Quay lại danh sách sản phẩm</a>

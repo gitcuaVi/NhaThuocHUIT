@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Views\Model\**" />
+    <Compile Remove="Areas\KhachHang\Data\**" />
     <Compile Remove="Service\**" />
     <Content Remove="Areas\Admin\Views\Model\**" />
+    <Content Remove="Areas\KhachHang\Data\**" />
     <Content Remove="Service\**" />
     <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
+    <EmbeddedResource Remove="Areas\KhachHang\Data\**" />
     <EmbeddedResource Remove="Service\**" />
     <None Remove="Areas\Admin\Views\Model\**" />
+    <None Remove="Areas\KhachHang\Data\**" />
     <None Remove="Service\**" />
   </ItemGroup>
 
@@ -33,7 +37,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\KhachHang\Data\" />
     <Folder Include="Areas\KhachHang\Views\DanhMuc\" />
   </ItemGroup>
 

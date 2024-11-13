@@ -42,7 +42,25 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return View();
         }
-        
+        [HttpGet("Chitietsp/{id}")]
+        public async Task<IActionResult> Chitietsp(int id)
+        {
+            var paramId = new SqlParameter("@MaThuoc", id);
+            var productDetail = await db.Set<ProductViewDetailsModel>()
+                .FromSqlRaw("SELECT * FROM vw_ChiTietThuoc WHERE MaThuoc = @MaThuoc", paramId)
+                .FirstOrDefaultAsync();
+
+            if (productDetail == null)
+            {
+                return NotFound();
+            }
+
+            return View(productDetail);
+        }
+
+
+
     }
 }
+
 
