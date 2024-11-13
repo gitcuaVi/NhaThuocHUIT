@@ -56,16 +56,22 @@
         {
             <div class="col-md-3 col-lg-3 mb-4">
                 <div class="product-item card">
-                    <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                    <!-- Bao bọc ảnh trong thẻ <a> để có thể click vào ảnh -->
+                    <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
+                        <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                    </a>
+
                     <div class="card-body">
                         <h5 class="card-title text-left">@product.TenThuoc</h5>
                         <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
-                        <!-- Thêm liên kết đến trang chi tiết sản phẩm -->
-                        <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })" class="btn btn-info">Xem Chi Tiết</a>
+
+                      
+
                         <button class="btn btn-primary add-to-cart">Thêm vào giỏ thuốc</button>
                     </div>
                 </div>
             </div>
+
         }
     </div>
 </div>

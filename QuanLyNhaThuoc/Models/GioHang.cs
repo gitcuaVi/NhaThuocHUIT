@@ -6,13 +6,9 @@ namespace QuanLyNhaThuoc.Models
     public partial class GioHang
     {
         public int MaGioHang { get; set; }
-        public int SoLuong { get; set; }
-        public decimal DonGia { get; set; }
         public decimal TongTien { get; set; }
-        public int MaThuoc { get; set; }
         public int? MaKhachHang { get; set; }
-
-        public virtual Thuoc MaThuocNavigation { get; set; } = null!;
-        public virtual KhachHang MaKhachHangNavigation { get; set; }=null!;
+        public virtual KhachHang MaKhachHangNavigation { get; set; } = null!;
+        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; } = new List<ChiTietGioHang>();
     }
 }
