@@ -130,11 +130,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Kiểm tra nếu LocalStorage đã có số lượng giỏ hàng, nếu có thì hiển thị
-        if (localStorage.getItem('cartCount')) {
-            $(".cart-count").text(localStorage.getItem('cartCount'));
-        }
-
         $(".add-to-cart").click(function () {
             var productId = $(this).data("product-id");
             var quantity = 1;
@@ -145,11 +140,6 @@
                 data: { maThuoc: productId, soLuong: quantity },
                 success: function (response) {
                     if (response.success) {
-                        // Tăng số lượng giỏ hàng
-                        var currentCount = parseInt(localStorage.getItem('cartCount') || '0') + quantity;
-                        localStorage.setItem('cartCount', currentCount);
-                        $(".cart-count").text(currentCount);
-
                         alert(response.message);
                     } else {
                         alert("Thêm vào giỏ hàng thất bại: " + response.message);
@@ -161,8 +151,6 @@
             });
         });
     });
-
-
 </script>
 
 

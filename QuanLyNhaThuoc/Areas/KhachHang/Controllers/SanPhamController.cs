@@ -75,7 +75,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
 
-
         [HttpGet("Cart")]
         public async Task<IActionResult> Cart()
         {
@@ -85,12 +84,46 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return RedirectToAction("Login", "UserDH");
             }
 
+            // Lấy số lượng sản phẩm trong giỏ
             var paramMaKhachHang = new SqlParameter("@MaKhachHang", maKhachHang);
+            var cartCount = await db.Database
+                .ExecuteSqlRawAsync("EXEC sp_GetCartCountByKhachHang @MaKhachHang", paramMaKhachHang);
+
+            ViewData["CartCount"] = cartCount;
+
+            // Lấy chi tiết giỏ hàng
             var cartItems = await db.Set<GioHangViewModel>()
                 .FromSqlRaw("EXEC sp_GetGioHangByKhachHang @MaKhachHang", paramMaKhachHang)
                 .ToListAsync();
 
             return View(cartItems);
+        }
+
+
+
+        [HttpGet("GetCartCount")]
+        public async Task<IActionResult> GetCartCount()
+        {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            if (maKhachHang == -1)
+            {
+                return Json(new { count = 0 });
+            }
+
+            // Lấy giỏ hàng của khách hàng hiện tại
+            var gioHang = await db.GioHangs
+                .FirstOrDefaultAsync(g => g.MaKhachHang == maKhachHang);
+
+            if (gioHang == null)
+            {
+                return Json(new { count = 0 });
+            }
+
+            var cartCount = await db.ChiTietGioHangs
+                .Where(c => c.MaGioHang == gioHang.MaGioHang)
+                .SumAsync(c => c.SoLuong);
+
+            return Json(new { count = cartCount });
         }
 
 

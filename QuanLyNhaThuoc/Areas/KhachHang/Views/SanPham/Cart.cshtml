@@ -1,32 +1,94 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.GioHangViewModel>
+﻿@model List<QuanLyNhaThuoc.Areas.KhachHang.Models.GioHangViewModel>
 
-@if (Model != null && Model.Any())
-{
-    <table>
-        <tr>
-            <th>Tên Thuốc</th>
-            <th>Hình Ảnh</th>
-            <th>Đơn Giá</th>
-            <th>Số Lượng</th>
-            <th>Đơn Vị</th>
-            <th>Thành Tiền</th>
-        </tr>
-        @foreach (var item in Model)
+<link href="~/css/cart.css" rel="stylesheet" />
+<form method="post" action="/KhachHang/DatHang">
+    <!-- Giỏ hàng -->
+    <div class="cart-container">
+        <h2>Giỏ thuốc của bạn</h2>
+        @if (Model != null && Model.Any())
         {
-            <tr>
-                <td>@item.TenThuoc</td>
-                <td><img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" width="50" /></td>
-                <td>@item.DonGia</td>
-                <td>@item.SoLuong</td>
-                <td>@item.DonVi</td>
-                <td>@item.ThanhTien</td>
-            </tr>
+            <table class="cart-table">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="cart-item-image">
+                            <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" width="50" />
+                        </td>
+                        <td class="cart-item-details">
+                            <strong>@item.TenThuoc</strong><br />   
+                            <button type="button" class="btn-remove">Xóa</button>
+                        </td>
+                        <td class="cart-item-price">
+                            @String.Format("{0:N0}", @item.DonGia)₫ / @item.DonVi
+                        </td>
+                        <td class="cart-item-quantity">
+                            <button type="button" class="btn-quantity">-</button>
+                            <span>@item.SoLuong</span>
+                            <button type="button" class="btn-quantity">+</button>
+                        </td>
+                        <td class="cart-item-total">
+                            @String.Format("{0:N0}", @item.ThanhTien)₫
+                        </td>
+                    </tr>
+                }
+            </table>
+@*             <div class="cart-summary">
+                <p><strong>Tạm tính:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
+            </div> *@
         }
-    </table>
-}
-else
-{
-    <p>Giỏ hàng trống.</p>
-}
+        else
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+    </div>
 
+    <!-- Thông tin khách hàng -->
+    <div class="customer-info-section">
+        <h2>Thông tin khách hàng</h2>
+        <div class="customer-info">
+            <label>Họ tên:</label>
+            <input type="text" name="HoTen" value="@ViewBag.HoTen" required />
 
+            <label>Số điện thoại:</label>
+            <input type="text" name="SoDienThoai" value="@ViewBag.SoDienThoai" required />
+        </div>
+
+        <h2>Chọn cách thức nhận hàng</h2>
+        <div class="shipping-options">
+            <label>
+                <input type="radio" name="CachThucNhanHang" value="GiaoTanNoi" checked /> Giao tận nơi
+            </label>
+            <label>
+                <input type="radio" name="CachThucNhanHang" value="NhanTaiNhaThuoc" /> Nhận tại nhà thuốc
+            </label>
+        </div>
+
+        <div class="shipping-address">
+            <label>Tỉnh/Thành phố:</label>
+            <select name="TinhThanh">
+                <option>Hồ Chí Minh</option>
+                <!-- Thêm các tỉnh thành khác -->
+            </select>
+
+            <label>Quận/Huyện:</label>
+            <select name="QuanHuyen">
+                <option>Chọn Quận / Huyện</option>
+                <!-- Thêm các quận/huyện -->
+            </select>
+
+            <label>Phường/Xã:</label>
+            <select name="PhuongXa">
+                <option>Chọn Phường / Xã</option>
+                <!-- Thêm các phường/xã -->
+            </select>
+
+            <label>Số nhà, tên đường:</label>
+            <input type="text" name="DiaChiChiTiet" />
+        </div>
+
+        <div class="submit-section">
+@*             <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p> *@
+            <button type="submit" class="btn-submit">Đặt hàng</button>
+        </div>
+    </div>
+</form>
