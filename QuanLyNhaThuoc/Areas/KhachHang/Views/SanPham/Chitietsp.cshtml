@@ -1,0 +1,309 @@
+﻿@model QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewDetailsModel
+
+@{
+    ViewData["Title"] = "Chi Tiết Thuốc";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QL_NhaThuoc</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #444;
+        }
+
+        .product-detail {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 30px auto;
+            flex-wrap: wrap; /* Allow for wrapping in smaller screens */
+        }
+
+        .product-image-section {
+            flex: 1;
+            text-align: center;
+            max-width: 100%; /* Ensure image section takes full width */
+        }
+
+        .product-image-section img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            object-fit: contain;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            justify-content: center; /* Align thumbnails to the left */
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap; /* Allow the thumbnails to wrap to the next line if needed */
+        }
+
+            .thumbnail-list img {
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: all 0.3s ease-in-out;
+            }
+
+                .thumbnail-list img:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+                }
+
+        .product-info-section {
+            flex: 1;
+            max-width: 100%;
+        }
+
+        .product-info-section h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .product-id {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .price-section {
+            font-size: 1.6em;
+            color: #d9534f;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selection {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+         .btnn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+            .btnn:hover {
+                background-color: #007bff;
+                border-color: #0056b3;
+                color: white;
+            }
+ 
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin: 0;
+        }
+
+        .add-to-cart {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+            .add-to-cart:hover {
+                background-color: #218838;
+            }
+
+            .add-to-cart i {
+                font-size: 18px;
+            }
+
+        .decrement-btn,
+        .increment-btn {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            padding: 0;
+        }
+
+        .quantity-selection .btnn:focus,
+        .quantity-selection .quantity-input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+
+        .back-to-list {
+            display: inline-block;
+            margin-top: 20px;
+            color: #007bff;
+            font-size: 1.1em;
+            text-decoration: none;
+        }
+
+        .back-to-list:hover {
+            text-decoration: underline;
+        }
+
+        .product-description-section {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-description-section h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .product-description-section h3 {
+            font-size: 1.3em;
+            color: #444;
+            margin-top: 15px;
+        }
+
+        .product-description-section p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="product-detail">
+        <div class="product-image-section">
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                var images = Model.HinhAnh.Split(new[] { ", " }, StringSplitOptions.None);
+                <img id="main-image" src="@images.FirstOrDefault()" alt="Hình ảnh của @Model.TenThuoc" class="img-fluid rounded mb-3" />
+                <div class="thumbnail-list">
+                    @foreach (var imageUrl in images)
+                    {
+                        <a href="#" onclick="changeMainImage('@imageUrl'); return false;">
+                            <img src="@imageUrl" alt="Thumbnail của @Model.TenThuoc" class="thumbnail" />
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Không có hình ảnh cho sản phẩm này.</p>
+            }
+        </div>
+        
+        <div class="product-info-section">
+            <h1>@Model.TenThuoc</h1>
+            <p class="product-id">Mã sản phẩm: @Model.MaThuoc</p>
+            <p class="product-id">Hạn Sử Dụng: @Model.HanSuDung</p>
+            <div class="price-section">@Model.DonGia.ToString("N0") VND/@Model.DonVi</div>
+
+            <div class="quantity-selection">
+                <button class="btnn btn-outline-secondary decrement-btn">-</button>
+                <input type="number" class="quantity-input" value="1" min="1" />
+                <button class="btnn btn-outline-secondary increment-btn">+</button>
+                <button class="add-to-cart">
+                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ thuốc
+                </button>
+            </div>
+
+
+            <a href="@Url.Action("Index", "SanPham", new { area = "KhachHang" })" class="back-to-list"><i class="fas fa-arrow-left"></i> Quay lại danh sách sản phẩm</a>
+        </div>
+    </div>
+
+    <div class="product-description-section container mt-5">
+        <h2>Thông Tin Sản Phẩm</h2>
+        <h3>1. Thành phần</h3>
+        <p>- Hoạt chất: Paracetamol 500mg, Caffeine 65mg.</p>
+        <p>- Tá dược: Pregelatinised starch, Maize starch, povidone...</p>
+
+        <h3>2. Công dụng (Chỉ định)</h3>
+        <p>Giảm đau, hạ sốt, chống viêm.</p>
+
+        <h3>3. Đối tượng sử dụng</h3>
+        <p>Dành cho người lớn và trẻ em từ 12 tuổi trở lên.</p>
+
+        <h3>4. Thương hiệu</h3>
+        <p>GlaxoSmithKline (gsk) Anh</p>
+
+        <h3>5. Nhà sản xuất</h3>
+        <p>Sanofi</p>
+    </div>
+
+    <script>
+        function changeMainImage(imageUrl) {
+            var mainImage = document.getElementById("main-image");
+            mainImage.src = imageUrl;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Check if screen size matches the media query
+    var media = window.matchMedia("(max-width: 768px)");
+
+    if (media.matches) {
+        // If the condition is true, apply some logic
+        console.log("The screen size is 768px or less.");
+    } else {
+        console.log("The screen size is larger than 768px.");
+    }
+        // Lấy các phần tử nút cộng, trừ và ô input
+        const decrementBtn = document.querySelector('.decrement-btn');
+        const incrementBtn = document.querySelector('.increment-btn');
+        const quantityInput = document.querySelector('.quantity-input');
+
+        // Xử lý sự kiện khi nhấn nút trừ
+        decrementBtn.addEventListener('click', function () {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {  // Đảm bảo không giảm xuống dưới 1
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        // Xử lý sự kiện khi nhấn nút cộng
+        incrementBtn.addEventListener('click', function () {
+            let currentValue = parseInt(quantityInput.value);  // Chuyển đổi giá trị input thành số
+            if (!isNaN(currentValue)) {  // Kiểm tra nếu giá trị hợp lệ
+                quantityInput.value = currentValue + 1;  // Tăng giá trị lên 1
+            }
+        });
+</script>
+
+</body>
+</html>

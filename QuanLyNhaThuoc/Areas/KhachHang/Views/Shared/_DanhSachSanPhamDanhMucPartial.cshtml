@@ -1,7 +1,7 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+﻿@using QuanLyNhaThuoc.Areas.KhachHang.Models
+@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
 
 <link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
-
 
 <div class="container mt-4">
     <h4>@Model.Count() Sản phẩm vitamin và khoáng chất</h4>
@@ -25,7 +25,6 @@
                 </select>
             </div>
 
-
             <div class="filter-section">
                 <h4>Giá</h4>
                 <div class="price-range">
@@ -36,14 +35,12 @@
                 </div>
             </div>
 
-
             <div class="filter-actions">
                 <button class="reset-filters">Chọn lại</button>
                 <button class="apply-filters">Xem kết quả</button>
             </div>
         </div>
     </div>
-
 
     <div class="product-type-filter mb-4">
         <span>Chọn vitamin và khoáng chất theo loại sản phẩm:</span>
@@ -59,20 +56,22 @@
         {
             <div class="col-md-3 col-lg-3 mb-4">
                 <div class="product-item card">
-                    @*  <a href="@Url.Action("Details", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
+                    <!-- Bao bọc ảnh trong thẻ <a> để có thể click vào ảnh -->
+                    <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
                         <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
-                    </a>  *@
-                     <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" /> 
+                    </a>
+
                     <div class="card-body">
                         <h5 class="card-title text-left">@product.TenThuoc</h5>
                         <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
                         <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
+
                     </div>
                 </div>
             </div>
+
         }
     </div>
-    
 </div>
 
 @* <script>
@@ -113,6 +112,7 @@
 
         window.location.href = url.toString();
     });
+
     document.querySelectorAll('.product-type-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const selectedType = this.getAttribute('data-type');
@@ -124,6 +124,7 @@
             document.querySelector('.apply-filters').click();
         });
     });
+
 
 </script> *@
 
@@ -154,3 +155,4 @@
 </script>
 
 
+</script>
