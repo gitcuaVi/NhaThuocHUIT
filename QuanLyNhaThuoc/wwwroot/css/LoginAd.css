@@ -1,7 +1,10 @@
 ﻿/* Admin Login Page Styles */
 
 body {
-    background-color: #f4f7fc;
+    background-image: url('../images/Fluid_background_2019_3-1-20.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     font-family: 'Arial', sans-serif;
 }
 
@@ -13,12 +16,13 @@ body {
 }
 
 .login-form {
-    background-color: #fff;
+    background-color: lavenderblush(255, 255, 255, 0.7); /* Màu trắng trong suốt */
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    backdrop-filter: blur(10px); /* Làm mờ nền phía sau */
 }
 
     .login-form h2 {
