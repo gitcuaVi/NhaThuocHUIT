@@ -1,61 +1,215 @@
-﻿.cart-container {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+﻿/* Tổng thể */
+.cart-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
+    .cart-container h2 {
+        font-size: 24px;
+        color: #2e7d32; /* Xanh lá */
+        margin-bottom: 20px;
+    }
+
+/* Bảng giỏ hàng */
 .cart-table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
-    .cart-table td {
-        padding: 10px;
+    .cart-table tr {
         border-bottom: 1px solid #ddd;
     }
 
+    .cart-table td {
+        padding: 10px;
+        vertical-align: middle;
+    }
+
+.cart-item-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Ảnh sản phẩm */
 .cart-item-image img {
-    max-width: 50px;
+    width: 60px;
     height: auto;
+    border-radius: 4px;
 }
 
+/* Chi tiết sản phẩm */
 .cart-item-details {
-    width: 50%;
+    padding-left: 10px;
+    color: #2e7d32; /* Xanh lá */
 }
 
-.cart-summary {
-    text-align: right;
-    font-size: 1.2em;
-    margin-top: 10px;
+    .cart-item-details strong {
+        display: block;
+        font-size: 16px;
+    }
+
+/* Định dạng cho cột đơn giá và số lượng */
+.price-quantity-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Canh trái */
 }
 
-.customer-info-section, .shipping-options, .shipping-address {
-    margin-top: 20px;
+.price {
+    font-size: 16px;
+    color: #2e7d32;
+    margin-bottom: 8px; /* Tạo khoảng cách giữa đơn giá và số lượng */
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+    .quantity-controls button {
+        width: 30px;
+        height: 30px;
+        background-color: #ddd;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #333;
+        border-radius: 4px;
+    }
+
+    .quantity-controls span {
+        display: inline-block;
+        width: 30px;
+        text-align: center;
+        font-size: 16px;
+        margin: 0 5px; /* Khoảng cách giữa các nút và số lượng */
+    }
+
+
+/* Nút xóa */
+.btn-remove {
+    color: #d9534f;
+    background: none;
     border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
 }
 
-.btn-quantity, .btn-remove {
+    .btn-remove:hover {
+        background-color: #f9f9f9;
+    }
+
+/* Giá sản phẩm */
+.cart-item-price {
+    font-size: 16px;
+    color: #2e7d32;
+    white-space: nowrap;
+    align-items: center;
+}
+
+
+.btn-quantity {
+    width: 30px;
+    height: 30px;
     background-color: #ddd;
     border: none;
-    padding: 5px;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 3px;
+    color: #333;
+    border-radius: 4px;
+}
+
+
+
+.cart-item-quantity span {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    font-size: 16px;
+}
+
+
+/* Phần tạm tính */
+.cart-summary {
+    text-align: right;
+    font-size: 18px;
+    color: #2e7d32; /* Xanh lá */
+    font-weight: bold;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+
+/* Thông tin khách hàng */
+.customer-info-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+    .customer-info-section h3 {
+        font-size: 20px;
+        color: #2e7d32; /* Xanh lá */
+        margin-bottom: 10px;
+    }
+
+.customer-info {
+    margin-left: 30px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .customer-info label {
+        font-weight: bold;
+        color: #2e7d32; /* Xanh lá */
+        margin-top: 10px;
+    }
+
+    .customer-info input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+        /* Đảm bảo rằng input kéo dài toàn chiều rộng của container */
+        .customer-info input[type="text"]::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+/* Phần nút đặt hàng */
+.submit-section {
+    text-align: center;
+    margin-top: 20px;
 }
 
 .btn-submit {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+    background-color: #2e7d32; /* Xanh lá */
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 18px;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1.2em;
-    border-radius: 5px;
+    width: 100%; /* Kéo dài nút đặt hàng toàn chiều ngang */
 }
 
-.submit-section {
-    text-align: right;
-    margin-top: 20px;
-}
+    .btn-submit:hover {
+        background-color: #4caf50;
+    }

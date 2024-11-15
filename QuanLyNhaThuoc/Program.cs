@@ -24,8 +24,6 @@ namespace QuanLyNhaThuoc
      {
          options.LoginPath = "/Account/Login";
          options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-         options.LoginPath = "/UserDH/Login";
-         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
          options.SlidingExpiration = true;
          options.AccessDeniedPath = "/Home/AccessDenied";
      });

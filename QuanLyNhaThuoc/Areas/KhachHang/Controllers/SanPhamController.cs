@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -99,8 +100,22 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return RedirectToAction("Login", "UserDH");
             }
 
-            // Lấy số lượng sản phẩm trong giỏ
             var paramMaKhachHang = new SqlParameter("@MaKhachHang", maKhachHang);
+
+            // Lấy thông tin khách hàng
+            var customerInfo = db.Set<ThongTinKhachHangGioHang>()
+                .FromSqlRaw("EXEC sp_GetThongTinKhachHangGioHang @MaKhachHang", paramMaKhachHang)
+                .AsEnumerable() 
+                .FirstOrDefault(); 
+
+            if (customerInfo != null)
+            {
+                ViewBag.HoTen = customerInfo.TenKhachHang;
+                ViewBag.SoDienThoai = customerInfo.SoDienThoai;
+                ViewBag.DiaChi = customerInfo.DiaChi;
+            }
+
+            // Lấy số lượng sản phẩm trong giỏ
             var cartCount = await db.Database
                 .ExecuteSqlRawAsync("EXEC sp_GetCartCountByKhachHang @MaKhachHang", paramMaKhachHang);
 
@@ -113,6 +128,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return View(cartItems);
         }
+
 
 
 
@@ -140,6 +156,57 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return Json(new { count = cartCount });
         }
+
+        [HttpPost("UpdateQuantity")]
+        public async Task<IActionResult> UpdateQuantity([FromBody] UpdateQuantityModel model)
+        {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            if (model == null || model.MaChiTietGioHang <= 0 || model.SoLuong <= 0)
+            {
+                Console.WriteLine("Invalid data: " + model);
+                return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
+            }
+
+
+            try
+            {
+                var paramMaChiTietGioHang = new SqlParameter("@MaChiTietGioHang", model.MaChiTietGioHang);
+                var paramSoLuong = new SqlParameter("@SoLuong", model.SoLuong);
+
+                await db.Database.ExecuteSqlRawAsync("EXEC sp_UpdateCartItemQuantity @MaChiTietGioHang, @SoLuong", paramMaChiTietGioHang, paramSoLuong);
+
+                return Json(new { success = true, message = "Cập nhật số lượng thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("RemoveFromCart")]
+        public async Task<IActionResult> RemoveFromCart([FromBody] int maChiTietGioHang)
+        {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            try
+            {
+                var paramMaChiTietGioHang = new SqlParameter("@MaChiTietGioHang", maChiTietGioHang);
+
+                int rowsAffected = await db.Database.ExecuteSqlRawAsync("EXEC sp_RemoveFromCart @MaChiTietGioHang", paramMaChiTietGioHang);
+
+                if (rowsAffected > 0)
+                    return Json(new { success = true, message = "Xóa sản phẩm thành công!" });
+                else
+                    return Json(new { success = false, message = "Không tìm thấy sản phẩm để xóa." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+
+        }
+
+
 
 
     }
