@@ -1,7 +1,7 @@
 ﻿@model List<QuanLyNhaThuoc.Areas.KhachHang.Models.GioHangViewModel>
 
 <link href="~/css/cart.css" rel="stylesheet" />
-<form method="post" action="/KhachHang/DatHang">
+<form id="orderForm" method="post" action="/KhachHang/SanPham/DatHang">
     <!-- Giỏ hàng -->
     <div class="cart-container">
         <h2>Giỏ thuốc của bạn</h2>
@@ -28,7 +28,6 @@
                                 </div>
                             </div>
                         </td>
-
                     </tr>
                 }
             </table>
@@ -55,7 +54,6 @@
 
             <label>Địa chỉ:</label>
             <input type="text" name="DiaChi" value="@ViewBag.DiaChi" required />
-
         </div>
 
         <div class="submit-section">
@@ -107,5 +105,28 @@
         });
     }
 
+    $('#orderForm').on('submit', function (e) {
+        e.preventDefault(); // Prevent form submission
 
+        const data = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            url: '/KhachHang/SanPham/DatHang',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.href = "/KhachHang/SanPham/DatHang"; // Redirect to order page
+                } else if (response.redirectToLogin) {
+                    window.location.href = response.loginUrl; // Redirect to login page if needed
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+            }
+        });
+    });
 </script>

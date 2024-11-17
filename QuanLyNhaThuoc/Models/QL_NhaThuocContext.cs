@@ -59,6 +59,12 @@ namespace QuanLyNhaThuoc.Models
 
         public DbSet<ThongTinKhachHangGioHang> ThongTinKhachHangGioHangs { get; set; }
 
+        public DbSet<KhachHang> KhachHang { get; set; }
+        public DbSet<DonHang> DonHang { get; set; }
+
+        public DbSet<DatHangView> datHangViews { get; set; }
+        public DbSet<ChiTietDonHangViewModel> chiTietDonHangViewModels { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -81,6 +87,13 @@ namespace QuanLyNhaThuoc.Models
             modelBuilder.Entity<GioHangViewModel>().HasNoKey();
 
             modelBuilder.Entity<ThongTinKhachHangGioHang>().HasNoKey();
+
+            modelBuilder.Entity<DatHangView>().HasNoKey();
+
+            modelBuilder.Entity<ChiTietDonHangViewModel>().HasNoKey();
+
+
+
             modelBuilder.Entity<CaLamViec>(entity =>
             {
                 entity.HasKey(e => e.MaCaLam)

@@ -212,6 +212,65 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
 
+        [HttpPost("DatHang")]
+        public async Task<IActionResult> DatHang(string diaChi, string ghiChu)
+        {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            if (maKhachHang == -1)
+            {
+                return Json(new { success = false, redirectToLogin = true, loginUrl = Url.Action("Login", "UserDH") });
+            }
+
+            try
+            {
+                // Thực thi stored procedure
+                await db.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @GhiChu",
+                    new SqlParameter("@MaKhachHang", maKhachHang),
+                    new SqlParameter("@DiaChi", diaChi),
+                    new SqlParameter("@GhiChu", ghiChu ?? (object)DBNull.Value)
+                );
+
+                // Truy vấn thông tin đơn hàng
+                var khachHang = await db.KhachHang.FindAsync(maKhachHang);
+                var donHang = await db.DonHang
+                    .Include(dh => dh.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.Thuoc)
+                    .Where(dh => dh.MaKhachHang == maKhachHang)
+                    .OrderByDescending(dh => dh.NgayDatHang)
+                    .FirstOrDefaultAsync();
+
+                if (donHang == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy đơn hàng!" });
+                }
+
+                var datHangView = new QuanLyNhaThuoc.Areas.KhachHang.Models.DatHangView
+                {
+                    HoTen = khachHang.TenKhachHang,
+                    SoDienThoai = khachHang.SoDienThoai,
+                    DiaChi = donHang.DiaChi,
+                    TongTien = donHang.ChiTietDonHangs.Sum(ct => ct.SoLuong * ct.Gia),
+                    MaDonHang = donHang.MaDonHang,
+                    NgayGiaoDuKien = DateTime.Now.AddHours(3).ToString("HH:mm dd/MM/yyyy"),
+                    ChiTietDonHang = donHang.ChiTietDonHangs.Select(ct => new QuanLyNhaThuoc.Areas.KhachHang.Models.ChiTietDonHangViewModel
+                    {
+                        TenThuoc = ct.Thuoc.TenThuoc,
+                        SoLuong = ct.SoLuong,
+                        Gia = ct.Gia,
+                        ThanhTien = ct.SoLuong * ct.Gia
+                    }).ToList()
+                };
+
+                return View("DatHangThanhCong", datHangView);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
 
 
     }

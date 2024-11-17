@@ -1,0 +1,39 @@
+﻿@model QuanLyNhaThuoc.Areas.KhachHang.Models.DatHangView
+
+<div class="order-success-container">
+    <h2>Đặt hàng thành công!</h2>
+    <p>Cảm ơn <strong>@Model.HoTen</strong> đã đặt hàng tại nhà thuốc của chúng tôi.</p>
+
+    <h3>Thông tin đơn hàng</h3>
+    <ul>
+        <li><strong>Mã đơn hàng:</strong> @Model.MaDonHang</li>
+        <li><strong>Ngày giao dự kiến:</strong> @Model.NgayGiaoDuKien</li>
+        <li><strong>Địa chỉ giao hàng:</strong> @Model.DiaChi</li>
+        <li><strong>Tổng tiền:</strong> @String.Format("{0:N0}₫", Model.TongTien)</li>
+    </ul>
+
+    <h3>Chi tiết đơn hàng</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên thuốc</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ChiTietDonHang)
+            {
+                <tr>
+                    <td>@item.TenThuoc</td>
+                    <td>@item.SoLuong</td>
+                    <td>@String.Format("{0:N0}₫", item.Gia)</td>
+                    <td>@String.Format("{0:N0}₫", item.ThanhTien)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="/KhachHang/SanPham" class="btn btn-primary">Tiếp tục mua sắm</a>
+</div>
