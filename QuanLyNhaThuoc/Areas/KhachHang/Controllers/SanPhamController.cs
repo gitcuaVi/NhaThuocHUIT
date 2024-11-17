@@ -72,10 +72,14 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         [HttpPost("AddToCart")]
         public async Task<IActionResult> AddToCart(int maThuoc, int soLuong)
         {
+            int maKhachHang = GetMaKhachHangFromClaims();
+            if (maKhachHang == -1)
+            {
+                return Json(new { success = false, redirectToLogin = true, loginUrl = Url.Action("Login", "UserDH") });
+            }
+
             try
             {
-                int maKhachHang = GetMaKhachHangFromClaims();
-
                 await db.Database.ExecuteSqlRawAsync("EXEC sp_AddToCart @MaKhachHang, @MaThuoc, @SoLuong",
                     new SqlParameter("@MaKhachHang", maKhachHang),
                     new SqlParameter("@MaThuoc", maThuoc),
@@ -89,6 +93,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
 
 
         [HttpGet("Cart")]
