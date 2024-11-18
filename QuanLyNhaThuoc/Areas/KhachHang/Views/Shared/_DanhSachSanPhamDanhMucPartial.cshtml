@@ -88,7 +88,10 @@
                 type: 'POST',
                 data: { maThuoc: productId, soLuong: quantity },
                 success: function (response) {
-                    if (response.success) {
+                    if (response.redirectToLogin) {
+                        // Chuyển đến trang đăng nhập nếu người dùng chưa đăng nhập
+                        window.location.href = response.loginUrl;
+                    } else if (response.success) {
                         alert(response.message);
                     } else {
                         alert("Thêm vào giỏ hàng thất bại: " + response.message);
@@ -100,6 +103,7 @@
             });
         });
     });
+
 
     document.querySelector('.filter-btn').addEventListener('click', function () {
         document.querySelector('.filter-popup').style.display = 'block';

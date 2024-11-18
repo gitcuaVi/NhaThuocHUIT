@@ -213,64 +213,71 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
 
         [HttpPost("DatHang")]
-        public async Task<IActionResult> DatHang(string diaChi, string ghiChu)
+        public async Task<IActionResult> DatHang(string diaChi)
         {
             int maKhachHang = GetMaKhachHangFromClaims();
             if (maKhachHang == -1)
             {
-                return Json(new { success = false, redirectToLogin = true, loginUrl = Url.Action("Login", "UserDH") });
+                return RedirectToAction("Login", "UserDH");
             }
 
             try
             {
-                // Thực thi stored procedure
-                await db.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @GhiChu",
-                    new SqlParameter("@MaKhachHang", maKhachHang),
-                    new SqlParameter("@DiaChi", diaChi),
-                    new SqlParameter("@GhiChu", ghiChu ?? (object)DBNull.Value)
-                );
-
-                // Truy vấn thông tin đơn hàng
-                var khachHang = await db.KhachHang.FindAsync(maKhachHang);
-                var donHang = await db.DonHang
-                    .Include(dh => dh.ChiTietDonHangs)
-                    .ThenInclude(ct => ct.Thuoc)
-                    .Where(dh => dh.MaKhachHang == maKhachHang)
-                    .OrderByDescending(dh => dh.NgayDatHang)
-                    .FirstOrDefaultAsync();
-
-                if (donHang == null)
+                var outputParam = new SqlParameter
                 {
-                    return Json(new { success = false, message = "Không tìm thấy đơn hàng!" });
-                }
-
-                var datHangView = new QuanLyNhaThuoc.Areas.KhachHang.Models.DatHangView
-                {
-                    HoTen = khachHang.TenKhachHang,
-                    SoDienThoai = khachHang.SoDienThoai,
-                    DiaChi = donHang.DiaChi,
-                    TongTien = donHang.ChiTietDonHangs.Sum(ct => ct.SoLuong * ct.Gia),
-                    MaDonHang = donHang.MaDonHang,
-                    NgayGiaoDuKien = DateTime.Now.AddHours(3).ToString("HH:mm dd/MM/yyyy"),
-                    ChiTietDonHang = donHang.ChiTietDonHangs.Select(ct => new QuanLyNhaThuoc.Areas.KhachHang.Models.ChiTietDonHangViewModel
-                    {
-                        TenThuoc = ct.Thuoc.TenThuoc,
-                        SoLuong = ct.SoLuong,
-                        Gia = ct.Gia,
-                        ThanhTien = ct.SoLuong * ct.Gia
-                    }).ToList()
+                    ParameterName = "@MaDonHangMoi",
+                    SqlDbType = System.Data.SqlDbType.Int,
+                    Direction = System.Data.ParameterDirection.Output
                 };
 
-                return View("DatHangThanhCong", datHangView);
+                await db.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @MaDonHangMoi OUTPUT",
+                    new SqlParameter("@MaKhachHang", maKhachHang),
+                    new SqlParameter("@DiaChi", diaChi),
+                    outputParam
+                );
+
+                int maDonHangMoi = (int)(outputParam.Value ?? 0);
+
+                if (maDonHangMoi == 0)
+                {
+                    throw new Exception("Không thể tạo đơn hàng.");
+                }
+
+                return RedirectToAction("OrderDetails", new { maDonHang = maDonHangMoi });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi đặt hàng.", details = ex.Message });
             }
         }
 
 
+
+
+
+        [HttpGet("OrderDetails/{maDonHang}")]
+        public async Task<IActionResult> OrderDetails(int maDonHang)
+        {
+            try
+            {
+                var orderDetails = await db.ThongTinDatHangViewModels.FromSqlRaw(
+                    "EXEC sp_GetThongTinDatHang @MaDonHang",
+                    new SqlParameter("@MaDonHang", maDonHang)
+                ).ToListAsync();
+
+                if (!orderDetails.Any())
+                {
+                    return NotFound("Không tìm thấy thông tin đơn hàng.");
+                }
+
+                return View(orderDetails);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
+            }
+        }
 
 
     }
