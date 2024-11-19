@@ -1,34 +1,151 @@
 ﻿@model List<QuanLyNhaThuoc.Areas.KhachHang.Models.ThongTinDatHangViewModel>
 
-<link href="~/css/thongtindathang.css" rel="stylesheet" />
+<style>
+    .order-success-container {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
 
-<div class="order-details-container">
-    <h2>Thông tin đơn hàng</h2>
-    <p><strong>Họ tên khách hàng:</strong> @Model.FirstOrDefault()?.TenKhachHang</p>
-    <p><strong>Số điện thoại:</strong> @Model.FirstOrDefault()?.SoDienThoai</p>
-    <p><strong>Địa chỉ:</strong> @Model.FirstOrDefault()?.DiaChi</p>
+    .order-header {
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
 
-    <h3>Danh sách sản phẩm</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên sản phẩm</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    .order-header h3 {
+        color: #28a745;
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .order-header p {
+        font-size: 16px;
+        margin: 10px 0 0;
+        color: #555;
+    }
+
+    .order-details {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .order-details h4 {
+        margin-top: 0;
+    }
+
+    .order-details p {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .order-products {
+        margin-bottom: 20px;
+    }
+
+    .order-products h4 {
+        margin-bottom: 10px;
+    }
+
+    .order-products table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .order-products table thead {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .order-products table th, .order-products table td {
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    .order-products table th {
+        font-weight: bold;
+    }
+
+    .order-products table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .order-footer {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn-unpaid {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-unpaid:hover {
+        background-color: #c82333;
+    }
+</style>
+
+
+<div class="order-success-container">
+    <div class="order-header">
+        <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
+        <p>Cảm ơn <strong>@Model.FirstOrDefault()?.TenKhachHang</strong> đã cho chúng tôi cơ hội được phục vụ.</p>
+    </div>
+
+    <div class="order-details">
+        <h4>THÔNG TIN GIỎ THUỐC</h4>
+        <p><strong>Khách hàng:</strong> @Model.FirstOrDefault()?.TenKhachHang, @Model.FirstOrDefault()?.SoDienThoai</p>
+        <p><strong>Giao đến:</strong> @Model.FirstOrDefault()?.DiaChi</p>
+        <p><em>(Nhân viên sẽ gọi xác nhận trước khi giao)</em></p>
+        <p><strong>Phí giao hàng:</strong> 25,000₫</p>
+        <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
+    </div>
+
+    <div class="order-products">
+        <h4>Danh sách sản phẩm</h4>
+        <table>
+            <thead>
                 <tr>
-                    <td>@item.TenSanPham</td>
-                    <td>@item.SoLuong</td>
-                    <td>@String.Format("{0:N0}", item.DonGia)₫</td>
-                    <td>@String.Format("{0:N0}", item.ThanhTien)₫</td>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                    <th>Trạng thái thanh toán</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.TenSanPham</td>
+                        <td>@item.SoLuong</td>
+                        <td>@String.Format("{0:N0}", item.DonGia)₫</td>
+                        <td>@String.Format("{0:N0}", item.ThanhTien)₫</td>
+                        <td>@item.TrangThaiThanhToan</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
