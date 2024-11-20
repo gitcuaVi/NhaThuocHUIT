@@ -213,3 +213,14 @@
     .btn-submit:hover {
         background-color: #4caf50;
     }
+
+.quantity-input {
+    width: 50px !important; 
+    height: 30px !important;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 5px;
+    padding: 0;
+}

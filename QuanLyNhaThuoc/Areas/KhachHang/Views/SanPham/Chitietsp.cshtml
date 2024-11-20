@@ -236,9 +236,10 @@
                 <button class="btnn btn-outline-secondary decrement-btn">-</button>
                 <input type="number" class="quantity-input" value="1" min="1" />
                 <button class="btnn btn-outline-secondary increment-btn">+</button>
-                <button class="add-to-cart">
+                <button class="btn btn-primary add-to-cart" data-product-id="@Model.MaThuoc">
                     <i class="fas fa-cart-plus"></i> Thêm vào giỏ thuốc
                 </button>
+
             </div>
 
 
@@ -303,7 +304,36 @@
                 quantityInput.value = currentValue + 1;  // Tăng giá trị lên 1
             }
         });
+
 </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart').on('click', function () {
+                var productId = $(this).data("product-id");
+                var quantity = 1;
+
+                $.ajax({
+                    url: '/KhachHang/SanPham/AddToCart',
+                    type: 'POST',
+                    data: { maThuoc: productId, soLuong: quantity },
+                    success: function (response) {
+                        if (response.redirectToLogin) {
+                            window.location.href = response.loginUrl;
+                        } else if (response.success) {
+                            alert(response.message);
+                        } else {
+                            alert("Thêm vào giỏ hàng thất bại: " + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Có lỗi xảy ra: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+
 
 </body>
 </html>

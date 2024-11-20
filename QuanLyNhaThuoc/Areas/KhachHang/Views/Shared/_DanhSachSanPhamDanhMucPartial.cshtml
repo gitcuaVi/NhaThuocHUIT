@@ -3,9 +3,84 @@
 
 <link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
 
-<div class="container mt-4">
-    <h4>@Model.Count() Sản phẩm vitamin và khoáng chất</h4>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click', '.add-to-cart', function () {
+        var productId = $(this).data("product-id");
+        var quantity = 1;
 
+        $.ajax({
+            url: '/KhachHang/SanPham/AddToCart',
+            type: 'POST',
+            data: { maThuoc: productId, soLuong: quantity },
+            success: function (response) {
+                if (response.redirectToLogin) {
+                    window.location.href = response.loginUrl;
+                } else if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert("Thêm vào giỏ hàng thất bại: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("Có lỗi xảy ra: " + error);
+            }
+        });
+    });
+
+
+    const filterBtn = document.querySelector('.filter-btn');
+    if (filterBtn) {
+        filterBtn.addEventListener('click', function () {
+            const filterPopup = document.querySelector('.filter-popup');
+            if (filterPopup) {
+                filterPopup.style.display = 'block';
+            }
+        });
+    } else {
+        console.warn('Filter button not found.');
+    }
+
+
+    $(document).ready(function () {
+        $('.filter-btn').on('click', function () {
+            $('.filter-popup').fadeIn();
+        });
+
+        $('.close-popup').on('click', function () {
+            $('.filter-popup').fadeOut();
+        });
+
+        $('.apply-filters').on('click', function () {
+            const minPrice = $('#minPriceInput').val();
+            const maxPrice = $('#maxPriceInput').val();
+            const productType = $('#productType').val();
+
+            const url = new URL(window.location.href);
+            if (minPrice) url.searchParams.set('minPrice', minPrice);
+            if (maxPrice) url.searchParams.set('maxPrice', maxPrice);
+            if (productType) url.searchParams.set('productType', productType);
+
+            window.location.href = url.toString();
+        });
+
+        $('.reset-filters').on('click', function () {
+            $('#minPriceInput').val('');
+            $('#maxPriceInput').val('');
+            $('#productType').val('');
+
+            const url = new URL(window.location.href);
+            url.searchParams.delete('minPrice');
+            url.searchParams.delete('maxPrice');
+            url.searchParams.delete('productType');
+
+            window.location.href = url.toString();
+        });
+    });
+
+</script>
+<div class="container mt-4">
+    <h4>@Model.Count() sản phẩm @ViewData["CategoryName"] </h4>
     <div class="filter-container">
         <button class="filter-btn">Lọc</button>
         <div class="filter-popup">
@@ -74,84 +149,3 @@
     </div>
 </div>
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
-<script>
-    $(document).ready(function () {
-        $(".add-to-cart").click(function () {
-            var productId = $(this).data("product-id");
-            var quantity = 1;
-
-            $.ajax({
-                url: '/KhachHang/SanPham/AddToCart',
-                type: 'POST',
-                data: { maThuoc: productId, soLuong: quantity },
-                success: function (response) {
-                    if (response.redirectToLogin) {
-                        // Chuyển đến trang đăng nhập nếu người dùng chưa đăng nhập
-                        window.location.href = response.loginUrl;
-                    } else if (response.success) {
-                        alert(response.message);
-                    } else {
-                        alert("Thêm vào giỏ hàng thất bại: " + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert("Có lỗi xảy ra: " + error);
-                }
-            });
-        });
-    });
-
-
-    document.querySelector('.filter-btn').addEventListener('click', function () {
-        document.querySelector('.filter-popup').style.display = 'block';
-    });
-
-    document.querySelector('.close-popup').addEventListener('click', function () {
-        document.querySelector('.filter-popup').style.display = 'none';
-    });
-
-    // Apply filters when "Xem kết quả" button is clicked
-    document.querySelector('.apply-filters').addEventListener('click', function () {
-        const minPrice = document.getElementById('minPriceInput').value;
-        const maxPrice = document.getElementById('maxPriceInput').value;
-        const productType = document.getElementById('productType').value;
-
-        const url = new URL(window.location.href);
-
-        // Set minPrice and maxPrice if they are entered
-        if (minPrice) url.searchParams.set('minPrice', minPrice);
-        if (maxPrice) url.searchParams.set('maxPrice', maxPrice);
-        if (productType) url.searchParams.set('productType', productType);
-
-        window.location.href = url.toString();
-    });
-
-    // Reset filters
-    document.querySelector('.reset-filters').addEventListener('click', function () {
-        document.getElementById('minPriceInput').value = '';
-        document.getElementById('maxPriceInput').value = '';
-        document.getElementById('productType').value = '';
-
-        const url = new URL(window.location.href);
-        url.searchParams.delete('minPrice');
-        url.searchParams.delete('maxPrice');
-        url.searchParams.delete('productType');
-
-        window.location.href = url.toString();
-    });
-
-    document.querySelectorAll('.product-type-btn').forEach(function (button) {
-        button.addEventListener('click', function () {
-            const selectedType = this.getAttribute('data-type');
-
-            // Update the product type dropdown value
-            document.getElementById('productType').value = selectedType;
-
-            // Trigger the "apply filters" button click to reload the page with the selected filter
-            document.querySelector('.apply-filters').click();
-        });
-    });
-</script>

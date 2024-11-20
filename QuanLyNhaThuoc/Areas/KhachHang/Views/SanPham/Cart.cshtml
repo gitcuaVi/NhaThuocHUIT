@@ -1,71 +1,14 @@
 ﻿@model List<QuanLyNhaThuoc.Areas.KhachHang.Models.GioHangViewModel>
-
 <link href="~/css/cart.css" rel="stylesheet" />
-<form id="orderForm" method="post" action="/KhachHang/SanPham/DatHang">
-    <!-- Giỏ hàng -->
-    <div class="cart-container">
-        <h2>Giỏ thuốc của bạn</h2>
-        @if (Model != null && Model.Any())
-        {
-            <table class="cart-table">
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="cart-item-image">
-                            <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" width="50" />
-                            <button type="button" class="btn-remove" onclick="removeFromCart(@item.MaChiTietGioHang)">Xóa</button>
-                        </td>
-                        <td class="cart-item-details">
-                            <strong>@item.TenThuoc</strong>
-                        </td>
-                        <td class="cart-item-price">
-                            <div class="price-quantity-container">
-                                <div class="price">@String.Format("{0:N0}", @item.DonGia)₫ / @item.DonVi</div>
-                                <div class="quantity-controls">
-                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong - 1)">-</button>
-                                    <span>@item.SoLuong</span>
-                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong + 1)">+</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </table>
-            <div class="cart-summary">
-                <p><strong>Tạm tính:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
-            </div>
-        }
-        else
-        {
-            <p>Giỏ hàng trống.</p>
-        }
-    </div>
-
-    <div class="customer-info-section">
-        <h2>Thông tin khách hàng</h2>
-        <div class="customer-info">
-            <label>Họ tên:</label>
-            <span>@ViewBag.HoTen</span>
-            <input type="hidden" name="HoTen" value="@ViewBag.HoTen" />
-
-            <label>Số điện thoại:</label>
-            <span>@ViewBag.SoDienThoai</span>
-            <input type="hidden" name="SoDienThoai" value="@ViewBag.SoDienThoai" />
-
-            <label>Địa chỉ:</label>
-            <input type="text" name="DiaChi" value="@ViewBag.DiaChi" required />
-        </div>
-
-        <div class="submit-section">
-            <button type="submit" class="btn-submit">Đặt hàng</button>
-        </div>
-    </div>
-</form>
-
-
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     function updateQuantity(maChiTietGioHang, soLuong) {
+        soLuong = parseInt(soLuong, 10);
+        if (soLuong < 1) {
+            alert('Số lượng phải lớn hơn 0.');
+            return;
+        }
+
         $.ajax({
             url: '/KhachHang/SanPham/UpdateQuantity',
             type: 'POST',
@@ -74,7 +17,7 @@
             success: function (data) {
                 if (data.success) {
                     alert(data.message);
-                    location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                    location.reload();
                 } else {
                     alert(data.message);
                 }
@@ -85,6 +28,8 @@
             }
         });
     }
+
+
 
     function removeFromCart(maChiTietGioHang) {
         $.ajax({
@@ -131,4 +76,70 @@
             }
         });
     });
+
 </script>
+<form id="orderForm" method="post" action="/KhachHang/SanPham/DatHang">
+    <!-- Giỏ hàng -->
+    <div class="cart-container">
+        <h2>Giỏ thuốc của bạn</h2>
+        @if (Model != null && Model.Any())
+        {
+            <table class="cart-table">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="cart-item-image">
+                            <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" width="50" />
+                            <button type="button" class="btn-remove" onclick="removeFromCart(@item.MaChiTietGioHang)">Xóa</button>
+                        </td>
+                        <td class="cart-item-details">
+                            <strong>@item.TenThuoc</strong>
+                        </td>
+                        <td class="cart-item-price">
+                            <div class="price-quantity-container">
+                                <div class="price">@String.Format("{0:N0}", @item.DonGia)₫ / @item.DonVi</div>
+                                <div class="quantity-controls">
+                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong - 1)">-</button>
+                                    <input type="number" class="quantity-input" id="quantity-@item.MaChiTietGioHang" value="@item.SoLuong"
+                                           min="1" onchange="updateQuantity(@item.MaChiTietGioHang, this.value)" />
+                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong + 1)">+</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div class="cart-summary">
+                <p><strong>Tạm tính:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
+            </div>
+        }
+        else
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+    </div>
+
+    <div class="customer-info-section">
+        <h2>Thông tin khách hàng</h2>
+        <div class="customer-info">
+            <label>Họ tên:</label>
+            <span>@ViewBag.HoTen</span>
+            <input type="hidden" name="HoTen" value="@ViewBag.HoTen" />
+
+            <label>Số điện thoại:</label>
+            <span>@ViewBag.SoDienThoai</span>
+            <input type="hidden" name="SoDienThoai" value="@ViewBag.SoDienThoai" />
+
+            <label>Địa chỉ:</label>
+            <input type="text" name="DiaChi" value="@ViewBag.DiaChi" required />
+        </div>
+
+        <div class="submit-section">
+            <button type="submit" class="btn-submit">Đặt hàng</button>
+        </div>
+    </div>
+</form>
+
+
+
+

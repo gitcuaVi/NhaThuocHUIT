@@ -38,9 +38,20 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 .Where(l => l.MaDanhMuc == categoryId)
                 .ToListAsync();
 
+            // Lấy thông tin danh mục
+            var category = await db.DanhMucs
+                .FirstOrDefaultAsync(d => d.MaDanhMuc == categoryId);
+
+            if (category == null)
+            {
+                return NotFound("Danh mục không tồn tại.");
+            }
+
             ViewData["ProductTypes"] = productTypes;
 
             ViewData["Products"] = products;
+
+            ViewData["CategoryName"] = category?.TenDanhMuc ?? "Danh mục không xác định";
 
             return View();
         }
