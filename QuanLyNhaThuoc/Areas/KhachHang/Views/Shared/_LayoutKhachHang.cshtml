@@ -47,7 +47,10 @@
             <!-- Right-side Options -->
             <ul class="navbar-nav ms-auto d-flex align-items-center">
                 <li class="nav-item me-3">
-                    <a class="nav-link" href="#"><i class="bi bi-bag-fill"></i> Giỏ hàng</a>
+                    <a class="nav-link" href="/KhachHang/SanPham/Cart">
+                        <i class="bi bi-bag-fill"></i> Giỏ hàng
+                        <span id="cartCount" class="badge bg-danger ms-1">0</span> 
+                    </a>
                 </li>
                 <li class="nav-item me-3">
                     <a class="nav-link" href="/KhachHang/UserDH/Profile">Tài khoản & đơn hàng</a>
@@ -252,7 +255,7 @@
 
                 if (!dropdownMenu.hasClass('loaded')) {
                     $.ajax({
-                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")', // Replace with your URL
+                        url: '@Url.Action("GetDanhMucByLoaiMenu", "DanhMuc")',
                         data: { loaiMenu: loaiMenu },
                         success: function (data) {
                             dropdownMenu.html(data).addClass('loaded').show();
@@ -262,6 +265,20 @@
             });
         });
 
+        async function updateCartCount() {
+            try {
+                const response = await fetch('/KhachHang/SanPham/GetCartCount'); // Gọi API
+                const data = await response.json();
+
+                // Cập nhật số lượng sản phẩm lên giao diện
+                document.getElementById('cartCount').textContent = data.count;
+            } catch (error) {
+                console.error('Error fetching cart count:', error);
+            }
+        }
+
+        // Gọi hàm khi trang web tải xong
+        document.addEventListener("DOMContentLoaded", updateCartCount);
     </script>
 </body>
 </html>

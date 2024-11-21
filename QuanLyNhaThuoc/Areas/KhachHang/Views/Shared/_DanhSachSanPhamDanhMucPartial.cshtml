@@ -64,10 +64,8 @@
                     <div class="card-body">
                         <h5 class="card-title text-left">@product.TenThuoc</h5>
                         <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
+                        <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
 
-                      
-
-                        <button class="btn btn-primary add-to-cart">Thêm vào giỏ thuốc</button>
                     </div>
                 </div>
             </div>
@@ -76,7 +74,7 @@
     </div>
 </div>
 
-<script>
+@* <script>
     document.querySelector('.filter-btn').addEventListener('click', function () {
         document.querySelector('.filter-popup').style.display = 'block';
     });
@@ -126,4 +124,35 @@
             document.querySelector('.apply-filters').click();
         });
     });
+
+
+</script> *@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".add-to-cart").click(function () {
+            var productId = $(this).data("product-id");
+            var quantity = 1;
+
+            $.ajax({
+                url: '/KhachHang/SanPham/AddToCart',
+                type: 'POST',
+                data: { maThuoc: productId, soLuong: quantity },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        alert("Thêm vào giỏ hàng thất bại: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Có lỗi xảy ra: " + error);
+                }
+            });
+        });
+    });
+</script>
+
+
 </script>

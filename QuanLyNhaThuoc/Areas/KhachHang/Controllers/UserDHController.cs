@@ -126,11 +126,9 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             {
                 try
                 {
-                    // Tạo các tham số cho stored procedure
                     var paramUsername = new SqlParameter("@Username", username);
                     var paramPassword = new SqlParameter("@Password", password);
 
-                    // Kết nối cơ sở dữ liệu và thực thi stored procedure
                     using (var connection = (SqlConnection)_context.Database.GetDbConnection())
                     {
                         await connection.OpenAsync();
@@ -144,28 +142,31 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                             {
                                 if (await reader.ReadAsync())
                                 {
-                                    int maNguoiDung = reader.GetInt32(0); // Lấy giá trị MaNguoiDung
-                                    int? maVaiTro = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1); // Lấy giá trị MaVaiTro (có thể null)
+                                    int maNguoiDung = reader.GetInt32(0);
+                                    int? maVaiTro = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1);
 
-                                    // Kiểm tra thông tin đăng nhập
-                                    if (maNguoiDung > 0 && maVaiTro == 3) // Đảm bảo vai trò là khách hàng
+                                    if (maNguoiDung > 0 && maVaiTro == 3)
                                     {
-                                        // Tạo Claims để lưu thông tin đăng nhập
+                                        int maKhachHang = GetMaKhachHang(maNguoiDung);
+                                        if (maKhachHang == -1)
+                                        {
+                                            ViewBag.ErrorMessage = "Không tìm thấy mã Khách Hàng tương ứng.";
+                                            return View();
+                                        }
+
                                         var claims = new List<Claim>
                                 {
                                     new Claim(ClaimTypes.Name, username),
-                                    new Claim("UserId", maNguoiDung.ToString()), // Lưu mã người dùng trong claim
-                                    new Claim("Role", maVaiTro.ToString()) // Lưu vai trò người dùng trong claim
+                                    new Claim("UserId", maNguoiDung.ToString()),
+                                    new Claim("Role", maVaiTro.ToString()),
+                                    new Claim("MaKhachHang", maKhachHang.ToString())
                                 };
 
-                                        // Tạo ClaimsIdentity và ClaimsPrincipal cho phiên đăng nhập
                                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-                                        // Đăng nhập với ClaimsPrincipal và lưu vào phiên
                                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-                                        // Đăng nhập thành công, chuyển hướng đến trang Profile
                                         return RedirectToAction("Profile");
                                     }
                                 }
@@ -173,7 +174,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                         }
                     }
 
-                    // Nếu không tìm thấy người dùng hoặc tài khoản không hoạt động
                     ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không đúng hoặc tài khoản không hoạt động.");
                 }
                 catch (Exception ex)
@@ -181,10 +181,9 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     ModelState.AddModelError(string.Empty, "Đã xảy ra lỗi trong quá trình đăng nhập.");
                 }
             }
-
-            // Nếu có lỗi, hiển thị lại form đăng nhập
             return View();
         }
+
 
         [HttpGet("EditProfile")]
         public IActionResult EditProfile()
@@ -314,6 +313,26 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Login", "UserDH");
+        }
+
+        private int GetMaKhachHang(int maNguoiDung)
+        {
+            using (var conn = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand("SELECT MaKhachHang FROM KhachHang WHERE MaNguoiDung = @MaNguoiDung", conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNguoiDung", maNguoiDung);
+
+                    var result = cmd.ExecuteScalar();
+
+                    if (result != null && int.TryParse(result.ToString(), out int maKhachHang))
+                    {
+                        return maKhachHang;
+                    }
+                }
+            }
+            return -1; 
         }
 
     }

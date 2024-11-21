@@ -55,6 +55,8 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<ThongKePhieuNhapView> vw_ThongKePhieuNhap { get; set; }
         public DbSet<BangTamTKDH> BangTamTKDHs { get; set; }
 
+        public DbSet<GioHangViewModel> GioHangViewModels { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -73,6 +75,7 @@ namespace QuanLyNhaThuoc.Models
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
             modelBuilder.Entity<ThongTinKhachHangViewModel>().HasNoKey();
+            modelBuilder.Entity<GioHangViewModel>().HasNoKey();
 
             modelBuilder.Entity<CaLamViec>(entity =>
             {
