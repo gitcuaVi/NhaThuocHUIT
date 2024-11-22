@@ -21,6 +21,13 @@
                                 <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
                                     <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
                                 </a>
+                             
+
+
+                                <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
+                                    <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                                </a>
+
                                 <div class="card-body">
                                     <h5 class="card-title text-left">@product.TenThuoc</h5>
                                     <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>

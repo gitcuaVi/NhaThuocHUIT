@@ -22,6 +22,7 @@
                 <button type="submit" class="btn btn-logout">Đăng xuất</button>
             </form>
             <a href="@Url.Action("EditProfile", "UserDH")" class="btn btn-edit">Chỉnh sửa thông tin</a>
+             <a href="@Url.Action("Index", "LichSuDonHang")" class="btn btn-lsdh">Lịch Sử Đơn Hàng</a> 
             <a href="@Url.Action("ChangePassword", "UserDH")" class="btn btn-change-password">Đổi mật khẩu</a>
         </div>
     </div>
@@ -85,6 +86,10 @@
 
     .btn-edit {
         background-color: #4CAF50;
+    }
+
+    .btn-lsdh {
+        background-color: gold;
     }
 
     .btn-change-password {

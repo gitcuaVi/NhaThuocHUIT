@@ -21,6 +21,7 @@ namespace QuanLyNhaThuoc.Models
         public string? DiaChiKhachHang { get; set; }  // Tương ứng với DiaChi của khách hàng
         public DateTime NgaySinh { get; set; }
         public string? SoDienThoai { get; set; }
+        public int MaNhanVien { get; set; }
 
     }
 

@@ -3,7 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
@@ -61,6 +64,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 DiaChiDonHang = d.DiaChi,
                 NgayGiaoHang = d.NgayGiaoHang,
                 TrangThai = d.TrangThai,
+                MaNhanVien= d.MaNhanVien,
                 MaKhachHang = d.MaKhachHang,
                 TenKhachHang = d.KhachHang.TenKhachHang,
                 GioiTinh = d.KhachHang.GioiTinh,
@@ -99,6 +103,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 MaDonHang = donHang.MaDonHang,
                 TrangThai = donHang.TrangThai
+               
             };
 
             return View(viewModel);
@@ -119,6 +124,16 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 // Cập nhật trạng thái đơn hàng
                 donHang.TrangThai = model.TrangThai;
+                // Lấy mã nhân viên từ claims của người dùng đang đăng nhập
+                var maNhanVienClaim = User.Claims.FirstOrDefault(c => c.Type == "MaNhanVien")?.Value;
+                if (maNhanVienClaim == null)
+                {
+                    ViewBag.ErrorMessage = "Không tìm thấy mã nhân viên trong phiên đăng nhập.";
+                    return View(model);
+                }
+
+                // Chuyển đổi mã nhân viên từ string sang int
+                donHang.MaNhanVien = int.Parse(maNhanVienClaim);
 
                 // Lưu thay đổi vào database
                 _context.Update(donHang);
