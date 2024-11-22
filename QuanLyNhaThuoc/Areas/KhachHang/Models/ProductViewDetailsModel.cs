@@ -7,7 +7,7 @@
         public string TenThuoc { get; set; }
         public decimal DonGia { get; set; }
         public string DonVi { get; set; }
-        public string? HinhAnh { get; set; } // Sử dụng nullable vì có thể không có hình ảnh
+        public string? HinhAnh { get; set; } 
         
         public DateTime? HanSuDung { get; set; }
         

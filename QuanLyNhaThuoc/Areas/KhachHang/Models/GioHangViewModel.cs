@@ -9,7 +9,7 @@
         public decimal DonGia { get; set; }
         public int SoLuong { get; set; }
         public string DonVi { get; set; }
-        public decimal ThanhTien { get; set; }
+        public decimal ThanhTien => DonGia * SoLuong;
 
     }
 }

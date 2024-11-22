@@ -122,17 +122,18 @@
     <thead>
         <tr>
             <th>Mã Đơn Hàng</th>
-            <th>Tổng Tiền</th>
-            <th>Ghi Chú</th>
-            <th>Ngày Đặt Hàng</th>
-            <th>Ngày Cập Nhật</th>
-            <th>Địa Chỉ Đơn Hàng</th>
-            <th>Ngày Giao Hàng</th>
-            <th>Trạng Thái</th>
             <th>Mã Khách Hàng</th>
             <th>Tên Khách Hàng</th>
             <th>Địa Chỉ Khách Hàng</th>
-            <th>Số Điện Thoại</th>
+            <th>Số Điện Thoại</th>            
+            <th>Ghi Chú</th>
+            <th>Ngày Đặt Hàng</th>
+            <th>Ngày Giao Hàng</th>
+            <th>Địa Chỉ Đơn Hàng</th>            
+            <th>Tổng Tiền</th>
+            <th>Ngày Cập Nhật</th>
+            <th>Trạng Thái</th>
+            <th>Mã Nhân Viên</th>            
             <th>Cập Nhật Trạng Thái</th>
             <th>Xem Chi Tiết</th>
  
@@ -143,17 +144,19 @@
         {
             <tr>
                 <td>@item.MaDonHang</td>
-                <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>
-                <td>@item.GhiChu</td>
-                <td>@item.NgayDatHang.ToShortDateString()</td>
-                <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>
-                <th>@item.DiaChiDonHang</th>
-                <td>@item.NgayGiaoHang.ToShortDateString()</td>
-                <td>@item.TrangThai</td>
                 <td>@item.MaKhachHang</td>
                 <th>@item.TenKhachHang</th>
                 <th>@item.DiaChiKhachHang</th>
                 <th>@item.SoDienThoai</th>
+                <td>@item.GhiChu</td>
+                <td>@item.NgayDatHang.ToShortDateString()</td>
+                <td>@item.NgayGiaoHang.ToShortDateString()</td>
+                <th>@item.DiaChiDonHang</th>
+                <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>                               
+                <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>               
+                <td>@item.TrangThai</td>
+                <td>@item.MaNhanVien</td>
+                
                 <th>
                     <!-- Nút cập nhật trạng thái -->
                     <a asp-area="Admin" asp-controller="DonHang" asp-action="Update" asp-route-id="@item.MaDonHang" class="btn btn-warning">Cậpnhật trạngthái</a>

@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using QuanLyNhaThuoc.Models; 
+using QuanLyNhaThuoc.Models;
 using System.Linq;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
     [Authorize(Roles = "NhanVien")]
-   [Area("Admin")]
+    [Area("Admin")]
     [Route("Admin/[controller]")]
     public class UserController : Controller
     {
         private readonly QL_NhaThuocContext db;
-        private readonly ILogger<NguoiDungController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(QL_NhaThuocContext context, ILogger<NguoiDungController> logger)
+        public UserController(QL_NhaThuocContext context, ILogger<UserController> logger)
         {
             db = context;
             _logger = logger;
         }
-        [HttpGet]
+
+        [HttpGet("Profile")]
         public IActionResult Profile()
         {
             var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
@@ -31,7 +33,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 if (userInfo != null)
                 {
-                    return View(userInfo);  
+                    return View(userInfo);
                 }
                 else
                 {
@@ -44,5 +46,44 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet("ChangePassword")]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(string oldPassword, string newPassword, string confirmNewPassword)
+        {
+            var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (maNguoiDungClaim == null)
+            {
+                return Unauthorized("Bạn chưa đăng nhập.");
+            }
+
+            int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+
+            try
+            {
+                var parameters = new[]
+                {
+                    new SqlParameter("@MaNguoiDung", maNguoiDung),
+                    new SqlParameter("@OldPassword", oldPassword),
+                    new SqlParameter("@NewPassword", newPassword),
+                    new SqlParameter("@ConfirmNewPassword", confirmNewPassword)
+                };
+
+                db.Database.ExecuteSqlRaw("EXEC sp_DoiMatKhau @MaNguoiDung, @OldPassword, @NewPassword, @ConfirmNewPassword", parameters);
+
+                TempData["SuccessMessage"] = "Mật khẩu đã được thay đổi thành công.";
+                return RedirectToAction("ChangePassword");
+            }
+            catch (SqlException ex)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi thay đổi mật khẩu: " + ex.Message;
+            }
+            return RedirectToAction("ChangePassword");
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@model List<QuanLyNhaThuoc.Areas.KhachHang.Models.GioHangViewModel>
 
 <link href="~/css/cart.css" rel="stylesheet" />
-<form method="post" action="/KhachHang/DatHang">
+<form id="orderForm" method="post" action="/KhachHang/SanPham/DatHang">
     <!-- Giỏ hàng -->
     <div class="cart-container">
         <h2>Giỏ thuốc của bạn</h2>
@@ -13,28 +13,27 @@
                     <tr>
                         <td class="cart-item-image">
                             <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" width="50" />
+                            <button type="button" class="btn-remove" onclick="removeFromCart(@item.MaChiTietGioHang)">Xóa</button>
                         </td>
                         <td class="cart-item-details">
-                            <strong>@item.TenThuoc</strong><br />   
-                            <button type="button" class="btn-remove">Xóa</button>
+                            <strong>@item.TenThuoc</strong>
                         </td>
                         <td class="cart-item-price">
-                            @String.Format("{0:N0}", @item.DonGia)₫ / @item.DonVi
-                        </td>
-                        <td class="cart-item-quantity">
-                            <button type="button" class="btn-quantity">-</button>
-                            <span>@item.SoLuong</span>
-                            <button type="button" class="btn-quantity">+</button>
-                        </td>
-                        <td class="cart-item-total">
-                            @String.Format("{0:N0}", @item.ThanhTien)₫
+                            <div class="price-quantity-container">
+                                <div class="price">@String.Format("{0:N0}", @item.DonGia)₫ / @item.DonVi</div>
+                                <div class="quantity-controls">
+                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong - 1)">-</button>
+                                    <span>@item.SoLuong</span>
+                                    <button type="button" class="btn-quantity" onclick="updateQuantity(@item.MaChiTietGioHang, @item.SoLuong + 1)">+</button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
             </table>
-@*             <div class="cart-summary">
+            <div class="cart-summary">
                 <p><strong>Tạm tính:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
-            </div> *@
+            </div>
         }
         else
         {
@@ -42,53 +41,94 @@
         }
     </div>
 
-    <!-- Thông tin khách hàng -->
     <div class="customer-info-section">
         <h2>Thông tin khách hàng</h2>
         <div class="customer-info">
             <label>Họ tên:</label>
-            <input type="text" name="HoTen" value="@ViewBag.HoTen" required />
+            <span>@ViewBag.HoTen</span>
+            <input type="hidden" name="HoTen" value="@ViewBag.HoTen" />
 
             <label>Số điện thoại:</label>
-            <input type="text" name="SoDienThoai" value="@ViewBag.SoDienThoai" required />
-        </div>
+            <span>@ViewBag.SoDienThoai</span>
+            <input type="hidden" name="SoDienThoai" value="@ViewBag.SoDienThoai" />
 
-        <h2>Chọn cách thức nhận hàng</h2>
-        <div class="shipping-options">
-            <label>
-                <input type="radio" name="CachThucNhanHang" value="GiaoTanNoi" checked /> Giao tận nơi
-            </label>
-            <label>
-                <input type="radio" name="CachThucNhanHang" value="NhanTaiNhaThuoc" /> Nhận tại nhà thuốc
-            </label>
-        </div>
-
-        <div class="shipping-address">
-            <label>Tỉnh/Thành phố:</label>
-            <select name="TinhThanh">
-                <option>Hồ Chí Minh</option>
-                <!-- Thêm các tỉnh thành khác -->
-            </select>
-
-            <label>Quận/Huyện:</label>
-            <select name="QuanHuyen">
-                <option>Chọn Quận / Huyện</option>
-                <!-- Thêm các quận/huyện -->
-            </select>
-
-            <label>Phường/Xã:</label>
-            <select name="PhuongXa">
-                <option>Chọn Phường / Xã</option>
-                <!-- Thêm các phường/xã -->
-            </select>
-
-            <label>Số nhà, tên đường:</label>
-            <input type="text" name="DiaChiChiTiet" />
+            <label>Địa chỉ:</label>
+            <input type="text" name="DiaChi" value="@ViewBag.DiaChi" required />
         </div>
 
         <div class="submit-section">
-@*             <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p> *@
             <button type="submit" class="btn-submit">Đặt hàng</button>
         </div>
     </div>
 </form>
+
+
+
+<script>
+    function updateQuantity(maChiTietGioHang, soLuong) {
+        $.ajax({
+            url: '/KhachHang/SanPham/UpdateQuantity',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ MaChiTietGioHang: maChiTietGioHang, SoLuong: soLuong }),
+            success: function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+            }
+        });
+    }
+
+    function removeFromCart(maChiTietGioHang) {
+        $.ajax({
+            url: '/KhachHang/SanPham/RemoveFromCart',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(maChiTietGioHang),
+            success: function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+            }
+        });
+    }
+
+    $('#orderForm').on('submit', function (e) {
+        e.preventDefault(); // Prevent form submission
+
+        const data = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            url: '/KhachHang/SanPham/DatHang',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.href = "/KhachHang/SanPham/OrderDetails"; // Redirect to order page
+                } else if (response.redirectToLogin) {
+                    window.location.href = response.loginUrl; // Redirect to login page if needed
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+            }
+        });
+    });
+</script>

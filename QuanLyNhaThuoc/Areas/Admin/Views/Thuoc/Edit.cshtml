@@ -54,11 +54,31 @@
             <span asp-validation-for="MaLoaiSanPham" class="text-danger"></span>
         </div>
 
-        <!-- Hình Ảnh Field -->
-        <div class="form-group">
-            <label for="ImageFiles">Hình Ảnh</label>
+        <!-- Hiển thị hình ảnh hiện tại -->
+        <div class="form-group mb-3">
+            <label>Hình Ảnh</label>
+            <div class="d-flex flex-wrap">
+                @if (Model.HinhAnhs != null && Model.HinhAnhs.Any())
+                {
+                    foreach (var hinhAnh in Model.HinhAnhs)
+                    {
+                        <div class="me-2 mb-2">
+                            <img src="@hinhAnh.UrlAnh" alt="Hình ảnh" style="width: 150px; height: 150px; object-fit: cover;" class="img-thumbnail" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Chưa có hình ảnh nào.</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="ImageFiles">Chọn Hình Ảnh</label>
             <input type="file" name="ImageFiles" multiple class="form-control-file" />
         </div>
+
 
         <!-- Submit Button -->
         <div class="text-center">
