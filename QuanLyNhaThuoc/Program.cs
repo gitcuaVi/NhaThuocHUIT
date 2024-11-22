@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
 using QuanLyNhaThuoc.Models;
 
 //using QuanLyNhaThuoc.Areas.Admin.Data;
@@ -47,7 +48,10 @@ namespace QuanLyNhaThuoc
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+            builder.Services.AddScoped<IMomoService, MomoService>();
 
+            builder.Services.AddSingleton<IVnPayService,VnPayService>();
             // Add other necessary services
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();

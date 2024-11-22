@@ -13,7 +13,7 @@ namespace QuanLyNhaThuoc.Models
         public DateTime NgayDatHang { get; set; }
         public DateTime? NgayCapNhat { get; set; }
         public string? DiaChiDonHang { get; set; }  // Tương ứng với DiaChi của đơn hàng
-        public DateTime NgayGiaoHang { get; set; }
+        public DateTime? NgayGiaoHang { get; set; } = null!;
         public string? TrangThai { get; set; }
         public int MaKhachHang { get; set; }
         public string? TenKhachHang { get; set; }

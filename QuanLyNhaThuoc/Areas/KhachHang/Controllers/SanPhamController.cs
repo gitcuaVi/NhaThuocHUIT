@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -15,10 +17,16 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
     public class SanPhamController : Controller
     {
         private readonly QL_NhaThuocContext db;
+        private readonly IVnPayService _vnPayservice;
+        private readonly IMomoService _momoService;
 
-        public SanPhamController(QL_NhaThuocContext context)
+
+        public SanPhamController(QL_NhaThuocContext context,IVnPayService vnPayservice, IMomoService momoService)
         {
             db = context;
+            _vnPayservice = vnPayservice;
+            _momoService = momoService;
+
         }
 
         [HttpGet]
@@ -263,10 +271,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
         }
 
-
-
-
-
         [HttpGet("OrderDetails/{maDonHang}")]
         public async Task<IActionResult> OrderDetails(int maDonHang)
         {
@@ -289,7 +293,104 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
             }
         }
+        [HttpPost("SubmitPayment")]
+        public async Task<IActionResult> SubmitPayment([FromForm] PaymentRequestModel model)
+        {
+            if (model == null || model.MaDonHang <= 0 || string.IsNullOrEmpty(model.PaymentMethod))
+            {
+                return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
+            }
 
+            try
+            {
+                // Lấy thông tin đặt hàng từ cơ sở dữ liệu
+                var paramMaDonHang = new SqlParameter("@MaDonHang", model.MaDonHang);
+                var orderDetails = await db.ThongTinDatHangViewModels.FromSqlRaw(
+                    "EXEC sp_GetThongTinDatHang @MaDonHang",
+                    paramMaDonHang
+                ).ToListAsync();
+
+                if (!orderDetails.Any())
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin đơn hàng." });
+                }
+
+                // Cập nhật phương thức thanh toán
+                var paramPhuongThucThanhToan = new SqlParameter("@PhuongThucThanhToan", model.PaymentMethod);
+                await db.Database.ExecuteSqlRawAsync(
+                    "EXEC [dbo].[CapNhatPhuongThucThanhToan] @MaDonHang, @PhuongThucThanhToan",
+                    paramMaDonHang, paramPhuongThucThanhToan
+                );
+
+                // Nếu chọn phương thức QR Momo
+                if (model.PaymentMethod == "qr-momo")
+                {
+                    var orderInfo = new OrderInfo
+                    {
+                        Fullname = orderDetails.First().TenKhachHang,
+                        Amount = (double)orderDetails.Sum(x => x.ThanhTien), // Ép kiểu từ decimal sang double
+                        OrderInfomation = "Thanh toán đơn hàng thuốc",
+                        OrderId = model.MaDonHang.ToString()
+                    };
+
+                    // Gọi hàm CreatePaymentUrl để tạo URL thanh toán MoMo
+                    return await CreatePaymentUrl(orderInfo);
+                }
+
+                // Xử lý các phương thức thanh toán khác
+                return Json(new { success = true, message = "Thanh toán cập nhật thành công.", maDonHang = model.MaDonHang });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
+            }
+        }
+
+        [HttpPost("MomoNotify")]
+        public async Task<IActionResult> MomoNotify([FromBody] MomoExecuteResponseModel model)
+        {
+            if (model == null || string.IsNullOrEmpty(model.OrderId))
+            {
+                return BadRequest("Dữ liệu không hợp lệ.");
+            }
+
+            try
+            {
+                int maDonHang = int.Parse(model.OrderId);
+
+                // Gọi stored procedure cập nhật trạng thái thanh toán
+                await db.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_CapNhatTrangThaiThanhToan @MaDonHang",
+                    new SqlParameter("@MaDonHang", maDonHang)
+                );
+
+                // Truyền thông báo thành công và mã đơn hàng qua TempData
+                TempData["Message"] = "Thanh toán MoMo thành công!";
+                TempData["MaDonHang"] = maDonHang;
+
+                // Chuyển hướng đến view MomoPaymentResult
+                return RedirectToAction("MomoPaymentResult");
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Đã xảy ra lỗi: " + ex.Message;
+                return RedirectToAction("Cart");
+            }
+        }
+     
+        [HttpPost]
+        [Route("CreatePaymentUrl")]
+        public async Task<IActionResult> CreatePaymentUrl(OrderInfo model)
+        {
+            var response = await _momoService.CreatePaymentMomo(model);
+
+            if (!string.IsNullOrEmpty(response.PayUrl))
+            {
+                return Redirect(response.PayUrl); // Chuyển hướng tới URL thanh toán MoMo
+            }
+
+            return Json(new { success = false, message = "Không thể tạo URL thanh toán Momo." });
+        }
 
     }
 }

@@ -104,8 +104,87 @@
     .btn-unpaid:hover {
         background-color: #c82333;
     }
-</style>
 
+    .payment-options {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+        .payment-options h4 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+    .payment-methods {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .payment-method {
+        text-align: center;
+        margin: 10px;
+        max-width: 150px;
+        position: relative;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        transition: box-shadow 0.3s, border-color 0.3s;
+    }
+
+        .payment-method:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: #28a745;
+        }
+
+        .payment-method input[type="radio"] {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .payment-method img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .payment-method p {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+
+    .payment-submit {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn-submit {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+
+</style>
 
 <div class="order-success-container">
     <div class="order-header">
@@ -115,6 +194,7 @@
 
     <div class="order-details">
         <h4>THÔNG TIN GIỎ THUỐC</h4>
+        <p><strong>Mã Đơn Hàng:</strong> @Model.FirstOrDefault()?.MaDonHang</p>
         <p><strong>Khách hàng:</strong> @Model.FirstOrDefault()?.TenKhachHang, @Model.FirstOrDefault()?.SoDienThoai</p>
         <p><strong>Giao đến:</strong> @Model.FirstOrDefault()?.DiaChi</p>
         <p><em>(Nhân viên sẽ gọi xác nhận trước khi giao)</em></p>
@@ -149,3 +229,33 @@
         </table>
     </div>
 </div>
+
+<form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
+    <input type="hidden" name="maDonHang" value="@Model.FirstOrDefault()?.MaDonHang" />
+    <div class="payment-methods">
+        <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="cash" required>
+            <img src="~/images/tienmat.jpeg" alt="Thanh toán khi nhận hàng">
+            <p>Thanh toán khi nhận hàng</p>
+        </label>
+        <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="banking" required>
+            <img src="~/images/internetbanbking.jpeg" alt="Internet Banking">
+            <p>Thanh toán qua Internet Banking</p>
+        </label>
+        <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="qr-vnpay" required>
+            <img src="~/images/vnpay.jpeg" alt="QR VNPAY">
+            <p>Thanh toán qua QR VNPAY</p>
+        </label>
+        <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="qr-momo" required>
+            <img src="~/images/momo.jpeg" alt="Thanh toán qua Momo">
+            <p>Thanh toán qua Momo</p>
+        </label>
+    </div>
+    <div class="payment-submit">
+        <button type="submit" class="btn-submit">Xác nhận</button>
+    </div>
+</form>
+
