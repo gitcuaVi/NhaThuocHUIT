@@ -4,7 +4,6 @@
     {
         public int MaDonHang { get; set; }
         public decimal TongTien { get; set; }
-        public string GhiChu { get; set; }
         public DateTime NgayDatHang { get; set; }
         public DateTime? NgayCapNhat { get; set; }
         public string? DiaChi { get; set; }

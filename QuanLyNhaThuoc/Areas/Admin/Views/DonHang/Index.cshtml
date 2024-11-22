@@ -150,7 +150,7 @@
                 <th>@item.SoDienThoai</th>
                 <td>@item.GhiChu</td>
                 <td>@item.NgayDatHang.ToShortDateString()</td>
-                <td>@item.NgayGiaoHang.ToShortDateString()</td>
+                <td>@item.NgayGiaoHang?.ToShortDateString()</td>
                 <th>@item.DiaChiDonHang</th>
                 <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>                               
                 <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>               

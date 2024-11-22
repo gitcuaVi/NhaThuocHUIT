@@ -137,6 +137,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 ViewBag.HoTen = customerInfo.TenKhachHang;
                 ViewBag.SoDienThoai = customerInfo.SoDienThoai;
                 ViewBag.DiaChi = customerInfo.DiaChi;
+                ViewBag.GhiChu = customerInfo.GhiChu;
             }
 
             // Lấy số lượng sản phẩm trong giỏ
@@ -232,7 +233,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
 
         [HttpPost("DatHang")]
-        public async Task<IActionResult> DatHang(string diaChi)
+        public async Task<IActionResult> DatHang(string diaChi, string ghiChu)
         {
             int maKhachHang = GetMaKhachHangFromClaims();
             if (maKhachHang == -1)
@@ -250,9 +251,10 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 };
 
                 await db.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @MaDonHangMoi OUTPUT",
+                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @GhiChu, @MaDonHangMoi OUTPUT",
                     new SqlParameter("@MaKhachHang", maKhachHang),
                     new SqlParameter("@DiaChi", diaChi),
+                    new SqlParameter("@GhiChu", ghiChu ?? string.Empty),
                     outputParam
                 );
 
@@ -270,6 +272,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi đặt hàng.", details = ex.Message });
             }
         }
+
 
         [HttpGet("OrderDetails/{maDonHang}")]
         public async Task<IActionResult> OrderDetails(int maDonHang)
@@ -303,12 +306,11 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             try
             {
-                // Lấy thông tin đặt hàng từ cơ sở dữ liệu
+                // Lấy thông tin đơn hàng từ stored procedure
                 var paramMaDonHang = new SqlParameter("@MaDonHang", model.MaDonHang);
-                var orderDetails = await db.ThongTinDatHangViewModels.FromSqlRaw(
-                    "EXEC sp_GetThongTinDatHang @MaDonHang",
-                    paramMaDonHang
-                ).ToListAsync();
+                var orderDetails = await db.ThongTinDatHangViewModels
+                                                 .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
+                                                 .ToListAsync();
 
                 if (!orderDetails.Any())
                 {
@@ -322,29 +324,27 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     paramMaDonHang, paramPhuongThucThanhToan
                 );
 
-                // Nếu chọn phương thức QR Momo
                 if (model.PaymentMethod == "qr-momo")
                 {
                     var orderInfo = new OrderInfo
                     {
                         Fullname = orderDetails.First().TenKhachHang,
-                        Amount = (double)orderDetails.Sum(x => x.ThanhTien), // Ép kiểu từ decimal sang double
+                        Amount = (double)orderDetails.Sum(x => x.ThanhTien),
                         OrderInfomation = "Thanh toán đơn hàng thuốc",
                         OrderId = model.MaDonHang.ToString()
                     };
 
-                    // Gọi hàm CreatePaymentUrl để tạo URL thanh toán MoMo
                     return await CreatePaymentUrl(orderInfo);
                 }
 
-                // Xử lý các phương thức thanh toán khác
-                return Json(new { success = true, message = "Thanh toán cập nhật thành công.", maDonHang = model.MaDonHang });
+                return RedirectToAction("Index", "LichSuDonHang", new { maDonHang = model.MaDonHang });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
             }
         }
+
 
         [HttpPost("MomoNotify")]
         public async Task<IActionResult> MomoNotify([FromBody] MomoExecuteResponseModel model)
@@ -358,18 +358,15 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             {
                 int maDonHang = int.Parse(model.OrderId);
 
-                // Gọi stored procedure cập nhật trạng thái thanh toán
                 await db.Database.ExecuteSqlRawAsync(
                     "EXEC sp_CapNhatTrangThaiThanhToan @MaDonHang",
                     new SqlParameter("@MaDonHang", maDonHang)
                 );
 
-                // Truyền thông báo thành công và mã đơn hàng qua TempData
                 TempData["Message"] = "Thanh toán MoMo thành công!";
                 TempData["MaDonHang"] = maDonHang;
 
-                // Chuyển hướng đến view MomoPaymentResult
-                return RedirectToAction("MomoPaymentResult");
+                return RedirectToAction("Cart");
             }
             catch (Exception ex)
             {
@@ -377,7 +374,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return RedirectToAction("Cart");
             }
         }
-     
+
         [HttpPost]
         [Route("CreatePaymentUrl")]
         public async Task<IActionResult> CreatePaymentUrl(OrderInfo model)
@@ -386,7 +383,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             if (!string.IsNullOrEmpty(response.PayUrl))
             {
-                return Redirect(response.PayUrl); // Chuyển hướng tới URL thanh toán MoMo
+                return Redirect(response.PayUrl);
             }
 
             return Json(new { success = false, message = "Không thể tạo URL thanh toán Momo." });
