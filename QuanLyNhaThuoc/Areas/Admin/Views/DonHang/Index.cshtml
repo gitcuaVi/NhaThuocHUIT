@@ -144,11 +144,11 @@
             <tr>
                 <td>@item.MaDonHang</td>
                 <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>
-                <td>@item.GhiChu</td>
+                <td>@item.GhiChu?</td>
                 <td>@item.NgayDatHang.ToShortDateString()</td>
                 <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>
                 <th>@item.DiaChiDonHang</th>
-                <td>@item.NgayGiaoHang.ToShortDateString()</td>
+                <td>@item.NgayGiaoHang?.ToShortDateString()</td>
                 <td>@item.TrangThai</td>
                 <td>@item.MaKhachHang</td>
                 <th>@item.TenKhachHang</th>

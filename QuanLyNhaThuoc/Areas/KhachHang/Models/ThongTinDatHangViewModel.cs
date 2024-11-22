@@ -2,6 +2,7 @@
 {
     public class ThongTinDatHangViewModel
     {
+        public int MaDonHang { get; set; } 
         public string TenKhachHang { get; set; }
         public string SoDienThoai { get; set; }
         public string DiaChi { get; set; }
