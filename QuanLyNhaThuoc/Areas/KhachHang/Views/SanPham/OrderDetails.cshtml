@@ -231,7 +231,11 @@
 </div>
 
 <form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
+    <!-- Hidden inputs để gửi dữ liệu cần thiết -->
     <input type="hidden" name="maDonHang" value="@Model.FirstOrDefault()?.MaDonHang" />
+    <input type="hidden" name="tenKhachHang" value="@Model.FirstOrDefault()?.TenKhachHang" />
+    <input type="hidden" name="tongTien" value="@Model.Sum(i => i.ThanhTien)" />
+
     <div class="payment-methods">
         <label class="payment-method">
             <input type="radio" name="paymentMethod" value="cash" required>
@@ -254,8 +258,10 @@
             <p>Thanh toán qua Momo</p>
         </label>
     </div>
+
     <div class="payment-submit">
         <button type="submit" class="btn-submit">Xác nhận</button>
     </div>
 </form>
+
 

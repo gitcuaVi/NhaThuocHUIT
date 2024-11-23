@@ -9,6 +9,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Newtonsoft.Json;
+using QuanLyNhaThuoc.Areas.KhachHang.Services.VnPay;
+using QuanLyNhaThuoc.Areas.KhachHang.Models.VnPay;
+using QuanLyNhaThuoc.KhachHang.Services.VnPay;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -17,14 +20,14 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
     public class SanPhamController : Controller
     {
         private readonly QL_NhaThuocContext db;
-        private readonly IVnPayService _vnPayservice;
         private readonly IMomoService _momoService;
+        private readonly IVnPayService _vnPayService;
 
 
-        public SanPhamController(QL_NhaThuocContext context,IVnPayService vnPayservice, IMomoService momoService)
+        public SanPhamController(QL_NhaThuocContext context, IVnPayService vnPayService, IMomoService momoService)
         {
             db = context;
-            _vnPayservice = vnPayservice;
+            _vnPayService = vnPayService;
             _momoService = momoService;
 
         }
@@ -309,8 +312,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 // Lấy thông tin đơn hàng từ stored procedure
                 var paramMaDonHang = new SqlParameter("@MaDonHang", model.MaDonHang);
                 var orderDetails = await db.ThongTinDatHangViewModels
-                                                 .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
-                                                 .ToListAsync();
+                                              .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
+                                              .ToListAsync();
 
                 if (!orderDetails.Any())
                 {
@@ -326,6 +329,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
                 if (model.PaymentMethod == "qr-momo")
                 {
+                    // Tạo thông tin thanh toán Momo
                     var orderInfo = new OrderInfo
                     {
                         Fullname = orderDetails.First().TenKhachHang,
@@ -334,9 +338,26 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                         OrderId = model.MaDonHang.ToString()
                     };
 
-                    return await CreatePaymentUrl(orderInfo);
+                    return await CreatePaymentUrl(orderInfo); // Gọi phương thức xử lý Momo
                 }
 
+                if (model.PaymentMethod == "qr-vnpay")
+                {
+                    // Tạo thông tin thanh toán VNPAY
+                    var paymentInfo = new PaymentInformationModel
+                    {
+                        Name = orderDetails.First().TenKhachHang,
+                        Amount = (double)orderDetails.Sum(x => x.ThanhTien),
+                        OrderDescription = "Thanh toán đơn hàng thuốc",
+                        OrderType = "other"
+                    };
+
+                    // Tạo URL thanh toán qua VNPAY
+                    var paymentUrl = _vnPayService.CreatePaymentUrl(paymentInfo, HttpContext);
+
+                    // Chuyển hướng người dùng đến URL thanh toán VNPAY
+                    return Redirect(paymentUrl);
+                }
                 return RedirectToAction("Index", "LichSuDonHang", new { maDonHang = model.MaDonHang });
             }
             catch (Exception ex)
@@ -344,6 +365,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
             }
         }
+
 
 
         [HttpPost("MomoNotify")]
@@ -388,6 +410,14 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return Json(new { success = false, message = "Không thể tạo URL thanh toán Momo." });
         }
+        public IActionResult CreatePaymentUrlVnpay(PaymentInformationModel model)
+        {
+            var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
+
+            return Redirect(url);
+        }
+
+
 
     }
 }

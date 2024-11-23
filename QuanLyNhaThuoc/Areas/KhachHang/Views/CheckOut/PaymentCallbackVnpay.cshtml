@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewData["Title"] = "Kết quả thanh toán";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    else if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="card mt-4">
+        <div class="card-header">Thông tin giao dịch</div>
+        <div class="card-body">
+            <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
+            <p><strong>Mã giao dịch:</strong> @Model.TransactionId</p>
+            <p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod</p>
+            <p><strong>Trạng thái:</strong> @(Model.Success ? "Thành công" : "Thất bại")</p>
+            <p><strong>Mô tả:</strong> @Model.OrderDescription</p>
+        </div>
+    </div>
+</div>
