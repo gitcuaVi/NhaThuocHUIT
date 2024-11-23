@@ -18,7 +18,6 @@ namespace QuanLyNhaThuoc.KhachHang.Services.VnPay
         {
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
-            var tick = DateTime.Now.Ticks.ToString();
 
             var pay = new VnPayLibrary();
             var urlCallBack = _configuration["Vnpay:PaymentBackReturnUrl"];
@@ -35,12 +34,15 @@ namespace QuanLyNhaThuoc.KhachHang.Services.VnPay
             pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.OrderDescription} {model.Amount}");
             pay.AddRequestData("vnp_OrderType", model.OrderType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
-            pay.AddRequestData("vnp_TxnRef", tick);
+
+            // Thay vì sử dụng tick, truyền MaDonHang vào vnp_TxnRef
+            pay.AddRequestData("vnp_TxnRef", model.OrderId);  // Thay "tick" bằng OrderId
 
             // Tạo URL thanh toán
             var paymentUrl = pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
             return paymentUrl;
         }
+
 
         public PaymentResponseModel PaymentExecute(IQueryCollection collections)
         {

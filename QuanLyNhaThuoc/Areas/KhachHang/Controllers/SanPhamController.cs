@@ -234,7 +234,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
         }
 
-
         [HttpPost("DatHang")]
         public async Task<IActionResult> DatHang(string diaChi, string ghiChu)
         {
@@ -277,11 +276,13 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
 
+
         [HttpGet("OrderDetails/{maDonHang}")]
         public async Task<IActionResult> OrderDetails(int maDonHang)
         {
             try
             {
+                // Lấy thông tin chi tiết đơn hàng từ stored procedure
                 var orderDetails = await db.ThongTinDatHangViewModels.FromSqlRaw(
                     "EXEC sp_GetThongTinDatHang @MaDonHang",
                     new SqlParameter("@MaDonHang", maDonHang)
@@ -292,13 +293,29 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     return NotFound("Không tìm thấy thông tin đơn hàng.");
                 }
 
-                return View(orderDetails);
+                // Tạo PaymentModel
+                var paymentModel = new PaymentModel
+                {
+                    MaDonHang = maDonHang,
+                    TotalAmount = orderDetails.Sum(x => x.ThanhTien),
+                    PaymentMethod = null // Người dùng sẽ chọn
+                };
+
+                // Tạo ViewModel tổng hợp
+                var viewModel = new OrderDetailsViewModel
+                {
+                    OrderItems = orderDetails,
+                    PaymentInfo = paymentModel
+                };
+
+                return View(viewModel); // Truyền ViewModel tổng hợp
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
             }
         }
+
         [HttpPost("SubmitPayment")]
         public async Task<IActionResult> SubmitPayment([FromForm] PaymentRequestModel model)
         {
@@ -312,8 +329,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 // Lấy thông tin đơn hàng từ stored procedure
                 var paramMaDonHang = new SqlParameter("@MaDonHang", model.MaDonHang);
                 var orderDetails = await db.ThongTinDatHangViewModels
-                                              .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
-                                              .ToListAsync();
+                                            .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
+                                            .ToListAsync();
 
                 if (!orderDetails.Any())
                 {
@@ -335,10 +352,11 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                         Fullname = orderDetails.First().TenKhachHang,
                         Amount = (double)orderDetails.Sum(x => x.ThanhTien),
                         OrderInfomation = "Thanh toán đơn hàng thuốc",
-                        OrderId = model.MaDonHang.ToString()
+                        OrderId = model.MaDonHang.ToString(),
+                        OrderIdOld = model.MaDonHang.ToString() // Set OrderIdOld to the same value as MaDonHang
                     };
-
                     return await CreatePaymentUrl(orderInfo); // Gọi phương thức xử lý Momo
+
                 }
 
                 if (model.PaymentMethod == "qr-vnpay")
@@ -349,16 +367,26 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                         Name = orderDetails.First().TenKhachHang,
                         Amount = (double)orderDetails.Sum(x => x.ThanhTien),
                         OrderDescription = "Thanh toán đơn hàng thuốc",
-                        OrderType = "other"
+                        OrderType = "other",
+                        OrderId = model.MaDonHang.ToString() // Truyền OrderId vào model
                     };
 
                     // Tạo URL thanh toán qua VNPAY
                     var paymentUrl = _vnPayService.CreatePaymentUrl(paymentInfo, HttpContext);
 
-                    // Chuyển hướng người dùng đến URL thanh toán VNPAY
+                    // Gọi stored procedure để cập nhật mã giao dịch trong bảng ThanhToan
+                    var paramMaGiaoDich = new SqlParameter("@MaGiaoDich", paymentInfo.OrderId); // Giả sử OrderId là mã giao dịch từ VNPAY
+                    await db.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[sp_UpdateMaGiaoDich] @MaDonHang, @MaGiaoDich",
+                        paramMaDonHang, paramMaGiaoDich
+                    );
+
+                    // Redirect to payment URL first
                     return Redirect(paymentUrl);
                 }
-                return RedirectToAction("Index", "LichSuDonHang", new { maDonHang = model.MaDonHang });
+
+                // After a successful transaction (for other cases like cash, credit, etc.)
+                return RedirectToAction("ThongTinDonHang", "CheckOut", new { maDonHang = model.MaDonHang });
             }
             catch (Exception ex)
             {
@@ -368,34 +396,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
 
 
-        [HttpPost("MomoNotify")]
-        public async Task<IActionResult> MomoNotify([FromBody] MomoExecuteResponseModel model)
-        {
-            if (model == null || string.IsNullOrEmpty(model.OrderId))
-            {
-                return BadRequest("Dữ liệu không hợp lệ.");
-            }
-
-            try
-            {
-                int maDonHang = int.Parse(model.OrderId);
-
-                await db.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_CapNhatTrangThaiThanhToan @MaDonHang",
-                    new SqlParameter("@MaDonHang", maDonHang)
-                );
-
-                TempData["Message"] = "Thanh toán MoMo thành công!";
-                TempData["MaDonHang"] = maDonHang;
-
-                return RedirectToAction("Cart");
-            }
-            catch (Exception ex)
-            {
-                TempData["Message"] = "Đã xảy ra lỗi: " + ex.Message;
-                return RedirectToAction("Cart");
-            }
-        }
 
         [HttpPost]
         [Route("CreatePaymentUrl")]
@@ -416,9 +416,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             return Redirect(url);
         }
-
-
-
+       
     }
 }
 

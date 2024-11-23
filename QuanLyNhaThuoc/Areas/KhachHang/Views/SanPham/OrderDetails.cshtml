@@ -1,4 +1,6 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ThongTinDatHangViewModel>
+﻿@using QuanLyNhaThuoc.Areas.KhachHang.Models
+@model OrderDetailsViewModel
+
 
 <style>
     .order-success-container {
@@ -189,17 +191,17 @@
 <div class="order-success-container">
     <div class="order-header">
         <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
-        <p>Cảm ơn <strong>@Model.FirstOrDefault()?.TenKhachHang</strong> đã cho chúng tôi cơ hội được phục vụ.</p>
+        <p>Cảm ơn <strong>@Model.OrderItems.FirstOrDefault()?.TenKhachHang</strong> đã cho chúng tôi cơ hội được phục vụ.</p>
     </div>
 
     <div class="order-details">
         <h4>THÔNG TIN GIỎ THUỐC</h4>
-        <p><strong>Mã Đơn Hàng:</strong> @Model.FirstOrDefault()?.MaDonHang</p>
-        <p><strong>Khách hàng:</strong> @Model.FirstOrDefault()?.TenKhachHang, @Model.FirstOrDefault()?.SoDienThoai</p>
-        <p><strong>Giao đến:</strong> @Model.FirstOrDefault()?.DiaChi</p>
+        <p><strong>Mã Đơn Hàng:</strong> @Model.PaymentInfo.MaDonHang</p>
+        <p><strong>Khách hàng:</strong> @Model.OrderItems.FirstOrDefault()?.TenKhachHang, @Model.OrderItems.FirstOrDefault()?.SoDienThoai</p>
+        <p><strong>Giao đến:</strong> @Model.OrderItems.FirstOrDefault()?.DiaChi</p>
         <p><em>(Nhân viên sẽ gọi xác nhận trước khi giao)</em></p>
         <p><strong>Phí giao hàng:</strong> 25,000₫</p>
-        <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.Sum(i => i.ThanhTien))₫</p>
+        <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.PaymentInfo.TotalAmount)₫</p>
     </div>
 
     <div class="order-products">
@@ -215,7 +217,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.OrderItems)
                 {
                     <tr>
                         <td>@item.TenSanPham</td>
@@ -231,10 +233,8 @@
 </div>
 
 <form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
-    <!-- Hidden inputs để gửi dữ liệu cần thiết -->
-    <input type="hidden" name="maDonHang" value="@Model.FirstOrDefault()?.MaDonHang" />
-    <input type="hidden" name="tenKhachHang" value="@Model.FirstOrDefault()?.TenKhachHang" />
-    <input type="hidden" name="tongTien" value="@Model.Sum(i => i.ThanhTien)" />
+    <input type="hidden" name="maDonHang" value="@Model.PaymentInfo.MaDonHang" />
+    <input type="hidden" name="tongTien" value="@Model.PaymentInfo.TotalAmount" />
 
     <div class="payment-methods">
         <label class="payment-method">
@@ -263,5 +263,3 @@
         <button type="submit" class="btn-submit">Xác nhận</button>
     </div>
 </form>
-
-

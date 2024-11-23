@@ -22,7 +22,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
             var rawData =
                 $"partnerCode={_options.Value.PartnerCode}" +
                 $"&accessKey={_options.Value.AccessKey}" +
-                $"&requestId={model.OrderId}" +
+                $"&requestId={model.OrderIdOld}" +
                 $"&amount={model.Amount}" +
                 $"&orderId={model.OrderId}" +
                 $"&orderInfo={model.OrderInfomation}" +
@@ -47,7 +47,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
                 orderId = model.OrderId,
                 amount = model.Amount.ToString(),
                 orderInfo = model.OrderInfomation,
-                requestId = model.OrderId,
+                requestId = model.OrderIdOld,
                 extraData = "",
                 signature = signature
             };

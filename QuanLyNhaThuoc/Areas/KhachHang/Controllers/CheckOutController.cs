@@ -27,68 +27,102 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             _vnPayService = vnPayService;
         }
 
-        [HttpGet("PaymentCallBack")]
-        public async Task<IActionResult> PaymentCallBack()
+        [HttpGet("PaymentCallBackMomo")]
+        public async Task<IActionResult> PaymentCallBackMomo([FromQuery] PaymentModel model)
         {
-            var response = _momoService.PaymentExecuteMomo(HttpContext.Request.Query);
-         var requestQuery = HttpContext.Request.Query;
-            if (requestQuery["resultCode"]==0)
+            var maGiaoDich = Request.Query["vnp_TxnRef"].ToString();
+
+            // Extract the requestId for further processing (this will be the OrderId in the Momo response)
+            var requestId = Request.Query["requestId"].ToString();
+            var response = _momoService.PaymentExecuteMomo(Request.Query);
+            if (Request.Query["resultCode"] == "0")
             {
 
-            }   
+                var paramMaGiaoDich = new SqlParameter("@MaGiaoDich", maGiaoDich);
+                var paramRequestId = new SqlParameter("@RequestId", requestId);  // Pass requestId (OrderId)
+
+                var result = await db.Database.ExecuteSqlRawAsync("EXEC sp_CapNhatTrangThaiThanhToan @MaGiaoDich", paramRequestId);
+
+                TempData["Success"] = "Thanh toán thành công!";
+                return RedirectToAction("ThongTinDonHang", new { maDonHang = Convert.ToInt32(requestId) });
+            }
             else
             {
-                TempData["success"] = "Đã hủy giao dịch Momo";
-                return RedirectToAction("Cart","SanPham");
-            }
-
-            return View(response);
-
-
-        }
-        [HttpGet("PaymentCallbackVnpay")]
-        public async Task<IActionResult> PaymentCallbackVnpay() // Đổi từ IActionResult thành Task<IActionResult>
-        {
-            try
-            {
-                // Thực hiện xử lý kết quả thanh toán qua VNPAY
-                var response = _vnPayService.PaymentExecute(Request.Query);
-                if (Request.Query == null || !Request.Query.Any())
-                {
-                    TempData["Error"] = "Dữ liệu phản hồi từ VNPAY không hợp lệ.";
-                    return RedirectToAction("Cart", "SanPham");
-                }
-                if (response == null)
-                {
-                    TempData["Error"] = "Không thể xử lý phản hồi từ VNPAY.";
-                    return RedirectToAction("Cart", "SanPham");
-                }
-
-                // Kiểm tra trạng thái giao dịch dựa trên mã phản hồi từ VNPAY
-                if (response.Success && response.VnPayResponseCode == "00") // 00: Giao dịch thành công
-                {
-                    TempData["Success"] = "Giao dịch VNPAY thành công!";
-                    int maDonHang = int.Parse(response.OrderId);
-
-                    // Gọi procedure cập nhật trạng thái thanh toán
-                    var paramMaDonHang = new SqlParameter("@MaDonHang", maDonHang);
-                    await db.Database.ExecuteSqlRawAsync("EXEC sp_CapNhatTrangThaiThanhToan @MaDonHang", paramMaDonHang);
-
-                    return RedirectToAction("Index", "LichSuDonHang");
-                }
-                else
-                {
-                    TempData["Error"] = $"Giao dịch thất bại. Mã lỗi: {response.VnPayResponseCode}";
-                    return RedirectToAction("Cart", "SanPham");
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Đã xảy ra lỗi khi xử lý kết quả thanh toán: " + ex.Message;
+              
+                TempData["Error"] = "Đã hủy giao dịch Momo";
                 return RedirectToAction("Cart", "SanPham");
             }
         }
 
+        [HttpGet("PaymentCallbackVnpay")]
+        public async Task<IActionResult> PaymentCallbackVnpay([FromQuery] PaymentModel model)
+        {
+                var maGiaoDich = Request.Query["vnp_TxnRef"].ToString();
+                // Kiểm tra nếu mã giao dịch  không hợp lệ
+                if (maGiaoDich == null)
+                {
+                    TempData["Error"] = "Mã đơn hàng không hợp lệ.";
+                    return RedirectToAction("Cart", "SanPham");
+                }
+
+                // Thực thi việc kiểm tra giao dịch qua VNPAY
+                var response = _vnPayService.PaymentExecute(Request.Query);
+
+                // Kiểm tra trạng thái giao dịch từ VNPAY
+                if (response == null || !response.Success || response.VnPayResponseCode != "00")
+                {
+                    TempData["Error"] = "Giao dịch thất bại.";
+                    return RedirectToAction("Cart", "SanPham");
+                }
+
+                // Cập nhật trạng thái thanh toán cho đơn hàng trong cơ sở dữ liệu
+                var paramMaGiaoDich = new SqlParameter("@MaGiaoDich", maGiaoDich);
+
+                var result = await db.Database
+                                      .ExecuteSqlRawAsync("EXEC sp_CapNhatTrangThaiThanhToan @MaGiaoDich", paramMaGiaoDich);
+                    TempData["Success"] = "Thanh toán thành công!";
+                    return RedirectToAction("ThongTinDonHang", "CheckOut");
+               
+        }
+        [HttpGet("ThongTinDonHang")]
+        public async Task<IActionResult> ThongTinDonHang(int maDonHang)
+        {
+            try
+            {
+                // Kiểm tra mã giao dịch có hợp lệ hay không
+                if (maDonHang <= 0)
+                {
+                    TempData["Error"] = "Mã đơn hàng không hợp lệ.";
+                    return RedirectToAction("Index", "LichSuDonHang");
+                }
+
+                // Gọi stored procedure và ánh xạ dữ liệu vào model
+                var paramMaDonHang = new SqlParameter("@MaDonHang", maDonHang);
+
+                // Sử dụng FromSqlRaw để lấy dữ liệu
+                var donHang = await db.ThongTinDatHangViewModels
+                    .FromSqlRaw("EXEC sp_GetThongTinDatHang @MaDonHang", paramMaDonHang)
+                    .FirstOrDefaultAsync();
+
+                // Nếu không tìm thấy đơn hàng
+                if (donHang == null)
+                {
+                    TempData["Error"] = "Không tìm thấy thông tin đơn hàng.";
+                    return RedirectToAction("Index", "LichSuDonHang");
+                }
+
+                // Trả về view với model
+                return View(donHang);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Đã xảy ra lỗi khi lấy thông tin đơn hàng: " + ex.Message;
+                return RedirectToAction("Index", "LichSuDonHang");
+            }
+        }
 
     }
+
+
 }
+

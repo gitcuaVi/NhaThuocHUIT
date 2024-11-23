@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "ThongTinDonHang";
+    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
+}
+
+@model QuanLyNhaThuoc.Areas.KhachHang.Models.ThongTinDatHangViewModel
+
+<h2>Thông Tin Đơn Hàng</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Mã Đơn Hàng</th>
+        <td>@Model.MaDonHang</td>
+    </tr>
+    <tr>
+        <th>Tên Khách Hàng</th>
+        <td>@Model.TenKhachHang</td>
+    </tr>
+    <tr>
+        <th>Số Điện Thoại</th>
+        <td>@Model.SoDienThoai</td>
+    </tr>
+    <tr>
+        <th>Địa Chỉ</th>
+        <td>@Model.DiaChi</td>
+    </tr>
+    <tr>
+        <th>Sản Phẩm</th>
+        <td>@Model.TenSanPham</td>
+    </tr>
+    <tr>
+        <th>Số Lượng</th>
+        <td>@Model.SoLuong</td>
+    </tr>
+    <tr>
+        <th>Đơn Giá</th>
+        <td>@Model.DonGia</td>
+    </tr>
+    <tr>
+        <th>Thành Tiền</th>
+        <td>@Model.ThanhTien</td>
+    </tr>
+    <tr>
+        <th>Trạng Thái Thanh Toán</th>
+        <td>@Model.TrangThaiThanhToan</td>
+    </tr>
+</table>
+
+

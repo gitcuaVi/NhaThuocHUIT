@@ -58,12 +58,15 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<BangTamTKDH> BangTamTKDHs { get; set; }
 
         public DbSet<GioHangViewModel> GioHangViewModels { get; set; }
+        public DbSet<PaymentModel> PaymentModels { get; set; }
 
         public DbSet<ThongTinKhachHangGioHang> ThongTinKhachHangGioHangs { get; set; }
 
         public DbSet<ThongTinDatHangViewModel> ThongTinDatHangViewModels { get; set; }
 
         public DbSet<DonHang> donHangs { get; set; }
+     
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -77,7 +80,8 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<PaymentModel>().HasNoKey();
+
             modelBuilder.Entity<LichsudonhangView>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
