@@ -65,6 +65,9 @@ namespace QuanLyNhaThuoc.Models
 
         public DbSet<DonHang> donHangs { get; set; }
 
+        
+       
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -77,7 +80,8 @@ namespace QuanLyNhaThuoc.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+           
+           
             modelBuilder.Entity<LichsudonhangView>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();

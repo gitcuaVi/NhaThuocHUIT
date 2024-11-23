@@ -38,11 +38,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 .OrderByDescending(ldh => ldh.NgayDatHang)    // Sắp xếp theo ngày đặt hàng giảm dần
                 .AsQueryable();
 
-            // Lọc theo trạng thái nếu có
-            if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "all")
-            {
-                query = query.Where(ldh => ldh.TrangThai == statusFilter);
-            }
+           
+           
 
             // Lấy danh sách đơn hàng
             var lichSuDonHang = await query.ToListAsync();
@@ -50,5 +47,9 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             // Trả về view với dữ liệu đơn hàng
             return View(lichSuDonHang);
         }
+       
+
+
+
     }
 }

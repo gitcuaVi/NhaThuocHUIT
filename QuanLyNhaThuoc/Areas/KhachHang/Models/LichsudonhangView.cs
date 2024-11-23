@@ -17,5 +17,6 @@
         public int MaKhachHang { get; set; }
         public string? HinhAnhDauTien { get; set; }
         public int MaThuoc { get; set; }
+        
     }
 }
