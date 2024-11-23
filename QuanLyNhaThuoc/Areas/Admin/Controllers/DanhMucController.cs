@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "NhanVien")]
+    [Authorize(Roles = "Admin,NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class DanhMucController : Controller

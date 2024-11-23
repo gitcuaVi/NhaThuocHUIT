@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
+using QuanLyNhaThuoc.Areas.KhachHang.Services;
 using QuanLyNhaThuoc.Areas.KhachHang.Services.VnPay;
 using QuanLyNhaThuoc.KhachHang.Services.VnPay;
 using QuanLyNhaThuoc.Models;
+using jsreport.Local;
+using jsreport.Types;
 
 namespace QuanLyNhaThuoc
 {
@@ -31,6 +34,10 @@ namespace QuanLyNhaThuoc
             builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
             builder.Services.AddScoped<IMomoService, MomoService>();
             builder.Services.AddScoped<IVnPayService, VnPayService>();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+           
+
+        
 
             // Add MVC and session services
             builder.Services.AddControllersWithViews();

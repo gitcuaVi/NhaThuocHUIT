@@ -5,9 +5,11 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class SaoLuuVaPhucHoiController : Controller

@@ -186,6 +186,45 @@
             background-color: #218838;
         }
 
+    .payment-success {
+        background-color: #f0f9f0; /* Màu nền nhạt xanh lá */
+        border: 2px solid #28a745; /* Viền màu xanh lá đậm */
+        border-radius: 8px; /* Bo tròn các góc */
+        padding: 20px; /* Khoảng cách bên trong */
+        margin: 20px 0; /* Khoảng cách phía trên và dưới */
+        text-align: center; /* Canh giữa nội dung */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    }
+
+        .payment-success h3 {
+            font-size: 1.5rem; /* Kích thước chữ */
+            font-weight: bold; /* Chữ đậm */
+            color: #28a745; /* Màu chữ xanh lá đậm */
+            margin: 0; /* Xóa khoảng cách mặc định của tiêu đề */
+        }
+
+        .payment-success p {
+            font-size: 1rem; /* Kích thước chữ cho đoạn văn */
+            color: #333; /* Màu chữ xám đậm */
+            margin-top: 10px; /* Khoảng cách giữa tiêu đề và đoạn văn */
+        }
+
+    .btn-print {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
+
+
 </style>
 
 <div class="order-success-container">
@@ -232,34 +271,51 @@
     </div>
 </div>
 
-<form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
-    <input type="hidden" name="maDonHang" value="@Model.PaymentInfo.MaDonHang" />
-    <input type="hidden" name="tongTien" value="@Model.PaymentInfo.TotalAmount" />
-
-    <div class="payment-methods">
-        <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="cash" required>
-            <img src="~/images/tienmat.jpeg" alt="Thanh toán khi nhận hàng">
-            <p>Thanh toán khi nhận hàng</p>
-        </label>
-        <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="banking" required>
-            <img src="~/images/internetbanbking.jpeg" alt="Internet Banking">
-            <p>Thanh toán qua Internet Banking</p>
-        </label>
-        <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="qr-vnpay" required>
-            <img src="~/images/vnpay.jpeg" alt="QR VNPAY">
-            <p>Thanh toán qua QR VNPAY</p>
-        </label>
-        <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="qr-momo" required>
-            <img src="~/images/momo.jpeg" alt="Thanh toán qua Momo">
-            <p>Thanh toán qua Momo</p>
-        </label>
+@if (Model.OrderItems.All(item => item.TrangThaiThanhToan == "Đã thanh toán"))
+{
+    <div class="payment-success">
+        <h3 style="color: green;">Đơn hàng của bạn đã được thanh toán thành công!</h3>
+        <button class="btn-print" onclick="exportOrderToPdf(@Model.PaymentInfo.MaDonHang)">In hóa đơn</button>
     </div>
+}
+else
+{
+    <form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
+        <input type="hidden" name="maDonHang" value="@Model.PaymentInfo.MaDonHang" />
+        <input type="hidden" name="tongTien" value="@Model.PaymentInfo.TotalAmount" />
 
-    <div class="payment-submit">
-        <button type="submit" class="btn-submit">Xác nhận</button>
-    </div>
-</form>
+        <div class="payment-methods">
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="cash" required>
+                <img src="~/images/tienmat.jpeg" alt="Thanh toán khi nhận hàng">
+                <p>Thanh toán khi nhận hàng</p>
+            </label>
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="banking" required>
+                <img src="~/images/internetbanbking.jpeg" alt="Internet Banking">
+                <p>Thanh toán qua Internet Banking</p>
+            </label>
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="qr-vnpay" required>
+                <img src="~/images/vnpay.jpeg" alt="QR VNPAY">
+                <p>Thanh toán qua QR VNPAY</p>
+            </label>
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="qr-momo" required>
+                <img src="~/images/momo.jpeg" alt="Thanh toán qua Momo">
+                <p>Thanh toán qua Momo</p>
+            </label>
+        </div>
+
+        <div class="payment-submit">
+            <button type="submit" class="btn-submit">Xác nhận</button>
+        </div>
+    </form>
+}
+
+<script>
+    function exportOrderToPdf(maDonHang) {
+        const url = `/KhachHang/SanPham/ExportOrderToPdf/${maDonHang}`;
+        window.open(url, '_blank'); // Mở file PDF trong một tab mới
+    }
+</script>

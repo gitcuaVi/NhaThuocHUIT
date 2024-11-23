@@ -81,8 +81,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 var result = await db.Database
                                       .ExecuteSqlRawAsync("EXEC sp_CapNhatTrangThaiThanhToan @MaGiaoDich", paramMaGiaoDich);
                     TempData["Success"] = "Thanh toán thành công!";
-                    return RedirectToAction("ThongTinDonHang", "CheckOut");
-               
+            return RedirectToAction("OrderDetails", "SanPham", new { maDonHang = maGiaoDich });
+
         }
         [HttpGet("ThongTinDonHang")]
         public async Task<IActionResult> ThongTinDonHang(int maDonHang)

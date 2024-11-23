@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using QuanLyNhaThuoc.Areas.KhachHang.Services.VnPay;
 using QuanLyNhaThuoc.Areas.KhachHang.Models.VnPay;
 using QuanLyNhaThuoc.KhachHang.Services.VnPay;
+using System.Threading.Tasks;
+using QuanLyNhaThuoc.Areas.KhachHang.Services;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -24,12 +26,12 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         private readonly IVnPayService _vnPayService;
 
 
-        public SanPhamController(QL_NhaThuocContext context, IVnPayService vnPayService, IMomoService momoService)
+        public SanPhamController(QL_NhaThuocContext context, IVnPayService vnPayService, IMomoService momoService, PDF pdfService)
         {
             db = context;
             _vnPayService = vnPayService;
             _momoService = momoService;
-
+          
         }
 
         [HttpGet]
@@ -275,8 +277,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
         }
 
-
-
         [HttpGet("OrderDetails/{maDonHang}")]
         public async Task<IActionResult> OrderDetails(int maDonHang)
         {
@@ -315,6 +315,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
             }
         }
+
+
 
         [HttpPost("SubmitPayment")]
         public async Task<IActionResult> SubmitPayment([FromForm] PaymentRequestModel model)
@@ -384,9 +386,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     // Redirect to payment URL first
                     return Redirect(paymentUrl);
                 }
-
-                // After a successful transaction (for other cases like cash, credit, etc.)
-                return RedirectToAction("ThongTinDonHang", "CheckOut", new { maDonHang = model.MaDonHang });
+                return RedirectToAction("OrderDetails", "SanPham", new { maDonHang = model.MaDonHang });
             }
             catch (Exception ex)
             {
@@ -394,8 +394,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
         }
 
-
-
+     
+    
 
         [HttpPost]
         [Route("CreatePaymentUrl")]

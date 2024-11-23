@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "NhanVien")]
+    [Authorize(Roles = "Admin,NhanVien")]
     [Area("Admin")]
     [Route("Admin/[controller]")]
     public class UserController : Controller

@@ -124,7 +124,7 @@
         <!-- Sidebar -->
         <div class="col-md-3">
             <div class="customer-info">
-                <h5>khách hàng</h5>
+                <h5>Khách Hàng</h5>
                 <p class="mb-1"><strong>@Model.FirstOrDefault()?.TenKhachHang</strong></p>
                 
             </div>
@@ -151,7 +151,7 @@
                                 <span class="badge badge-status @GetBadgeClass(item.TrangThai)">
                                     @item.TrangThai
                                 </span>
-                                <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = item.MaThuoc })" class="btn btn-primary btn-sm mt-2">
+                                <a href="@Url.Action("OrderDetails", "SanPham", new { area = "KhachHang", id = item.MaDonHang })" class="btn btn-primary btn-sm mt-2">
                                     Xem chi tiết
                                 </a>
                                 <p>Thành tiền: <strong>@String.Format("{0:N0}", item.ThanhTien)₫</strong></p>
