@@ -14,6 +14,7 @@ using QuanLyNhaThuoc.Areas.KhachHang.Models.VnPay;
 using QuanLyNhaThuoc.KhachHang.Services.VnPay;
 using System.Threading.Tasks;
 using QuanLyNhaThuoc.Areas.KhachHang.Services;
+using QuanLyNhaThuoc.Areas.KhachHang.Services.Momo;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -26,7 +27,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         private readonly IVnPayService _vnPayService;
 
 
-        public SanPhamController(QL_NhaThuocContext context, IVnPayService vnPayService, IMomoService momoService, PDF pdfService)
+        public SanPhamController(QL_NhaThuocContext context, IVnPayService vnPayService, IMomoService momoService)
         {
             db = context;
             _vnPayService = vnPayService;

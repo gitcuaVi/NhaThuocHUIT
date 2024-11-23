@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
@@ -6,6 +7,7 @@ using System.Data;
 
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,NhanVien")]
     [Area("Admin")]
     [Route("admin/[controller]")]
     public class PhieuNhapController : Controller

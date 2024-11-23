@@ -1,4 +1,4 @@
-﻿namespace QuanLyNhaThuoc.Models
+﻿namespace QuanLyNhaThuoc.Areas.KhachHang.Models.Momo
 {
     public class MomoOptionModel
     {
@@ -9,6 +9,6 @@
         public string NotifyUrl { get; set; }
         public string PartnerCode { get; set; }
         public string RequestType { get; set; }
-    }
 
+    }
 }

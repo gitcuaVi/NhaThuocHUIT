@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace QuanLyNhaThuoc.Areas.KhachHang.Models
+﻿namespace QuanLyNhaThuoc.Areas.KhachHang.Models.Momo
 {
     public class MomoCreatePaymentResponseModel
     {
@@ -15,5 +13,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
         public string QrCodeUrl { get; set; }
         public string Deeplink { get; set; }
         public string DeeplinkWebInApp { get; set; }
+       
     }
 }

@@ -1,20 +1,23 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using QuanLyNhaThuoc.Models;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
+using QuanLyNhaThuoc.Areas.KhachHang.Models.Momo;
 using System.Security.Cryptography;
 using System.Text;
-using RestSharp; // Add RestSharp namespace
+using RestSharp;
+using RestSharpMethod = RestSharp.Method;
 
-namespace QuanLyNhaThuoc.Areas.KhachHang.Models
+
+namespace QuanLyNhaThuoc.Areas.KhachHang.Services.Momo
 {
-    public class MomoService : IMomoService
+    public class MomoService: IMomoService
     {
         private readonly IOptions<MomoOptionModel> _options;
         public MomoService(IOptions<MomoOptionModel> options)
         {
             _options = options;
         }
-
         public async Task<MomoCreatePaymentResponseModel> CreatePaymentMomo(OrderInfo model)
         {
             model.OrderId = DateTime.UtcNow.Ticks.ToString();
@@ -22,7 +25,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
             var rawData =
                 $"partnerCode={_options.Value.PartnerCode}" +
                 $"&accessKey={_options.Value.AccessKey}" +
-                $"&requestId={model.OrderIdOld}" +
+                $"&requestId={model.OrderId}" +
                 $"&amount={model.Amount}" +
                 $"&orderId={model.OrderId}" +
                 $"&orderInfo={model.OrderInfomation}" +
@@ -32,8 +35,11 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
 
             var signature = ComputeHmacSha256(rawData, _options.Value.SecretKey);
 
-            var client = new RestClient(_options.Value.MomoApiUrl); // Initialize RestClient
-            var request = new RestRequest() { Method = Method.Post }; // Correct Method is Post
+            var client = new RestClient(_options.Value.MomoApiUrl);
+            var request = new RestRequest() { Method = RestSharpMethod.Post };
+
+
+
             request.AddHeader("Content-Type", "application/json; charset=UTF-8");
 
             // Create an object representing the request data
@@ -47,29 +53,23 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
                 orderId = model.OrderId,
                 amount = model.Amount.ToString(),
                 orderInfo = model.OrderInfomation,
-                requestId = model.OrderIdOld,
+                requestId = model.OrderId,
                 extraData = "",
                 signature = signature
             };
 
-            request.AddParameter("application/json", JsonConvert.SerializeObject(requestData), ParameterType.RequestBody); // ParameterType.RequestBody is valid here
+            request.AddParameter("application/json", JsonConvert.SerializeObject(requestData), ParameterType.RequestBody);
 
             var response = await client.ExecuteAsync(request);
             var momoResponse = JsonConvert.DeserializeObject<MomoCreatePaymentResponseModel>(response.Content);
             return momoResponse;
-        }
 
+        }
         public MomoExecuteResponseModel PaymentExecuteMomo(IQueryCollection collection)
         {
-            if (!collection.ContainsKey("amount") || !collection.ContainsKey("orderInfo") || !collection.ContainsKey("orderId"))
-            {
-                throw new ArgumentException("Invalid query collection: Missing required parameters.");
-            }
-
-            var amount = collection["amount"].ToString();
-            var orderInfo = collection["orderInfo"].ToString();
-            var orderId = collection["orderId"].ToString();
-
+            var amount = collection.First(s => s.Key == "amount").Value;
+            var orderInfo = collection.First(s => s.Key == "orderInfo").Value;
+            var orderId = collection.First(s => s.Key == "orderId").Value;
 
             return new MomoExecuteResponseModel()
             {
@@ -78,6 +78,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
                 OrderInfo = orderInfo
             };
         }
+
 
         public string ComputeHmacSha256(string message, string secretKey)
         {
@@ -92,7 +93,10 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Models
             }
 
             var hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
             return hashString;
         }
     }
+
 }
+

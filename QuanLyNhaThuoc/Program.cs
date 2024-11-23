@@ -5,8 +5,8 @@ using QuanLyNhaThuoc.Areas.KhachHang.Services;
 using QuanLyNhaThuoc.Areas.KhachHang.Services.VnPay;
 using QuanLyNhaThuoc.KhachHang.Services.VnPay;
 using QuanLyNhaThuoc.Models;
-using jsreport.Local;
-using jsreport.Types;
+using QuanLyNhaThuoc.Areas.KhachHang.Services.Momo;
+using QuanLyNhaThuoc.Areas.KhachHang.Models.Momo;
 
 namespace QuanLyNhaThuoc
 {
