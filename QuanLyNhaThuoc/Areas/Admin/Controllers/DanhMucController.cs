@@ -18,13 +18,36 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             _context = context;
         }
         [HttpGet("")]
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int page = 1, int pageSize = 10)
         {
-            var danhMucList = _context.DanhMucs
-                              .FromSqlRaw("EXEC GetDanhMucList")
+            // Truy vấn danh sách từ database
+            var danhMucQuery = _context.DanhMucs.AsQueryable();
+
+            // Nếu có từ khóa tìm kiếm, áp dụng bộ lọc
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                danhMucQuery = danhMucQuery.Where(dm => dm.TenDanhMuc.Contains(searchString));
+            }
+
+            // Tổng số danh mục
+            int totalItems = danhMucQuery.Count();
+
+            // Phân trang
+            var danhMucList = danhMucQuery
+                              .OrderBy(dm => dm.MaDanhMuc) // Sắp xếp để đảm bảo thứ tự
+                              .Skip((page - 1) * pageSize)
+                              .Take(pageSize)
                               .ToList();
+
+            // Gửi dữ liệu đến View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.CurrentFilter = searchString;
+
             return View(danhMucList);
         }
+
+
 
         [HttpGet("Create")]
         public IActionResult Create()

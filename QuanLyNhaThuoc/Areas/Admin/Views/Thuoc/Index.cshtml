@@ -50,6 +50,35 @@
                 position: absolute;
                 right: 15px;
             }
+
+        .pagination {
+            display: flex;
+            justify-content: center; /* Căn giữa các số trang */
+            padding: 0; /* Xóa khoảng cách mặc định */
+            margin-top: 20px; /* Khoảng cách với các phần tử khác */
+        }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Thêm khoảng cách giữa các nút */
+            }
+
+            .pagination .page-link {
+                color: #28a745; /* Màu chữ */
+                border: 1px solid #28a745; /* Viền xanh lá */
+                border-radius: 5px; /* Bo tròn các nút */
+            }
+
+                .pagination .page-link:hover {
+                    background-color: #218838; /* Đổi màu nền khi hover */
+                    color: #fff; /* Màu chữ khi hover */
+                }
+
+            .pagination .active > .page-link {
+                background-color: #28a745; /* Nền màu xanh lá */
+                color: #fff; /* Màu chữ trắng */
+                border-color: #28a745; /* Viền cùng màu nền */
+            }
+
     </style>
 </head>
 <body>
@@ -57,7 +86,6 @@
         <h1 class="mb-4">Quản lý thuốc</h1>
 
         <form method="get" class="row g-3 align-items-center mb-3">
-            @Html.AntiForgeryToken()
             <div class="col-md-3">
                 <div class="custom-search-icon">
                     <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm thuốc..." value="@ViewBag.CurrentFilter" />
@@ -65,11 +93,12 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i>
+                <button type="submit" class="btn btn-primary w-50">
+                    <i class="bi bi-search"></i> Tìm kiếm
                 </button>
             </div>
         </form>
+
 
         <div class="drug-list-container" style="overflow-y:auto; max-height: 600px;">
             <table class="table table-bordered">
@@ -122,7 +151,6 @@
                 <i class="bi bi-trash"></i> Xóa
             </button>
         </div>
-
         <div class="pagination mt-3">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -147,6 +175,7 @@
                 </ul>
             </nav>
         </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

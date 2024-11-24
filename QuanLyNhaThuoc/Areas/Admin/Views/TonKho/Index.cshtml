@@ -13,26 +13,91 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
-        /* Styling */
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary, .btn-success, .btn-warning, .btn-danger {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-primary:hover, .btn-success:hover {
+                background-color: #218838;
+            }
+
+            .btn-warning:hover {
+                background-color: goldenrod;
+            }
+
+            .btn-danger:hover {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+
+        .pagination .active > .page-link {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .custom-search-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .custom-search-icon i {
+                position: absolute;
+                right: 15px;
+            }
+
+        .pagination {
+            display: flex;
+            justify-content: center; /* Căn giữa các số trang */
+            padding: 0; /* Xóa khoảng cách mặc định */
+            margin-top: 20px; /* Khoảng cách với các phần tử khác */
+        }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Thêm khoảng cách giữa các nút */
+            }
+
+            .pagination .page-link {
+                color: #28a745; /* Màu chữ */
+                border: 1px solid #28a745; /* Viền xanh lá */
+                border-radius: 5px; /* Bo tròn các nút */
+            }
+
+                .pagination .page-link:hover {
+                    background-color: #218838; /* Đổi màu nền khi hover */
+                    color: #fff; /* Màu chữ khi hover */
+                }
+
+            .pagination .active > .page-link {
+                background-color: #28a745; /* Nền màu xanh lá */
+                color: #fff; /* Màu chữ trắng */
+                border-color: #28a745; /* Viền cùng màu nền */
+            }
     </style>
 </head>
 <body>
     <div class="container my-4">
         <h1 class="mb-4">Quản lý Tồn Kho</h1>
         <form method="get" class="row g-3 align-items-center mb-3">
-            @Html.AntiForgeryToken()
             <div class="col-md-3">
                 <div class="custom-search-icon">
-                    <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm tồn kho..." value="@ViewBag.CurrentFilter" />
+                    <input type="text" name="searchString" class="form-control"
+                           placeholder="Tìm kiếm tồn kho..." value="@ViewBag.CurrentFilter" />
                     <i class="bi bi-search"></i>
                 </div>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i>
+                <button type="submit" class="btn btn-primary w-50">
+                    <i class="bi bi-search"></i> Tìm kiếm
                 </button>
             </div>
         </form>
+
 
         <div class="tonkho-list-container" style="overflow-y:auto; max-height: 600px;">
             <table class="table table-bordered">
@@ -87,10 +152,18 @@
         <div class="pagination mt-3">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    @* Pagination Logic *@
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, searchString = ViewBag.CurrentFilter })">
+                                @i
+                            </a>
+                        </li>
+                    }
                 </ul>
             </nav>
         </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

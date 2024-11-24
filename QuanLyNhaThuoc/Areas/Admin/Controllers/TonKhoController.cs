@@ -22,13 +22,32 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 10)
         {
-            var tonKhos = await _context.TonKhos
+            // Lấy danh sách tồn kho từ database
+            var tonKhosQuery = _context.TonKhos
                 .Include(tk => tk.MaThuocNavigation)
-                .AsNoTracking()
+                .AsNoTracking();
+
+            // Tìm kiếm
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                tonKhosQuery = tonKhosQuery.Where(tk =>
+                    tk.MaThuocNavigation.TenThuoc.Contains(searchString) ||
+                    tk.MaTonKho.ToString().Contains(searchString));
+            }
+
+            // Tổng số bản ghi
+            int totalItems = await tonKhosQuery.CountAsync();
+
+            // Phân trang
+            var tonKhos = await tonKhosQuery
+                .OrderBy(tk => tk.MaTonKho) // Sắp xếp nếu cần
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
+            // Xử lý cảnh báo
             foreach (var item in tonKhos)
             {
                 item.WarningMessage = null;
@@ -42,8 +61,14 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 }
             }
 
+            // Truyền dữ liệu phân trang và tìm kiếm
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.CurrentFilter = searchString;
+
             return View(tonKhos);
         }
+
 
         [HttpPost("CapNhatSoLuongTonKho")]
         public async Task<IActionResult> CapNhatSoLuongTonKho(int maTonKho, int? SoLuongCanhBao, int? SoLuongToiDa)

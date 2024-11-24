@@ -20,16 +20,38 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
         [HttpGet("")]
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int page = 1, int pageSize = 10)
         {
-            var phieuNhaps = _context.PhieuNhaps
+            var phieuNhapQuery = _context.PhieuNhaps
                 .Include(p => p.MaNhanVienNavigation)
                 .Include(p => p.ChiTietPns)
                     .ThenInclude(ctpn => ctpn.MaTonKhoNavigation)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                phieuNhapQuery = phieuNhapQuery.Where(pn =>
+                    pn.MaPhieuNhap.ToString().Contains(searchString) || // Chuyển int sang string
+                    pn.MaNhanVienNavigation.HoTen.Contains(searchString) ||
+                    pn.NhaCungCap.Contains(searchString));
+            }
+
+            int totalItems = phieuNhapQuery.Count();
+            var phieuNhaps = phieuNhapQuery
+                .OrderByDescending(pn => pn.NgayNhap)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.CurrentFilter = searchString;
 
             return View(phieuNhaps);
         }
+
+
+
         [HttpGet("create")]
         public IActionResult CreatePhieuNhap()
         {

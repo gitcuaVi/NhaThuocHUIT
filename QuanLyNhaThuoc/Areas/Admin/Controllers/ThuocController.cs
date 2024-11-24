@@ -25,11 +25,36 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int page = 1)
         {
-            var thuocList = await _context.Thuocs.Include(t => t.HinhAnhs).ToListAsync();
+            // Số lượng item trang
+            int pageSize = 10;
+
+            // Lưu vào ViewBag
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentPage = page;
+
+            var thuocQuery = _context.Thuocs.Include(t => t.HinhAnhs).AsQueryable();
+
+            // điều kiện lọc
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                thuocQuery = thuocQuery.Where(t => t.TenThuoc.Contains(searchString));
+            }
+
+            // Tổng số trang
+            int totalItems = await thuocQuery.CountAsync();
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            // Phân trang
+            var thuocList = await thuocQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             return View(thuocList);
         }
+
 
         [HttpGet("Create")]
         public IActionResult Create()

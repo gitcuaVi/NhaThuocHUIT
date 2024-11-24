@@ -19,15 +19,40 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             _context = context;
         }
 
-        // Hiển thị danh sách loại sản phẩm
         [HttpGet("")]
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int page = 1, int pageSize = 10)
         {
-            var loaiSanPhamList = _context.LoaiSanPhams
-                                  .Include(lsp => lsp.MaDanhMucNavigation)
-                                  .ToList();
+            // Truy vấn loại sản phẩm
+            var loaiSanPhamQuery = _context.LoaiSanPhams
+                .Include(lsp => lsp.MaDanhMucNavigation)
+                .AsQueryable();
+
+            // Nếu có từ khóa tìm kiếm, áp dụng bộ lọc
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                loaiSanPhamQuery = loaiSanPhamQuery.Where(lsp =>
+                    lsp.TenLoai.Contains(searchString) ||
+                    lsp.MaDanhMucNavigation.TenDanhMuc.Contains(searchString));
+            }
+
+            // Tổng số loại sản phẩm
+            int totalItems = loaiSanPhamQuery.Count();
+
+            // Lấy dữ liệu theo phân trang
+            var loaiSanPhamList = loaiSanPhamQuery
+                .OrderBy(lsp => lsp.MaLoaiSanPham)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Truyền thông tin phân trang và tìm kiếm đến View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.CurrentFilter = searchString;
+
             return View(loaiSanPhamList);
         }
+
 
         // GET: Trang thêm loại sản phẩm
         [HttpGet("Create")]
