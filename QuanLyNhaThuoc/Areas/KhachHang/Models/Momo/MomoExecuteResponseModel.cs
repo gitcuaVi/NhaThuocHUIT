@@ -1,4 +1,4 @@
-﻿namespace QuanLyNhaThuoc.Areas.KhachHang.Models.Momo
+﻿namespace QuanLyNhaThuoc.Areas.KhachHang.Models
 {
     public class MomoExecuteResponseModel
     {

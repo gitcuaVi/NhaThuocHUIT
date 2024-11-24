@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
-using QuanLyNhaThuoc.Areas.KhachHang.Models.Momo;
+using QuanLyNhaThuoc.Areas.KhachHang.Models;
 using System.Security.Cryptography;
 using System.Text;
 using RestSharp;
