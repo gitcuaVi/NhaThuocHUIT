@@ -92,6 +92,17 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             return View(productDetail);
 
         }
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            var paramKeyword = new SqlParameter("@Keyword", string.IsNullOrEmpty(keyword) ? (object)DBNull.Value : keyword);
+
+            var products = await db.Set<ProductViewModel>()
+                .FromSqlRaw("EXEC sp_SearchThuocByTenThuoc @Keyword", paramKeyword)
+                .ToListAsync();
+
+            return PartialView("_SearchResults", products);
+        }
 
 
         [HttpPost("AddToCart")]

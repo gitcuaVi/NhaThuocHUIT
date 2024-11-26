@@ -13,13 +13,16 @@
 }
 
 
-/* Navbar Styles */
+/* Navbar Style */
 .navbar-custom {
     background-color: #4CAF50;
 }
 
-    .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .location-text, .navbar-custom .hotline {
-        color: #fff; /* Màu chữ */
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link,
+    .navbar-custom .location-text,
+    .navbar-custom .hotline {
+        color: #fff;
     }
 
     .navbar-custom .hotline {
@@ -27,11 +30,73 @@
         font-weight: bold;
     }
 
-/* Search Bar */
-.search-bar {
-    width: 300px;
+/* Search Container */
+.search-container {
+    position: relative;
+    width: 500px; /* Tăng độ rộng thanh tìm kiếm */
+    margin-left: auto;
+    margin-right: auto; /* Canh giữa */
 }
 
+.search-bar {
+    width: 100%;
+    padding: 8px 12px;
+    margin-left: 5px;
+    font-size: 14px; /* Giảm kích thước font để phù hợp với nút */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: all 0.3s ease;
+    height: auto; /* Đảm bảo không bị cố định chiều cao */
+}
+
+    .search-bar:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+    }
+
+/* Search Popup */
+.search-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    z-index: 10;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    width: 100%; /* Đặt chiều rộng bằng chiều rộng thanh tìm kiếm */
+    max-width: 700px; /* Tăng độ rộng tối đa */
+    min-height: 200px;
+    max-height: 500px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+    .search-popup.active {
+        display: block;
+    }
+
+
+/* Nút trong navbar đều nhau */
+.navbar-custom .d-flex.align-items-center > button {
+    min-width: 120px; /* Đảm bảo các nút đều nhau */
+    text-align: center;
+}
+/* Navbar Link Hover Effect */
+.navbar .nav-link {
+    position: relative;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+    .navbar .nav-link:hover {
+        color: #ffd600; /* Màu vàng khi hover */
+        padding-left: 8px; /* Di chuyển link sang trái khi hover */
+    }
 /* Secondary Navbar Styles */
 .secondary-navbar {
     background-color: #4CAF50;
@@ -43,14 +108,14 @@
         color: #fff;
         font-weight: bold;
         padding: 10px 15px;
-        line-height: 1.5; /* Ensures uniform vertical alignment */
+        line-height: 1.5; 
         text-decoration: none;
         transition: color 0.3s;
         display: flex;
-        align-items: center; /* Centers items vertically */
+        align-items: center;
     }
 
-        /* Hover color for all menu links */
+         Hover color for all menu links 
         .secondary-navbar .nav-link:hover,
         .secondary-navbar .nav-link-gocsuckhoe:hover {
             color: #007bff;
@@ -88,7 +153,7 @@
         transition: background-color 0.3s, color 0.3s;
     }
 
-        /* Hover effect for dropdown items */
+         Hover effect for dropdown items 
         .secondary-navbar .dropdown-item:hover,
         .secondary-navbar .dropdown-item-gocsuckhoe:hover {
             background-color: #c6ee9a;

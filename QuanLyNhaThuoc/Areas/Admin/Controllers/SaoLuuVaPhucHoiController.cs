@@ -29,7 +29,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpPost("SaoLuu")]
         public async Task<IActionResult> SaoLuu(string backupLocation)
         {
-             backupLocation = "C:\\Program Files\\Microsoft SQL Server\\MSSQL16.MSSQLSERVER\\MSSQL\\Backup";
+             backupLocation = "E:\\CSDL\\MSSQL16.SQLEXPRESS\\MSSQL\\Backup\\";
 
             try
             {

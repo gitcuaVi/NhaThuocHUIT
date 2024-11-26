@@ -1,0 +1,86 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+<div class="search-results">
+    @if (Model != null && Model.Any())
+    {
+        <ul class="product-listSearch">
+            @foreach (var product in Model)
+            {
+                <li class="product-itemSearch">
+                    <img class="product-imageSearch" src="@product.HinhAnhDauTien" alt="@product.TenThuoc" />
+                    <div class="product-infoSearch">
+                        <h3 class="product-nameSearch">@product.TenThuoc</h3>
+                        @if (product.DonGia > 0)
+                        {
+                            <p class="product-priceSearch">@String.Format("{0:0,0} VND", product.DonGia)/@product.DonVi</p>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+    }
+</div>
+
+
+<style>
+    .search-results {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        max-height: 100%; /* Chiều cao tối đa cho danh sách */
+    }
+
+    .product-listSearch {
+        padding: 0;
+        margin: 0;
+        list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+    }
+
+    .product-itemSearch {
+        display: flex; /* Bố cục ngang cho từng sản phẩm */
+        align-items: center; /* Căn giữa dọc nội dung */
+        padding: 8px 0; /* Giảm padding để tiết kiệm không gian */
+        border-bottom: 1px solid #eee; /* Đường kẻ ngang giữa các sản phẩm */
+    }
+
+        .product-itemSearch:last-child {
+            border-bottom: none; /* Bỏ đường kẻ cuối cùng */
+        }
+
+    .product-imageSearch {
+        width: 120px; 
+        height: 100px; 
+        object-fit: cover; /* Cắt ảnh vừa khung */
+        margin-right: 10px; 
+       
+    }
+
+    .product-infoSearch {
+        display: flex; /* Sử dụng flexbox cho thông tin */
+        flex: 1; 
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: space-between; /* Đẩy nội dung ra hai bên */
+    }
+
+    .product-nameSearch {
+        font-size: 14px; 
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+        margin-bottom: 4px; /* Khoảng cách với các dòng bên dưới */
+    }
+
+    .product-priceSearch {
+        font-size: 12px;
+        font-weight: bold;
+        color: #e74c3c;
+        margin: 0;
+        margin-left: auto;
+    }
+
+
+
+</style>

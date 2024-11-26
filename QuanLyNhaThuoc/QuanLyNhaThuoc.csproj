@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="EPPlus" Version="7.4.1" />
     <PackageReference Include="itext7" Version="9.0.0" />
     <PackageReference Include="jsreport.Local" Version="3.8.2" />
@@ -41,6 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\KhachHang\Views\DanhMuc\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="libwkhtmltox.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -275,7 +275,7 @@
 {
     <div class="payment-success">
         <h3 style="color: green;">Đơn hàng của bạn đã được thanh toán thành công!</h3>
-        <button class="btn-print" onclick="exportOrderToPdf(@Model.PaymentInfo.MaDonHang)">In hóa đơn</button>
+        <button class="btn-print" onclick="exportOrderToPdf(@Model.PaymentInfo.MaDonHang)">Xuất hóa đơn</button>
     </div>
 }
 else
@@ -315,7 +315,8 @@ else
 
 <script>
     function exportOrderToPdf(maDonHang) {
-        const url = `/KhachHang/SanPham/ExportOrderToPdf/${maDonHang}`;
+        const url = `/KhachHang/Report/ShowOrderDetails/${maDonHang}`;
         window.open(url, '_blank'); // Mở file PDF trong một tab mới
     }
 </script>
+
