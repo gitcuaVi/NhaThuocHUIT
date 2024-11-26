@@ -1,0 +1,91 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.ViewModels.SanPhamViewModel>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<li class="nav-item me-3">
+    <a class="nav-link" href="/Admin/NhanVienHoaDon/Cart">
+        <i class="bi bi-bag-fill"></i> Giỏ hàng
+        <span id="cartCount" class="badge bg-danger ms-1">0</span>
+    </a>
+</li>
+<h2>Chọn danh mục</h2>
+<form method="get" action="/Admin/NhanVienHoaDon">
+    <div class="form-group">
+        <label for="categoryId">Danh mục:</label>
+        <select name="categoryId" id="categoryId" class="form-control">
+            <option value="">-- Chọn danh mục --</option>
+            @foreach (var danhMuc in ViewBag.DanhMucList)
+            {
+                <option value="@danhMuc.MaDanhMuc">@danhMuc.TenDanhMuc</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Xem thuốc</button>
+</form>
+
+@if (Model.Any())
+{
+    <h2>Danh sách thuốc</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên Thuốc</th>
+                <th>Hình Ảnh</th>
+                <th>Đơn Giá</th>
+                <th>Đơn Vị</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Select((item, index) => new { item, index }))
+            {
+                <tr>
+                    <td>@(product.index + 1)</td>
+                    <td>@product.item.TenThuoc</td>
+                    <td>
+                        <img src="@product.item.HinhAnhDauTien" alt="@product.item.TenThuoc" style="width: 50px; height: 50px;" />
+                    </td>
+                    <td>@string.Format("{0:#,##0}", product.item.DonGia)₫</td>
+                    <td>@product.item.DonVi</td>
+                    <td>
+                        <button class="btn btn-primary add-to-cart" data-product-id="@product.item.MaThuoc">Xác Nhận</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Không có sản phẩm nào để hiển thị.</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Xử lý sự kiện click nút thêm vào giỏ hàng
+            $(".add-to-cart").click(function () {
+                const maThuoc = $(this).data("product-id");
+                const soLuong = 1; // Bạn có thể lấy từ input nếu cần
+
+                $.ajax({
+                    url: '/Admin/NhanVienHoaDon/AddToCart',
+                    type: 'POST',
+                    data: { maThuoc: maThuoc, soLuong: soLuong },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Thêm vào giỏ hàng thành công!");
+                        } else {
+                            alert("Thêm vào giỏ hàng thất bại: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Đã xảy ra lỗi khi thêm vào giỏ hàng!");
+                    }
+                });
+            });
+        });
+    </script>
+}

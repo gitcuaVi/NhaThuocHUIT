@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using QuanLyNhaThuoc.Areas.KhachHang.Models;
-
+using QuanLyNhaThuoc.ViewModels;
 namespace QuanLyNhaThuoc.Models
 {
     public partial class QL_NhaThuocContext : DbContext
@@ -65,7 +65,10 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<ThongTinDatHangViewModel> ThongTinDatHangViewModels { get; set; }
 
         public DbSet<DonHang> donHangs { get; set; }
-     
+
+        public DbSet<GioHangNhanVienThanhToanView> GioHangNhanVienThanhToanViews { get; set; }
+
+
 
 
 
@@ -74,7 +77,7 @@ namespace QuanLyNhaThuoc.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=THANHSANG;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Data Source=LAPTOP-OGOI530P;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
         }
 
@@ -96,6 +99,9 @@ namespace QuanLyNhaThuoc.Models
 
             modelBuilder.Entity<ThongTinDatHangViewModel>().HasNoKey();
 
+            modelBuilder.Entity<GioHangNhanVienThanhToanView>()
+                       .HasNoKey()
+                       .ToView(null);
 
 
 
