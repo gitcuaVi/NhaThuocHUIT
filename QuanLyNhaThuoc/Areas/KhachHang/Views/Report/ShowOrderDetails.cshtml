@@ -1,0 +1,174 @@
+﻿@using QuanLyNhaThuoc.Areas.KhachHang.Models
+@model ReportOrder
+@{
+    ViewData["Title"] = "ShowOrderDetails";
+    Layout = "~/Areas/KhachHang/Views/Shared/_LayoutKhachHang.cshtml";
+}
+<style>
+    /* Căn chỉnh form nằm chính giữa */
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f8f9fa; /* Màu nền nhẹ */
+        padding: 20px;
+    }
+
+    /* Styling cho nội dung form */
+    #orderDetails {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px; /* Giới hạn chiều rộng */
+        font-family: Arial, sans-serif;
+    }
+
+    /* Tiêu đề chính */
+    h2 {
+        text-align: center;
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Tiêu đề phụ */
+    h4 {
+        text-align: left; /* Căn trái */
+        color: black;
+        font-weight: bold; /* Độ đậm mặc định */
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+
+    /* Bảng chi tiết đơn hàng */
+    .table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    /* Tổng tiền */
+    .total {
+        text-align: right; /* Căn bên phải */
+        font-size: 16px;
+        font-weight: bold;
+        color: #28a745;
+        margin-top: 20px;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-small {
+        font-size: 12px;
+        padding: 5px 10px; /* Điều chỉnh khoảng cách bên trong */
+        border-radius: 3px; /* Bo tròn nhẹ hơn */
+    }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+</style>
+
+<div class="form-container">
+    <div id="orderDetails">
+        <h2>Thông Tin Đơn Hàng</h2>
+        <div>
+            <h4>Thông Tin Chung</h4>
+            <p><strong>Ngày tạo:</strong> @DateTime.Now.ToString("dd/MM/yyyy")</p>
+            <p><strong>Địa điểm:</strong> Tân Phú, Thành phố Hồ Chí Minh</p>
+        </div>
+        <div>
+            <h4>Khách Hàng</h4>
+            <p><strong>Tên khách hàng:</strong> @Model.DiaChi.TenKhachHang</p>
+            <p><strong>Số điện thoại:</strong> @Model.DiaChi.SoDienThoai</p>
+            <p><strong>Địa chỉ:</strong> @Model.DiaChi.DiaChi</p>
+        </div>
+
+        <div>
+            <h4>Chi Tiết Đơn Hàng</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Số Lượng</th>
+                        <th>Đơn Giá</th>
+                        <th>Thành Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Details)
+                    {
+                        <tr>
+                            <td>@item.TenSanPham</td>
+                            <td>@item.SoLuong</td>
+                            <td>@item.DonGia.ToString("N0")</td>
+                            <td>@item.ThanhTien.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div class="btn-container">
+    <button id="exportPdfBtn" class="btn btn-small">Xuất PDF</button>
+</div>
+
+
+<script>
+    document.getElementById("exportPdfBtn").addEventListener("click", function () {
+        // Lấy nội dung HTML cần xuất
+        const element = document.getElementById("orderDetails");
+
+        // Tùy chọn cấu hình PDF
+        const options = {
+            margin: 1,
+            filename: 'ThongTinDonHang.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Xuất PDF
+        html2pdf().set(options).from(element).save();
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+

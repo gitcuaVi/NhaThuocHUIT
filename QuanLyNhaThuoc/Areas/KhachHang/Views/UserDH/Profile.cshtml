@@ -19,19 +19,16 @@
 
         <div class="profile-actions">
             <form method="post" asp-action="Logout" class="logout-form">
-                <button type="submit" class="btn btn-logout">Đăng xuất</button>
+                <button type="submit" class="btnprofile btn-logout">Đăng xuất</button>
             </form>
-            <a href="@Url.Action("EditProfile", "UserDH")" class="btn btn-edit">Chỉnh sửa thông tin</a>
-             <a href="@Url.Action("Index", "LichSuDonHang")" class="btn btn-lsdh">Lịch Sử Đơn Hàng</a> 
-            <a href="@Url.Action("ChangePassword", "UserDH")" class="btn btn-change-password">Đổi mật khẩu</a>
+            <a href="@Url.Action("EditProfile", "UserDH")" class="btnprofile btn-edit">Chỉnh sửa thông tin</a>
+            <a href="@Url.Action("Index", "LichSuDonHang")" class="btnprofile btn-lsdh">Lịch Sử Đơn Hàng</a>
+            <a href="@Url.Action("ChangePassword", "UserDH")" class="btnprofile btn-change-password">Đổi mật khẩu</a>
         </div>
     </div>
 </div>
 
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
     .profile-container {
         display: flex;
         justify-content: center;
@@ -70,7 +67,7 @@
         margin-top: 20px;
     }
 
-    .btn {
+    .btnprofile {
         padding: 10px 20px;
         border-radius: 5px;
         color: white;
