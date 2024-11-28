@@ -6,14 +6,16 @@
             @foreach (var product in Model)
             {
                 <li class="product-itemSearch">
-                    <img class="product-imageSearch" src="@product.HinhAnhDauTien" alt="@product.TenThuoc" />
-                    <div class="product-infoSearch">
-                        <h3 class="product-nameSearch">@product.TenThuoc</h3>
-                        @if (product.DonGia > 0)
-                        {
-                            <p class="product-priceSearch">@String.Format("{0:0,0} VND", product.DonGia)/@product.DonVi</p>
-                        }
-                    </div>
+                    <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
+                        <img class="product-imageSearch" src="@product.HinhAnhDauTien" alt="@product.TenThuoc" />
+                        <div class="product-infoSearch">
+                            <h3 class="product-nameSearch">@product.TenThuoc</h3>
+                            @if (product.DonGia > 0)
+                            {
+                                <p class="product-priceSearch">@String.Format("{0:0,0} VND", product.DonGia)/@product.DonVi</p>
+                            }
+                        </div>
+                    </a>
                 </li>
             }
         </ul>
@@ -29,58 +31,84 @@
     .search-results {
         background-color: #fff;
         border: 1px solid #ddd;
-        border-radius: 8px;
-        max-height: 100%; /* Chiều cao tối đa cho danh sách */
+        border-radius: 12px;
+        overflow: hidden; /* Ensures the content does not overflow */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+        max-height: 100%; /* Keeps the maximum height constraint */
+        padding: 10px; /* Adds some padding around the edges */
     }
 
     .product-listSearch {
         padding: 0;
         margin: 0;
-        list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+        list-style: none; /* Removes bullet points */
     }
 
     .product-itemSearch {
-        display: flex; /* Bố cục ngang cho từng sản phẩm */
-        align-items: center; /* Căn giữa dọc nội dung */
-        padding: 8px 0; /* Giảm padding để tiết kiệm không gian */
-        border-bottom: 1px solid #eee; /* Đường kẻ ngang giữa các sản phẩm */
+        position: relative; /* Allows absolute positioning inside */
+        display: flex;
+        align-items: center;
+        padding: 10px 0; /* Adds more space around items */
+        border-bottom: 1px solid #eee; /* Adds separation between items */
+        transition: background-color 0.3s; /* Adds a smooth hover effect */
     }
 
         .product-itemSearch:last-child {
-            border-bottom: none; /* Bỏ đường kẻ cuối cùng */
+            border-bottom: none; /* Removes the border from the last item */
+        }
+
+        .product-itemSearch:hover {
+            background-color: #f9f9f9; /* Adds a background color on hover */
+        }
+
+        .product-itemSearch a {
+            display: flex;
+            align-items: center;
+            text-decoration: none; /* Removes underline */
+            width: 100%; /* Ensures the entire item is clickable */
+            color: inherit; /* Keeps the text color consistent */
         }
 
     .product-imageSearch {
-        width: 120px; 
-        height: 100px; 
-        object-fit: cover; /* Cắt ảnh vừa khung */
-        margin-right: 10px; 
-       
+        width: 120px;
+        height: 120px; /* Makes the image square */
+        object-fit: cover; /* Ensures the image fits the container */
+        margin-right: 15px;
+        border-radius: 8px; /* Adds rounded corners to the image */
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Adds shadow to the image */
     }
 
     .product-infoSearch {
-        display: flex; /* Sử dụng flexbox cho thông tin */
-        flex: 1; 
-        align-items: center; /* Căn giữa theo chiều dọc */
-        justify-content: space-between; /* Đẩy nội dung ra hai bên */
+        display: flex;
+        flex: 1;
+        flex-direction: column; /* Aligns content in a column */
+        justify-content: space-between;
+        align-items: flex-start; /* Aligns items to the start of the flex container */
     }
 
     .product-nameSearch {
-        font-size: 14px; 
+        font-size: 16px;
         font-weight: bold;
         color: #333;
         margin: 0;
-        margin-bottom: 4px; /* Khoảng cách với các dòng bên dưới */
+        margin-bottom: 4px;
+        line-height: 1.4; /* Improves readability */
     }
 
     .product-priceSearch {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         color: #e74c3c;
         margin: 0;
-        margin-left: auto;
+        margin-top: 4px; /* Adds space between name and price */
+        text-align: right; /* Aligns the price to the right */
     }
 
-
+        .product-priceSearch::before {
+            content: "Giá: "; /* Adds a label before the price */
+            font-size: 12px;
+            font-weight: normal;
+            color: #777;
+        }
 
 </style>

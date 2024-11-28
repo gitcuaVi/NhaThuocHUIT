@@ -2,7 +2,65 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="content-box" data-aos="fade-up">
+    <h1>Welcome to Pharmacy Management</h1>
+    <p style="text-align:center">Professional and effective</p>
+    <div class="text-center">
+        <h5 class="display-4">Built by:</h5>
+        <div class="team-members">
+            <div class="member">
+                <h3 class="display-4">Nguyen Viet Anh</h3>
+            </div>
+            <div class="member">
+                <h3 class="display-4">Tran Gia Vi</h3>
+            </div>
+            <div class="member">
+                <h3 class="display-4">Nguyen Thanh Sang</h3>
+            </div>
+        </div>
+    </div>
 </div>
+<style>
+    /* Tạo không gian và căn giữa các thành viên */
+    .team-members {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px; 
+        margin-top: 20px;
+    }
+
+    .member {
+        text-align: center;
+    }
+
+    .avatar {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+    .member h3 {
+        font-size: 1.5rem;
+        margin-top: 10px;
+    }
+
+    .content-box {
+        background: rgba(0, 0, 0, 0.4); /* Giảm độ mờ của nền */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Giảm độ đậm của bóng đổ */
+        color: #f0f0f0; 
+    }
+
+        .content-box h1 {
+            font-size: 2.5rem; /* Giảm kích thước chữ */
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            color: #fafafa; /* Màu chữ sáng hơn */
+        }
+
+</style>
+
