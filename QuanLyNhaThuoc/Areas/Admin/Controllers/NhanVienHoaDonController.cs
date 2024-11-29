@@ -75,19 +75,19 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
-                // Lấy thông tin thuốc
                 var thuoc = await db.Thuocs.FindAsync(maThuoc);
                 if (thuoc == null)
                 {
-                    return Json(new { success = false, message = "Không tìm thấy thuốc." });
+                    TempData["ErrorMessage"] = "Không tìm thấy thuốc.";
+                    return RedirectToAction("Index");
                 }
 
                 if (thuoc.SoLuongTon < soLuong)
                 {
-                    return Json(new { success = false, message = "Số lượng không đủ." });
+                    TempData["ErrorMessage"] = "Số lượng không đủ.";
+                    return RedirectToAction("Index");
                 }
 
-                // Lưu thông tin vào session giỏ hàng (hoặc lưu vào bảng Giỏ hàng tạm)
                 var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
 
                 var item = cart.FirstOrDefault(c => c.MaThuoc == maThuoc);
@@ -107,14 +107,17 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 }
 
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
-
-                return Json(new { success = true, message = "Thêm vào giỏ hàng thành công!" });
+                TempData["SuccessMessage"] = "Thêm vào giỏ hàng thành công!";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                TempData["ErrorMessage"] = $"Có lỗi xảy ra: {ex.Message}";
+                return RedirectToAction("Index");
             }
         }
+
+
 
 
         private int GetMaNhanVienFromClaims()
@@ -190,63 +193,31 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
 
-
-
-        [HttpGet("DanhSachDonHangNhanVien")]
+        [HttpGet]
+        [Route("Admin/NhanVienHoaDon/DanhSachDonHangNhanVien")]
         public async Task<IActionResult> DanhSachDonHangNhanVien()
         {
-            try
-            {
-                // Lấy mã nhân viên hiện tại từ Claims
-                var maNhanVien = GetMaNhanVienFromClaims();
-                if (maNhanVien == -1)
+            var maNhanVien = GetMaNhanVienFromClaims();
+
+            var donHangList = await db.DonHangs
+                .Where(d => d.MaNhanVien == maNhanVien)
+                .OrderByDescending(d => d.NgayDatHang)
+                .Select(d => new DonHangViewModel
                 {
-                    return Forbid("Không có quyền truy cập.");
-                }
+                    MaDonHang = d.MaDonHang,
+                    TongTien = d.TongTien,
+                    NgayDatHang = d.NgayDatHang,
+                    TrangThai = d.TrangThai,
+                    ChiTietDonHang = d.ChiTietDonHangs.Select(ct => new ChiTietDonHangNhanVienViewModel
+                    {
+                        TenThuoc = ct.Thuoc.TenThuoc,
+                        SoLuong = ct.SoLuong,
+                        Gia = ct.Gia
+                    }).ToList()
+                })
+                .ToListAsync();
 
-                // Lấy mã đơn hàng gần nhất của nhân viên hiện tại
-                var maDonHang = await db.DonHangs
-                    .Where(dh => dh.MaNhanVien == maNhanVien)
-                    .Select(dh => dh.MaDonHang)
-                    .FirstOrDefaultAsync();
-
-                if (maDonHang == 0)
-                {
-                    return NotFound("Không tìm thấy đơn hàng nào.");
-                }
-
-                // Gọi stored procedure để lấy chi tiết đơn hàng
-                var orderDetails = await db.ThongTinDatHangViewModels.FromSqlRaw(
-                    "EXEC sp_GetThongTinDatHang @MaDonHang",
-                    new SqlParameter("@MaDonHang", maDonHang)
-                ).ToListAsync();
-
-                if (!orderDetails.Any())
-                {
-                    return NotFound("Không tìm thấy thông tin chi tiết đơn hàng.");
-                }
-
-                // Tạo PaymentModel
-                var paymentModel = new PaymentModel
-                {
-                    MaDonHang = maDonHang,
-                    TotalAmount = orderDetails.Sum(x => x.ThanhTien),
-                    PaymentMethod = null // Người dùng sẽ chọn
-                };
-
-                // Tạo ViewModel tổng hợp
-                var viewModel = new OrderDetailsViewModel
-                {
-                    OrderItems = orderDetails,
-                    PaymentInfo = paymentModel
-                };
-
-                return View(viewModel); // Truyền ViewModel tổng hợp
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Đã xảy ra lỗi: " + ex.Message);
-            }
+            return View(donHangList);
         }
 
 

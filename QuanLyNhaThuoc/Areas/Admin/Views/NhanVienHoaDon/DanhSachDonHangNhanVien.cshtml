@@ -1,322 +1,63 @@
-﻿@using QuanLyNhaThuoc.Areas.KhachHang.Models
-@model OrderDetailsViewModel
+﻿@model List<QuanLyNhaThuoc.ViewModels.DonHangViewModel>
 
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+}
 
-<style>
-    .order-success-container {
-        font-family: Arial, sans-serif;
-        max-width: 800px;
-        margin: 20px auto;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        background-color: #f9f9f9;
-    }
+<h2>Danh sách đơn hàng</h2>
 
-    .order-header {
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-    }
-
-    .order-header h3 {
-        color: #28a745;
-        margin: 0;
-        font-size: 24px;
-    }
-
-    .order-header p {
-        font-size: 16px;
-        margin: 10px 0 0;
-        color: #555;
-    }
-
-    .order-details {
-        margin-bottom: 20px;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .order-details h4 {
-        margin-top: 0;
-    }
-
-    .order-details p {
-        margin: 8px 0;
-        font-size: 14px;
-        color: #333;
-    }
-
-    .order-products {
-        margin-bottom: 20px;
-    }
-
-    .order-products h4 {
-        margin-bottom: 10px;
-    }
-
-    .order-products table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .order-products table thead {
-        background-color: #28a745;
-        color: #fff;
-    }
-
-    .order-products table th, .order-products table td {
-        padding: 8px;
-        text-align: left;
-        border: 1px solid #ddd;
-        font-size: 14px;
-    }
-
-    .order-products table th {
-        font-weight: bold;
-    }
-
-    .order-products table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .order-footer {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .btn-unpaid {
-        background-color: #dc3545;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .btn-unpaid:hover {
-        background-color: #c82333;
-    }
-
-    .payment-options {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-        .payment-options h4 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-    .payment-methods {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .payment-method {
-        text-align: center;
-        margin: 10px;
-        max-width: 150px;
-        position: relative;
-        cursor: pointer;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        transition: box-shadow 0.3s, border-color 0.3s;
-    }
-
-        .payment-method:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-color: #28a745;
-        }
-
-        .payment-method input[type="radio"] {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-
-        .payment-method img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 10px;
-        }
-
-        .payment-method p {
-            font-size: 14px;
-            color: #555;
-            font-weight: bold;
-        }
-
-    .payment-submit {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .btn-submit {
-        background-color: #28a745;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-        .btn-submit:hover {
-            background-color: #218838;
-        }
-
-    .payment-success {
-        background-color: #f0f9f0; /* Màu nền nhạt xanh lá */
-        border: 2px solid #28a745; /* Viền màu xanh lá đậm */
-        border-radius: 8px; /* Bo tròn các góc */
-        padding: 20px; /* Khoảng cách bên trong */
-        margin: 20px 0; /* Khoảng cách phía trên và dưới */
-        text-align: center; /* Canh giữa nội dung */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
-    }
-
-        .payment-success h3 {
-            font-size: 1.5rem; /* Kích thước chữ */
-            font-weight: bold; /* Chữ đậm */
-            color: #28a745; /* Màu chữ xanh lá đậm */
-            margin: 0; /* Xóa khoảng cách mặc định của tiêu đề */
-        }
-
-        .payment-success p {
-            font-size: 1rem; /* Kích thước chữ cho đoạn văn */
-            color: #333; /* Màu chữ xám đậm */
-            margin-top: 10px; /* Khoảng cách giữa tiêu đề và đoạn văn */
-        }
-
-    .btn-print {
-        background-color: #007bff;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: 10px;
-    }
-
-        .btn-print:hover {
-            background-color: #0056b3;
-        }
-
-
-</style>
-
-<div class="order-success-container">
-    <div class="order-header">
-        <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
-        <p>Cảm ơn <strong>@Model.OrderItems.FirstOrDefault()?.TenKhachHang</strong> đã cho chúng tôi cơ hội được phục vụ.</p>
-    </div>
-
-    <div class="order-details">
-        <h4>THÔNG TIN GIỎ THUỐC</h4>
-        <p><strong>Mã Đơn Hàng:</strong> @Model.PaymentInfo.MaDonHang</p>
-        <p><strong>Khách hàng:</strong> @Model.OrderItems.FirstOrDefault()?.TenKhachHang, @Model.OrderItems.FirstOrDefault()?.SoDienThoai</p>
-        <p><strong>Giao đến:</strong> @Model.OrderItems.FirstOrDefault()?.DiaChi</p>
-        <p><em>(Nhân viên sẽ gọi xác nhận trước khi giao)</em></p>
-        <p><strong>Phí giao hàng:</strong> 0₫</p>
-        <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.PaymentInfo.TotalAmount)₫</p>
-    </div>
-
-    <div class="order-products">
-        <h4>Danh sách sản phẩm</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                    <th>Trạng thái thanh toán</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.OrderItems)
-                {
-                    <tr>
-                        <td>@item.TenSanPham</td>
-                        <td>@item.SoLuong</td>
-                        <td>@String.Format("{0:N0}", item.DonGia)₫</td>
-                        <td>@String.Format("{0:N0}", item.ThanhTien)₫</td>
-                        <td>@item.TrangThaiThanhToan</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@if (Model.OrderItems.All(item => item.TrangThaiThanhToan == "Đã thanh toán"))
+@if (!Model.Any())
 {
-    <div class="payment-success">
-        <h3 style="color: green;">Đơn hàng của bạn đã được thanh toán thành công!</h3>
-        <button class="btn-print" onclick="exportOrderToPdf(@Model.PaymentInfo.MaDonHang)">Xuất hóa đơn</button>
-    </div>
+    <p>Không có đơn hàng nào.</p>
 }
 else
 {
-    <form id="payment-form" method="post" action="/KhachHang/SanPham/SubmitPayment">
-        <input type="hidden" name="maDonHang" value="@Model.PaymentInfo.MaDonHang" />
-        <input type="hidden" name="tongTien" value="@Model.PaymentInfo.TotalAmount" />
-
-        <div class="payment-methods">
-            <label class="payment-method">
-                <input type="radio" name="paymentMethod" value="cash" required>
-                <img src="~/images/tienmat.jpeg" alt="Thanh toán khi nhận hàng">
-                <p>Thanh toán khi nhận hàng</p>
-            </label>
-            <label class="payment-method">
-                <input type="radio" name="paymentMethod" value="banking" required>
-                <img src="~/images/internetbanbking.jpeg" alt="Internet Banking">
-                <p>Thanh toán qua Internet Banking</p>
-            </label>
-            <label class="payment-method">
-                <input type="radio" name="paymentMethod" value="qr-vnpay" required>
-                <img src="~/images/vnpay.jpeg" alt="QR VNPAY">
-                <p>Thanh toán qua QR VNPAY</p>
-            </label>
-            <label class="payment-method">
-                <input type="radio" name="paymentMethod" value="qr-momo" required>
-                <img src="~/images/momo.jpeg" alt="Thanh toán qua Momo">
-                <p>Thanh toán qua Momo</p>
-            </label>
-        </div>
-
-        <div class="payment-submit">
-            <button type="submit" class="btn-submit">Xác nhận</button>
-        </div>
-    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donHang in Model)
+            {
+                <tr>
+                    <td>@donHang.MaDonHang</td>
+                    <td>@donHang.NgayDatHang.ToString("dd/MM/yyyy")</td>
+                    <td>@donHang.TongTien₫</td>
+                    <td>@donHang.TrangThai</td>
+                    <td>
+                        <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#chiTiet-@donHang.MaDonHang">
+                            Xem chi tiết
+                        </button>
+                        <div id="chiTiet-@donHang.MaDonHang" class="collapse mt-2">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên thuốc</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var chiTiet in donHang.ChiTietDonHang)
+                                    {
+                                        <tr>
+                                            <td>@chiTiet.TenThuoc</td>
+                                            <td>@chiTiet.SoLuong</td>
+                                            <td>@chiTiet.Gia₫</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-
-<script>
-    function exportOrderToPdf(maDonHang) {
-        const url = `/KhachHang/Report/ShowOrderDetails/${maDonHang}`;
-        window.open(url, '_blank'); // Mở file PDF trong một tab mới
-    }
-</script>
-

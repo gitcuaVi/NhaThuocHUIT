@@ -1,5 +1,20 @@
 ﻿@model List<QuanLyNhaThuoc.Models.CartItem>
 
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 @if (Model != null && Model.Any())
 {
     <table class="table">
