@@ -8,22 +8,22 @@
 <div class="profile-container">
     <div class="profile-card">
         <div class="profile-info">
-            <p><strong>Email:</strong> @Model.Email</p>
-            <p><strong>Số điện thoại:</strong> @Model.SoDienThoai</p>
-            <p><strong>Tên khách hàng:</strong> @Model.TenKhachHang</p>
-            <p><strong>Giới tính:</strong> @Model.GioiTinh</p>
-            <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
-            <p><strong>Ngày sinh:</strong> @(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "N/A")</p>
-            <p><strong>Điểm:</strong> @Model.Diem</p>
+            <p class="profile-text-email"><strong>Email:</strong> @Model.Email</p>
+            <p class="profile-text-phone"><strong>Số điện thoại:</strong> @Model.SoDienThoai</p>
+            <p class="profile-text-name"><strong>Tên khách hàng:</strong> @Model.TenKhachHang</p>
+            <p class="profile-text-gender"><strong>Giới tính:</strong> @Model.GioiTinh</p>
+            <p class="profile-text-address"><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+            <p class="profile-text-dob"><strong>Ngày sinh:</strong> @(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+            <p class="profile-text-points"><strong>Điểm:</strong> @Model.Diem</p>
         </div>
 
         <div class="profile-actions">
-            <form method="post" asp-action="Logout" class="logout-form">
-                <button type="submit" class="btnprofile btn-logout">Đăng xuất</button>
+            <form method="post" asp-action="Logout" class="profile-logout-form">
+                <button type="submit" class="profile-btn profile-btn-logout">Đăng xuất</button>
             </form>
-            <a href="@Url.Action("EditProfile", "UserDH")" class="btnprofile btn-edit">Chỉnh sửa thông tin</a>
-            <a href="@Url.Action("Index", "LichSuDonHang")" class="btnprofile btn-lsdh">Lịch Sử Đơn Hàng</a>
-            <a href="@Url.Action("ChangePassword", "UserDH")" class="btnprofile btn-change-password">Đổi mật khẩu</a>
+            <a href="@Url.Action("EditProfile", "UserDH")" class="profile-btn profile-btn-edit">Chỉnh sửa thông tin</a>
+            <a href="@Url.Action("Index", "LichSuDonHang")" class="profile-btn profile-btn-lsdh">Lịch Sử Đơn Hàng</a>
+            <a href="@Url.Action("ChangePassword", "UserDH")" class="profile-btn profile-btn-change-password">Đổi mật khẩu</a>
         </div>
     </div>
 </div>
@@ -60,6 +60,13 @@
             margin: 10px 0;
         }
 
+    .profile-text-email, .profile-text-phone, .profile-text-name,
+    .profile-text-gender, .profile-text-address, .profile-text-dob,
+    .profile-text-points {
+        font-size: 1.1em;
+        margin: 10px 0;
+    }
+
     .profile-actions {
         display: flex;
         justify-content: space-between;
@@ -67,7 +74,7 @@
         margin-top: 20px;
     }
 
-    .btnprofile {
+    .profile-btn {
         padding: 10px 20px;
         border-radius: 5px;
         color: white;
@@ -77,23 +84,23 @@
         flex: 1;
     }
 
-    .btn-logout {
+    .profile-btn-logout {
         background-color: #f44336;
     }
 
-    .btn-edit {
+    .profile-btn-edit {
         background-color: #4CAF50;
     }
 
-    .btn-lsdh {
+    .profile-btn-lsdh {
         background-color: gold;
     }
 
-    .btn-change-password {
+    .profile-btn-change-password {
         background-color: #2196F3;
     }
 
-    .btn:hover {
+    .profile-btn:hover {
         opacity: 0.8;
     }
 </style>

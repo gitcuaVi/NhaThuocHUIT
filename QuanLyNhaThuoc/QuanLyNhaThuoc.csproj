@@ -9,15 +9,19 @@
   <ItemGroup>
     <Compile Remove="Areas\Admin\Views\Model\**" />
     <Compile Remove="Areas\KhachHang\Data\**" />
+    <Compile Remove="Services\**" />
     <Compile Remove="Service\**" />
     <Content Remove="Areas\Admin\Views\Model\**" />
     <Content Remove="Areas\KhachHang\Data\**" />
+    <Content Remove="Services\**" />
     <Content Remove="Service\**" />
     <EmbeddedResource Remove="Areas\Admin\Views\Model\**" />
     <EmbeddedResource Remove="Areas\KhachHang\Data\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Service\**" />
     <None Remove="Areas\Admin\Views\Model\**" />
     <None Remove="Areas\KhachHang\Data\**" />
+    <None Remove="Services\**" />
     <None Remove="Service\**" />
   </ItemGroup>
 
@@ -42,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\KhachHang\Views\DanhMuc\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="libwkhtmltox.dylib">

@@ -306,6 +306,13 @@ else
                 <p>Thanh toán qua Momo</p>
             </label>
         </div>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-info">
+                @TempData["Message"]
+            </div>
+        }
+
 
         <div class="payment-submit">
             <button type="submit" class="btn-submit">Xác nhận</button>
@@ -319,4 +326,6 @@ else
         window.open(url, '_blank'); // Mở file PDF trong một tab mới
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 

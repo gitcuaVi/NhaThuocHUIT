@@ -139,13 +139,23 @@
                     <div class="card-body">
                         <h5 class="card-title text-left">@product.TenThuoc</h5>
                         <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
-                        <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
 
+                        @if (product.SoLuongTon > 0)
+                        {
+                            <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">
+                                Thêm vào giỏ thuốc
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled>
+                                Hết hàng
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
-
         }
     </div>
-</div>
 
+</div>
