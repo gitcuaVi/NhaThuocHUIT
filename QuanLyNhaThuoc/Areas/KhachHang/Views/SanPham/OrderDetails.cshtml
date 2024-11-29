@@ -239,7 +239,7 @@
         <p><strong>Khách hàng:</strong> @Model.OrderItems.FirstOrDefault()?.TenKhachHang, @Model.OrderItems.FirstOrDefault()?.SoDienThoai</p>
         <p><strong>Giao đến:</strong> @Model.OrderItems.FirstOrDefault()?.DiaChi</p>
         <p><em>(Nhân viên sẽ gọi xác nhận trước khi giao)</em></p>
-        <p><strong>Phí giao hàng:</strong> 25,000₫</p>
+        <p><strong>Phí giao hàng:</strong> 0₫</p>
         <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.PaymentInfo.TotalAmount)₫</p>
     </div>
 

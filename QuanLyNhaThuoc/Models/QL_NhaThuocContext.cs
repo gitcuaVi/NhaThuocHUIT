@@ -66,8 +66,6 @@ namespace QuanLyNhaThuoc.Models
 
         public DbSet<DonHang> donHangs { get; set; }
 
-        public DbSet<GioHangNhanVienThanhToanView> GioHangNhanVienThanhToanViews { get; set; }
-
 
 
 
@@ -99,9 +97,6 @@ namespace QuanLyNhaThuoc.Models
 
             modelBuilder.Entity<ThongTinDatHangViewModel>().HasNoKey();
 
-            modelBuilder.Entity<GioHangNhanVienThanhToanView>()
-                       .HasNoKey()
-                       .ToView(null);
 
 
 

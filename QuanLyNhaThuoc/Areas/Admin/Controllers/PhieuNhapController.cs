@@ -103,7 +103,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 _context.Database.ExecuteSqlRaw("EXEC dbo.sp_InsertPhieuNhap @MaNhanVien, @TongTien, @NgayNhap, @GhiChu, @NhaCungCap, @ChiTietPns", parameters);
 
-                return Ok("Phiếu nhập đã được tạo thành công.");
+                TempData["SuccessMessage"] = "Phiếu nhập đã được tạo thành công.";
+                return RedirectToAction("Index", new { maNhanVien, ngayNhap });
             }
             catch (Exception ex)
             {
