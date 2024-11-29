@@ -15,16 +15,11 @@ namespace QuanLyNhaThuoc.Models
         public int MaThuoc { get; set; }
         public decimal Gia { get; set; }
 
-        public virtual DonHang MaDonHangNavigation { get; set; } = null!;
-        [NotMapped]
-        //public DonHang DonHang { get; set; }
-        public  Thuoc MaThuocNavigation { get; set; } = null!;
-        //public Thuoc Thuoc { get; set; }
-        // public object DonHang { get; internal set; }
         // Điều hướng đến DonHang
-        public DonHang DonHang { get; set; }
+        public virtual DonHang DonHang { get; set; } = null!;
 
         // Điều hướng đến Thuoc
-        public  Thuoc Thuoc { get; set; }
+        public virtual Thuoc Thuoc { get; set; } = null!;
     }
+
 }

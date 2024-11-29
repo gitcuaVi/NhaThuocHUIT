@@ -1,0 +1,61 @@
+﻿@model List<QuanLyNhaThuoc.Models.CartItem>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TenThuoc</td>
+                    <td>@item.SoLuong</td>
+                    <td>@item.DonGia₫</td> 
+                    <td>@(item.SoLuong * item.DonGia)₫</td> 
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <strong>Tổng tiền giỏ hàng: </strong>
+        @ViewBag.Total₫
+    </div>
+
+    <hr />
+
+    <form action="/admin/NhanVienHoaDon/PlaceOrder" method="post">
+        <h3>Thông tin khách hàng</h3>
+        <div class="mb-3">
+            <label for="TenKhachHang">Tên khách hàng:</label>
+            <input type="text" id="TenKhachHang" name="TenKhachHang" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label for="SoDienThoai">Số điện thoại:</label>
+            <input type="text" id="SoDienThoai" name="SoDienThoai" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label for="GioiTinh">Giới tính:</label>
+            <select id="GioiTinh" name="GioiTinh" class="form-select" required>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="DiaChi">Địa chỉ (tùy chọn):</label>
+            <input type="text" id="DiaChi" name="DiaChi" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Đặt hàng</button>
+    </form>
+}
+else
+{
+    <p>Giỏ hàng trống.</p>
+}

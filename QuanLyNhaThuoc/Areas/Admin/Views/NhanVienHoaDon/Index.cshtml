@@ -1,92 +1,62 @@
-﻿@model IEnumerable<QuanLyNhaThuoc.ViewModels.SanPhamViewModel>
-
+﻿@model List<QuanLyNhaThuoc.ViewModels.SanPhamViewModel>
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Danh sách sản phẩm";
+    var danhMucList = ViewBag.DanhMucList as List<QuanLyNhaThuoc.Models.DanhMuc>;
 }
 
-@* <li class="nav-item me-3">
-     <a class="nav-link" href="/Admin/NhanVienHoaDon/Cart">
-         <i class="bi bi-bag-fill"></i> Giỏ hàng
-         <span id="cartCount" class="badge bg-danger ms-1">0</span>
-     </a>
- </li> *@
-<h2>Chọn danh mục</h2>
-<form method="get" action="/Admin/NhanVienHoaDon">
-    <div class="form-group">
-        <label for="categoryId">Danh mục:</label>
-        <select name="categoryId" id="categoryId" class="form-control">
-            <option value="">-- Chọn danh mục --</option>
-            @foreach (var danhMuc in ViewBag.DanhMucList)
-            {
-                <option value="@danhMuc.MaDanhMuc">@danhMuc.TenDanhMuc</option>
-            }
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Xem thuốc</button>
+<div class="cart-container">
+    @await Html.PartialAsync("_CartPartial", ViewBag.Cart as List<CartItem>)
+</div>
+
+
+<h2>Danh sách sản phẩm</h2>
+
+<form method="get" asp-action="Index" asp-controller="NhanVienHoaDon" asp-area="Admin">
+    <label for="categoryId">Chọn danh mục:</label>
+    <select name="categoryId" id="categoryId" onchange="this.form.submit()">
+        <option value="">Tất cả</option>
+        @foreach (var danhMuc in danhMucList)
+        {
+            <option value="@danhMuc.MaDanhMuc">@danhMuc.TenDanhMuc</option>
+        }
+    </select>
 </form>
 
-@if (Model.Any())
+@if (!Model.Any())
 {
-    <h2>Danh sách thuốc</h2>
-    <table class="table table-bordered table-striped">
+    <p>Không có sản phẩm nào trong danh mục này.</p>
+}
+else
+{
+    <table class="table">
         <thead>
             <tr>
-                <th>STT</th>
-                <th>Tên Thuốc</th>
-                <th>Hình Ảnh</th>
-                <th>Đơn Giá</th>
-                <th>Đơn Vị</th>
-                <th>Hành Động</th>
+                <th>Hình ảnh</th>
+                <th>Tên thuốc</th>
+                <th>Đơn giá</th>
+                <th>Đơn vị</th>
+                <th>Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var product in Model.Select((item, index) => new { item, index }))
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@(product.index + 1)</td>
-                    <td>@product.item.TenThuoc</td>
                     <td>
-                        <img src="@product.item.HinhAnhDauTien" alt="@product.item.TenThuoc" style="width: 50px; height: 50px;" />
+                        <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" style="width: 100px;" />
                     </td>
-                    <td>@string.Format("{0:#,##0}", product.item.DonGia)₫</td>
-                    <td>@product.item.DonVi</td>
+                    <td>@item.TenThuoc</td>
+                    <td>@item.DonGia</td>
+                    <td>@item.DonVi</td>
                     <td>
-                        <button class="btn btn-primary add-to-cart" data-product-id="@product.item.MaThuoc">Xác Nhận</button>
+                        <form method="post" asp-action="AddToCart" asp-controller="NhanVienHoaDon" asp-area="Admin">
+                            <input type="hidden" name="maThuoc" value="@item.MaThuoc" />
+                            <input type="number" name="soLuong" value="1" min="1" />
+                            <button type="submit" class="btn btn-primary">Thêm vào giỏ</button>
+                        </form>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-}
-else
-{
-    <p>Không có sản phẩm nào để hiển thị.</p>
-}
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            // Xử lý sự kiện click nút thêm vào giỏ hàng
-            $(".add-to-cart").click(function () {
-                const maThuoc = $(this).data("product-id");
-                const soLuong = 1; // Bạn có thể lấy từ input nếu cần
-
-                $.ajax({
-                    url: '/Admin/NhanVienHoaDon/AddToCart',
-                    type: 'POST',
-                    data: { maThuoc: maThuoc, soLuong: soLuong },
-                    success: function (response) {
-                        if (response.success) {
-                            alert("Thêm vào giỏ hàng thành công!");
-                        } else {
-                            alert("Thêm vào giỏ hàng thất bại: " + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert("Đã xảy ra lỗi khi thêm vào giỏ hàng!");
-                    }
-                });
-            });
-        });
-    </script>
 }

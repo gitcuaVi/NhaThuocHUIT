@@ -157,26 +157,26 @@ namespace QuanLyNhaThuoc.Models
 
             modelBuilder.Entity<ChiTietDonHang>(entity =>
             {
-                entity.HasKey(e => e.MaChiTiet)
-                    .HasName("PK__ChiTietD__CDF0A114F8C6B04F");
+                entity.ToTable("ChiTietDonHang"); // Đảm bảo ánh xạ đúng tên bảng
 
-                entity.ToTable("ChiTietDonHang");
+                // Thiết lập khóa chính
+                entity.HasKey(e => e.MaChiTiet);
 
-                entity.Property(e => e.Gia).HasColumnType("decimal(18, 0)");
-
-                entity.HasOne(d => d.MaDonHangNavigation)
-                    .WithMany(p => p.ChiTietDonHangs)
+                // Quan hệ với bảng DonHang
+                entity.HasOne(d => d.DonHang)
+                    .WithMany(p => p.ChiTietDonHangs) // Sửa tên Navigation Property
                     .HasForeignKey(d => d.MaDonHang)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChiTietDonHang_MaDonHang");
+                    .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(d => d.MaThuocNavigation)
-                    .WithMany(p => p.ChiTietDonHangs)
+                // Quan hệ với bảng Thuoc
+                entity.HasOne(d => d.Thuoc)
+                    .WithMany(p => p.ChiTietDonHangs) // Sửa tên Navigation Property
                     .HasForeignKey(d => d.MaThuoc)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChiTietDonHang_MaThuoc");
+                    .OnDelete(DeleteBehavior.Restrict);
             });
-       
+
+
+
             modelBuilder.Entity<ChiTietPn>(entity =>
             {
                 entity.HasKey(e => e.MaChiTietPn)
