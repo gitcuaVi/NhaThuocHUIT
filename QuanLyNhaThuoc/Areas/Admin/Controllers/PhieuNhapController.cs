@@ -31,7 +31,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 phieuNhapQuery = phieuNhapQuery.Where(pn =>
-                    pn.MaPhieuNhap.ToString().Contains(searchString) || // Chuyển int sang string
+                    pn.MaPhieuNhap.ToString().Contains(searchString) || 
                     pn.MaNhanVienNavigation.HoTen.Contains(searchString) ||
                     pn.NhaCungCap.Contains(searchString));
             }
