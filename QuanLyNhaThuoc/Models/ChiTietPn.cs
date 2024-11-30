@@ -12,6 +12,9 @@ namespace QuanLyNhaThuoc.Models
         public int MaTonKho { get; set; }
         public int MaPhieuNhap { get; set; }
 
+        public bool TrangThai { get; set; }
+
+
         public virtual PhieuNhap MaPhieuNhapNavigation { get; set; } = null!;
         public virtual Thuoc MaThuocNavigation { get; set; } = null!;
         public virtual TonKho MaTonKhoNavigation { get; set; } = null!;

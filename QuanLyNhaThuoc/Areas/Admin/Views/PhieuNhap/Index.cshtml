@@ -114,6 +114,7 @@
                         <th>Ngày Nhập</th>
                         <th>Nhà Cung Cấp</th>
                         <th>Tổng Tiền</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -126,6 +127,9 @@
                             <td>@pn.NgayNhap?.ToString("dd/MM/yyyy")</td>
                             <td>@pn.NhaCungCap</td>
                             <td>@pn.TongTien.ToString("N0")</td>
+                            <td>
+                                <a asp-action="ChiTiet" asp-route-id="@pn.MaPhieuNhap" class="btn btn-primary">Xem chi tiết</a>
+                            </td>
                         </tr>
                     }
                 </tbody>

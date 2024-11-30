@@ -113,5 +113,60 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
 
+        [HttpGet("ChiTiet/{id}")]
+        public IActionResult ChiTiet(int id)
+        {
+            var chiTietPhieuNhap = _context.ChiTietPns
+                .Include(ct => ct.MaThuocNavigation)
+                .Include(ct => ct.MaTonKhoNavigation)
+                .Where(ct => ct.MaPhieuNhap == id)
+                .ToList();
+
+            if (chiTietPhieuNhap == null || !chiTietPhieuNhap.Any())
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy chi tiết phiếu nhập.";
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.MaPhieuNhap = id;
+            return View(chiTietPhieuNhap);
+        }
+
+        [HttpPost("ThucHien")]
+        public IActionResult ThucHien(int maPhieuNhap, [FromForm] Dictionary<string, string> trangThai)
+        {
+            try
+            {
+                foreach (var key in trangThai.Keys)
+                {
+                    if (key.StartsWith("TrangThai_"))
+                    {
+                        // Lấy mã chi tiết phiếu nhập
+                        var maChiTietPn = int.Parse(key.Replace("TrangThai_", ""));
+                        var trangThaiValue = bool.Parse(trangThai[key]);
+
+                        // Gọi procedure sp_CapNhatTrangThaiChiTietPN
+                        var parameters = new[]
+                        {
+                    new SqlParameter("@MaChiTietPN", maChiTietPn),
+                    new SqlParameter("@TrangThai", trangThaiValue)
+                };
+
+                        _context.Database.ExecuteSqlRaw("EXEC sp_CapNhatTrangThaiChiTietPN @MaChiTietPN, @TrangThai", parameters);
+                    }
+                }
+
+                TempData["SuccessMessage"] = "Cập nhật trạng thái thành công.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
+            }
+
+            return RedirectToAction("ChiTiet", new { id = maPhieuNhap });
+        }
+
+
+
     }
 }
