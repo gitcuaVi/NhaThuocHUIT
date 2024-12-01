@@ -24,7 +24,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title text-left">@product.TenThuoc</h5>
                                     <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
-                                <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
+
+                                    <!-- Display Stock Quantity -->
+                                    <p class="stock-quantity">Số lượng tồn: @product.SoLuongTon</p>
+
+                                    <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
                                 </div>
                             </div>
                         </div>
@@ -45,6 +49,7 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

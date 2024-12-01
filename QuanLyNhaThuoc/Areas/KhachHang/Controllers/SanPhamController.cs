@@ -15,6 +15,7 @@ using QuanLyNhaThuoc.KhachHang.Services.VnPay;
 using System.Threading.Tasks;
 using QuanLyNhaThuoc.Areas.KhachHang.Services;
 using QuanLyNhaThuoc.Areas.KhachHang.Services.Momo;
+using System.Data;
 
 namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 {
@@ -34,7 +35,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             _momoService = momoService;
           
         }
-
         [HttpGet]
         public async Task<IActionResult> Index(int categoryId, decimal? minPrice, decimal? maxPrice, string productType)
         {
@@ -62,20 +62,21 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
 
             ViewData["ProductTypes"] = productTypes;
-
             ViewData["Products"] = products;
-
             ViewData["CategoryName"] = category?.TenDanhMuc ?? "Danh mục không xác định";
+
+            // Thêm categoryId vào ViewData để sử dụng trong Razor View
+            ViewData["CategoryId"] = categoryId;
 
             return View();
         }
+
 
         private int GetMaKhachHangFromClaims()
         {
             var maKhachHangClaim = User.FindFirst("MaKhachHang")?.Value;
             return int.TryParse(maKhachHangClaim, out var maKhachHang) ? maKhachHang : -1;
         }
-
         [HttpGet("Chitietsp/{id}")]
         public async Task<IActionResult> Chitietsp(int id)
         {
@@ -90,8 +91,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
 
             return View(productDetail);
-
         }
+
         [HttpGet("Search")]
         public async Task<IActionResult> Search(string keyword)
         {
@@ -129,8 +130,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
-
 
         [HttpGet("Cart")]
         public async Task<IActionResult> Cart()
@@ -259,18 +258,43 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             try
             {
+                // Lấy giỏ hàng từ database
+                var gioHangItems = await db.Set<GioHangViewModel>()
+                    .FromSqlRaw("EXEC sp_GetGioHangByKhachHang @MaKhachHang", new SqlParameter("@MaKhachHang", maKhachHang))
+                    .ToListAsync();
+
+                // Tạo DataTable để truyền vào TVP
+                var gioHangTable = new DataTable();
+                gioHangTable.Columns.Add("MaThuoc", typeof(int));
+                gioHangTable.Columns.Add("SoLuong", typeof(int));
+
+                foreach (var item in gioHangItems)
+                {
+                    gioHangTable.Rows.Add(item.MaThuoc, item.SoLuong);
+                }
+
+                // Tham số TVP
+                var gioHangParam = new SqlParameter
+                {
+                    ParameterName = "@GioHang",
+                    SqlDbType = SqlDbType.Structured,
+                    TypeName = "dbo.GioHangTableType",
+                    Value = gioHangTable
+                };
+
                 var outputParam = new SqlParameter
                 {
                     ParameterName = "@MaDonHangMoi",
-                    SqlDbType = System.Data.SqlDbType.Int,
-                    Direction = System.Data.ParameterDirection.Output
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Output
                 };
 
                 await db.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @GhiChu, @MaDonHangMoi OUTPUT",
+                    "EXEC sp_DatHang @MaKhachHang, @DiaChi, @GhiChu, @GioHang, @MaDonHangMoi OUTPUT",
                     new SqlParameter("@MaKhachHang", maKhachHang),
                     new SqlParameter("@DiaChi", diaChi),
                     new SqlParameter("@GhiChu", ghiChu ?? string.Empty),
+                    gioHangParam,
                     outputParam
                 );
 
@@ -357,7 +381,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     "EXEC [dbo].[CapNhatPhuongThucThanhToan] @MaDonHang, @PhuongThucThanhToan",
                     paramMaDonHang, paramPhuongThucThanhToan
                 );
-
+                TempData["Message"] = "Phương thức thanh toán đã được cập nhật thành công.";
                 if (model.PaymentMethod == "qr-momo")
                 {
                     // Tạo thông tin thanh toán Momo
