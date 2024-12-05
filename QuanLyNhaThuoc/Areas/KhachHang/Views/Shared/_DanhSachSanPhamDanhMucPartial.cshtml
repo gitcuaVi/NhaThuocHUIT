@@ -118,7 +118,7 @@
     </div>
 
     <div class="product-type-filter mb-4">
-        <span>Chọn vitamin và khoáng chất theo loại sản phẩm:</span>
+        <span>Chọn theo loại sản phẩm:</span>
         @foreach (var type in ViewData["ProductTypes"] as IEnumerable<LoaiSanPham>)
         {
             <button class="btn btn-outline-primary product-type-btn" data-type="@type.TenLoai">@type.TenLoai</button>

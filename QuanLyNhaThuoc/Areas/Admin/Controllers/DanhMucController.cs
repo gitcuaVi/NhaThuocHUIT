@@ -20,26 +20,22 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("")]
         public IActionResult Index(string searchString, int page = 1, int pageSize = 10)
         {
-            // Truy vấn danh sách từ database
             var danhMucQuery = _context.DanhMucs.AsQueryable();
 
-            // Nếu có từ khóa tìm kiếm, áp dụng bộ lọc
             if (!string.IsNullOrEmpty(searchString))
             {
                 danhMucQuery = danhMucQuery.Where(dm => dm.TenDanhMuc.Contains(searchString));
             }
 
-            // Tổng số danh mục
             int totalItems = danhMucQuery.Count();
 
-            // Phân trang
             var danhMucList = danhMucQuery
-                              .OrderBy(dm => dm.MaDanhMuc) // Sắp xếp để đảm bảo thứ tự
+                              .OrderBy(dm => dm.MaDanhMuc) 
                               .Skip((page - 1) * pageSize)
                               .Take(pageSize)
                               .ToList();
 
-            // Gửi dữ liệu đến View
+            // gửi đến View
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             ViewBag.CurrentFilter = searchString;
@@ -132,10 +128,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     return Json(new { success = false, message = "Không có loại sản phẩm nào được chọn để xóa." });
                 }
 
-                // Tạo danh sách ID dưới dạng chuỗi để sử dụng trong câu truy vấn
                 var idList = string.Join(",", ids);
 
-                // Gọi stored procedure xóa nhiều sản phẩm cùng lúc
                 _context.Database.ExecuteSqlRaw($"EXEC sp_XoaDanhMuc @Ids = '{idList}'");
 
                 return Json(new { success = true, message = "Các loại sản phẩm đã được xóa thành công." });

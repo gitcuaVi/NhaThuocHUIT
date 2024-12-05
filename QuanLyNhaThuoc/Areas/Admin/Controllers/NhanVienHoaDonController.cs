@@ -32,25 +32,24 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int? categoryId)
         {
-            // Lấy danh sách danh mục
+            // lấy danh mục
             var danhMucList = await db.DanhMucs.ToListAsync();
             ViewBag.DanhMucList = danhMucList;
 
-            // Lấy giỏ hàng từ session
+            // lấy giỏ hàng
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             ViewBag.Cart = cart;
 
-            // Tính tổng tiền giỏ hàng
+            // tổng tiền giỏ hàng
             var total = cart.Sum(x => x.SoLuong * x.DonGia);
             ViewBag.Total = total;
 
-            // Nếu không có categoryId, hiển thị trang mặc định
             if (categoryId == null)
             {
                 return View(new List<SanPhamViewModel>());
             }
 
-            // Lấy danh sách thuốc theo danh mục
+            // lấy danh sách thuốc theo danh mục
             var thuocList = await db.Thuocs
                 .Where(t => t.MaLoaiSanPhamNavigation != null && t.MaLoaiSanPhamNavigation.MaDanhMuc == categoryId)
                 .Include(t => t.HinhAnhs)
@@ -119,14 +118,14 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
 
 
-
+        //lấy nhân viên từ claim
         private int GetMaNhanVienFromClaims()
         {
             if (User.IsInRole("NhanVien"))
             {
                 return int.Parse(User.FindFirstValue("MaNhanVien"));
             }
-            return -1; // Không phải nhân viên
+            return -1;
         }
 
 
@@ -139,7 +138,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return RedirectToAction("Index", "NhanVienHoaDon");
             }
 
-            // Lấy giỏ hàng từ session
+            // lấy giỏ hàng
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
             if (cart == null || !cart.Any())
             {
@@ -147,7 +146,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return RedirectToAction("Index", "NhanVienHoaDon");
             }
 
-            // Tạo DataTable từ giỏ hàng
+            // tạo giỏ hàng
             var chiTietDonHang = new DataTable();
             chiTietDonHang.Columns.Add("MaThuoc", typeof(int));
             chiTietDonHang.Columns.Add("SoLuong", typeof(int));
@@ -163,7 +162,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
             try
             {
-                // Gọi stored procedure
                 await db.Database.ExecuteSqlRawAsync(
                     "EXEC sp_TaoDonHangVaKhachHang @TenKhachHang, @SoDienThoai, @GioiTinh, @DiaChi, @TongTien, @ChiTietDonHang, @MaNhanVien",
                     new SqlParameter("@TenKhachHang", model.TenKhachHang),
@@ -179,7 +177,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     new SqlParameter("@MaNhanVien", maNhanVien == -1 ? (object)DBNull.Value : maNhanVien)
                 );
 
-                // Xóa giỏ hàng
+                // xóa
                 HttpContext.Session.Remove("Cart");
 
                 TempData["Success"] = "Đặt hàng thành công!";

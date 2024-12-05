@@ -20,7 +20,18 @@
         <!-- Đơn Vị Field -->
         <div class="form-group mb-3">
             <label asp-for="DonVi" class="form-label">Đơn Vị</label>
-            <input asp-for="DonVi" class="form-control" placeholder="Nhập đơn vị" required />
+            <select asp-for="DonVi" class="form-select" required>
+                <option value="">-- Chọn Đơn Vị --</option>
+                <option value="Hộp">Hộp</option>
+                <option value="Chai">Chai</option>
+                <option value="Ống">Ống</option>
+                <option value="Lon">Lon</option>
+                <option value="Tuýp">Tuýp</option>
+                <option value="Hủ">Hủ</option>
+                <option value="Gói">Gói</option>
+                <option value="Túi">Túi</option>
+                <option value="Cái">Cái</option>
+            </select>
             <span asp-validation-for="DonVi" class="text-danger"></span>
         </div>
 

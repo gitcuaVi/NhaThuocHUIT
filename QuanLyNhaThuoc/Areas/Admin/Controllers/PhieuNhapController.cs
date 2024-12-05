@@ -141,11 +141,11 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 {
                     if (key.StartsWith("TrangThai_"))
                     {
-                        // Lấy mã chi tiết phiếu nhập
+                        // lấy mã chi tiết phiếu nhập
                         var maChiTietPn = int.Parse(key.Replace("TrangThai_", ""));
                         var trangThaiValue = bool.Parse(trangThai[key]);
 
-                        // Gọi procedure sp_CapNhatTrangThaiChiTietPN
+                        // procedure sp_CapNhatTrangThaiChiTietPN
                         var parameters = new[]
                         {
                     new SqlParameter("@MaChiTietPN", maChiTietPn),

@@ -24,12 +24,11 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 10)
         {
-            // Lấy danh sách tồn kho từ database
             var tonKhosQuery = _context.TonKhos
                 .Include(tk => tk.MaThuocNavigation)
                 .AsNoTracking();
 
-            // Tìm kiếm
+            // tìm kiếm
             if (!string.IsNullOrEmpty(searchString))
             {
                 tonKhosQuery = tonKhosQuery.Where(tk =>
@@ -37,17 +36,15 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     tk.MaTonKho.ToString().Contains(searchString));
             }
 
-            // Tổng số bản ghi
             int totalItems = await tonKhosQuery.CountAsync();
 
-            // Phân trang
+            // phân trang
             var tonKhos = await tonKhosQuery
-                .OrderBy(tk => tk.MaTonKho) // Sắp xếp nếu cần
+                .OrderBy(tk => tk.MaTonKho)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Xử lý cảnh báo
             foreach (var item in tonKhos)
             {
                 item.WarningMessage = null;
@@ -61,7 +58,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 }
             }
 
-            // Truyền dữ liệu phân trang và tìm kiếm
+            // truyền phân trang và tìm kiếm
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             ViewBag.CurrentFilter = searchString;

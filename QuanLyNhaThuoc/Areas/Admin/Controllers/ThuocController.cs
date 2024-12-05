@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaThuoc.Models;
@@ -27,10 +26,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index(string searchString, int page = 1)
         {
-            // Số lượng item trang
             int pageSize = 10;
 
-            // Lưu vào ViewBag
             ViewBag.CurrentFilter = searchString;
             ViewBag.CurrentPage = page;
 
@@ -42,11 +39,11 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 thuocQuery = thuocQuery.Where(t => t.TenThuoc.Contains(searchString));
             }
 
-            // Tổng số trang
+            // tổng số trang
             int totalItems = await thuocQuery.CountAsync();
             ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            // Phân trang
+            // phân trang
             var thuocList = await thuocQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -68,7 +65,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Gọi stored procedure để thêm thuốc và tồn kho
+                //procedure thêm thuốc và tồn kho
                 var parameters = new[]
                 {
             new SqlParameter("@TenThuoc", thuoc.TenThuoc),
@@ -81,16 +78,15 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             new SqlParameter("@SoLuongToiDa", 100)
         };
 
-                // Thêm thuốc và lấy mã thuốc mới
+                // thêm thuốc lấy mã thuốc mới
                 await _context.Database.ExecuteSqlRawAsync("EXEC sp_ThemThuocVaTonKho @TenThuoc, @HanSuDung, @DonGia, @SoLuongTon, @MaLoaiSanPham, @DonVi, @SoLuongCanhBao, @SoLuongToiDa", parameters);
 
-                // Lấy mã thuốc mới nhất
                 thuoc.MaThuoc = await _context.Thuocs
                     .Where(t => t.TenThuoc == thuoc.TenThuoc && t.HanSuDung == thuoc.HanSuDung)
                     .Select(t => t.MaThuoc)
                     .FirstOrDefaultAsync();
 
-                // Thêm hình ảnh nếu có
+                // thêm hình
                 if (ImageFiles != null && ImageFiles.Count > 0)
                 {
                     foreach (var imageFile in ImageFiles)
@@ -151,7 +147,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return View(thuoc);
             }
 
-            // Cập nhật thông tin thuốc
+            // cập nhật thông tin thuốc
             var existingThuoc = await _context.Thuocs.Include(t => t.HinhAnhs).FirstOrDefaultAsync(t => t.MaThuoc == id);
             if (existingThuoc == null)
             {
@@ -165,10 +161,10 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             existingThuoc.SoLuongTon = thuoc.SoLuongTon;
             existingThuoc.MaLoaiSanPham = thuoc.MaLoaiSanPham;
 
-            // Nếu có ảnh mới, thay thế ảnh cũ
+            // cập nhật ảnh
             if (ImageFiles != null && ImageFiles.Count > 0)
             {
-                // Xóa ảnh cũ
+                // xóa ảnh
                 if (existingThuoc.HinhAnhs != null)
                 {
                     foreach (var hinhAnh in existingThuoc.HinhAnhs)
@@ -182,7 +178,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     _context.HinhAnhs.RemoveRange(existingThuoc.HinhAnhs);
                 }
 
-                // Lưu ảnh mới
+                // lưu lại ảnh
                 foreach (var imageFile in ImageFiles)
                 {
                     if (imageFile.Length > 0)
@@ -221,13 +217,12 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
-                // Gọi stored procedure xóa thuốc và tồn kho liên quan
+                //procedure xóa thuốc
                 await _context.Database.ExecuteSqlRawAsync("EXEC sp_XoaThuocTonKho @p0", id);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
             {
-                // Bắt lỗi và trả về thông báo lỗi chi tiết
                 ModelState.AddModelError("", $"Không thể xóa thuốc này: {ex.Message}");
                 return RedirectToAction(nameof(Index));
             }
