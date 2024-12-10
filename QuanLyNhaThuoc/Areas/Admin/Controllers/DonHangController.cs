@@ -148,7 +148,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 {
                     MaThuoc = ct.MaThuoc,
                     SoLuong = ct.SoLuong,
-                    
+
                     Gia = ct.Gia,
                     ThanhTien = ct.SoLuong * ct.Gia,
                     TenThuoc = _context.Thuocs

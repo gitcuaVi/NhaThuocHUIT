@@ -15,73 +15,73 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
-<style>
-    .input-label {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        color: gray;
-        transition: 0.2s;
-        opacity: 0.5;
-    }
-
-    .input-container {
-        position: relative;
-    }
-
-        .input-container input:focus + .input-label,
-        .input-container input:not(:placeholder-shown) + .input-label {
-            top: -10px;
-            left: 10px;
-            font-size: 12px;
-            color: black;
-            opacity: 1;
-        }
-
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .btn-primary, .btn-success, .btn-warning, .btn-danger {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-
-        .btn-primary:hover, .btn-success:hover {
-            background-color: #218838;
-        }
-
-        .btn-warning:hover {
-            background-color: goldenrod;
-        }
-
-        .btn-danger:hover {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-    .pagination .active > .page-link {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-
-    .custom-search-icon {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-        .custom-search-icon i {
+    <style>
+        .input-label {
             position: absolute;
-            right: 15px;
+            left: 10px;
+            top: 10px;
+            color: gray;
+            transition: 0.2s;
+            opacity: 0.5;
         }
 
-    #edit-user, #delete-user {
-        font-size: 1.1rem;
-        padding: 10px 20px;
-    }
-</style>
-    </head>
+        .input-container {
+            position: relative;
+        }
+
+            .input-container input:focus + .input-label,
+            .input-container input:not(:placeholder-shown) + .input-label {
+                top: -10px;
+                left: 10px;
+                font-size: 12px;
+                color: black;
+                opacity: 1;
+            }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary, .btn-success, .btn-warning, .btn-danger {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-primary:hover, .btn-success:hover {
+                background-color: #218838;
+            }
+
+            .btn-warning:hover {
+                background-color: goldenrod;
+            }
+
+            .btn-danger:hover {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+
+        .pagination .active > .page-link {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .custom-search-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .custom-search-icon i {
+                position: absolute;
+                right: 15px;
+            }
+
+        #edit-user, #delete-user {
+            font-size: 1.1rem;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
 <h1>Danh Sách Đơn Hàng</h1>
 <form method="get" class="row g-3 align-items-center mb-3">
     @Html.AntiForgeryToken()
@@ -125,18 +125,18 @@
             <th>Mã Khách Hàng</th>
             <th>Tên Khách Hàng</th>
             <th>Địa Chỉ Khách Hàng</th>
-            <th>Số Điện Thoại</th>            
+            <th>Số Điện Thoại</th>
             <th>Ghi Chú</th>
             <th>Ngày Đặt Hàng</th>
             <th>Ngày Giao Hàng</th>
-            <th>Địa Chỉ Đơn Hàng</th>            
+            <th>Địa Chỉ Đơn Hàng</th>
             <th>Tổng Tiền</th>
             <th>Ngày Cập Nhật</th>
             <th>Trạng Thái</th>
-            <th>Mã Nhân Viên</th>            
+            <th>Mã Nhân Viên</th>
             <th>Cập Nhật Trạng Thái</th>
             <th>Xem Chi Tiết</th>
- 
+
         </tr>
     </thead>
     <tbody>
@@ -152,11 +152,11 @@
                 <td>@item.NgayDatHang.ToShortDateString()</td>
                 <td>@item.NgayGiaoHang?.ToShortDateString()</td>
                 <th>@item.DiaChiDonHang</th>
-                <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>                               
-                <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>               
+                <td>@item.TongTien.ToString("N0", new CultureInfo("vi-VN"))VND</td>
+                <td>@(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToShortDateString() : "Chưa cập nhật")</td>
                 <td>@item.TrangThai</td>
                 <td>@item.MaNhanVien</td>
-                
+
                 <th>
                     <!-- Nút cập nhật trạng thái -->
                     <a asp-area="Admin" asp-controller="DonHang" asp-action="Update" asp-route-id="@item.MaDonHang" class="btn btn-warning">Cậpnhật trạngthái</a>
@@ -166,8 +166,8 @@
                 </th>
 
             </tr>
-        
-            
+
+
         }
     </tbody>
 </table>

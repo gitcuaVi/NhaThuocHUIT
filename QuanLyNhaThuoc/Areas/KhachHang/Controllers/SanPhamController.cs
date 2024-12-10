@@ -41,7 +41,8 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             var paramCategoryId = new SqlParameter("@MaDanhMuc", categoryId);
             var paramMinPrice = new SqlParameter("@MinPrice", minPrice ?? (object)DBNull.Value);
             var paramMaxPrice = new SqlParameter("@MaxPrice", maxPrice ?? (object)DBNull.Value);
-            var paramProductType = new SqlParameter("@ProductType", string.IsNullOrEmpty(productType) ? (object)DBNull.Value : productType);
+            var paramProductType = new SqlParameter("@ProductType",
+      string.IsNullOrEmpty(productType) ? (object)DBNull.Value : productType);
 
             var products = await db.Set<ProductViewModel>()
                 .FromSqlRaw("EXEC sp_GetAllProductsByCategoryAndFilters @MaDanhMuc, @MinPrice, @MaxPrice, @ProductType",

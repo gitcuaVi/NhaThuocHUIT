@@ -5,6 +5,16 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).on('click', '.product-type-btn', function () {
+        const productType = $(this).data('type');
+        const url = new URL(window.location.href);
+
+        if (productType) {
+            url.searchParams.set('productType', productType);
+            window.location.href = url.toString();
+        }
+    });
+
     $(document).on('click', '.add-to-cart', function () {
         var productId = $(this).data("product-id");
         var quantity = 1;
@@ -89,16 +99,21 @@
                 <button class="close-popup">Đóng</button>
             </div>
 
-            <div class="filter-section">
-                <h4>Loại sản phẩm</h4>
-                <select id="productType" name="productType">
-                    <option value="">Chọn loại sản phẩm</option>
-                    @foreach (var type in ViewData["ProductTypes"] as IEnumerable<LoaiSanPham>)
+            <div class="product-type-filter mb-4">
+                <span>Chọn theo loại sản phẩm:</span>
+                @if (ViewData["ProductTypes"] is IEnumerable<LoaiSanPham> productTypes && productTypes.Any())
+                {
+                    foreach (var type in productTypes)
                     {
-                        <option value="@type.TenLoai">@type.TenLoai</option>
+                        <button class="btn btn-outline-primary product-type-btn" data-type="@type.TenLoai">@type.TenLoai</button>
                     }
-                </select>
+                }
+                else
+                {
+                    <p>Không có loại sản phẩm để hiển thị.</p>
+                }
             </div>
+
 
             <div class="filter-section">
                 <h4>Giá</h4>
