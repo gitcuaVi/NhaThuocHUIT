@@ -1,105 +1,180 @@
 ﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.LichsudonhangView>
-
-@{
-    ViewData["Title"] = "Lịch Sử Đơn Hàng";
-}
-
-<h1 class="text-center my-4">Lịch Sử Đơn Hàng</h1>
-
 <style>
-    /* Tổng quan */
     body {
         font-family: 'Segoe UI', sans-serif;
-        background-color: #f5f5f5;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
     }
 
     .container {
-        padding-top: 20px;
+        padding: 20px 15px;
+        max-width: 1200px;
+        margin: auto;
     }
 
     .btn-status {
-        margin-bottom: 15px;
-        border-radius: 25px;
+        margin: 5px;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        transition: all 0.3s ease;
+        color: #333;
     }
+
+        .btn-status.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .btn-status:hover {
+            background-color: #f0f8ff;
+        }
 
     .order-list-container {
         background: #fff;
         border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .order-item {
-        border-bottom: 1px solid #eee;
-        padding: 15px 0;
+    .order-item-group {
+        margin-bottom: 20px;
+        border: 1px solid #eaeaea;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .order-header {
+        padding: 10px 15px;
+        background-color: #f1f1f1;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .order-header p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .order-header .badge-status {
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+    .order-products {
+        padding: 10px 15px;
+    }
+
+    .product-item {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        border: 1px solid #f0f0f0; /* Viền nhạt xung quanh từng đơn hàng */
-        border-radius: 8px; /* Bo góc cho từng đơn hàng */
-        margin-bottom: 20px; /* Khoảng cách giữa các đơn hàng */
-        background-color: #fafafa; /* Màu nền nhạt để phân biệt */
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f1f1;
     }
 
-        .order-item:last-child {
+        .product-item:last-child {
             border-bottom: none;
         }
 
-    .order-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-        .order-info img {
-            width: 80px;
-            height: 80px;
+        .product-item img {
+            width: 50px;
+            height: 50px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 5px;
             border: 1px solid #ddd;
         }
 
-    .order-details {
-        max-width: 300px;
+    .product-details {
+        flex: 1;
+        margin-left: 10px;
     }
 
-        .order-details p {
+        .product-details p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .product-details strong {
+            font-size: 14px;
+            color: #333;
+        }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+        .product-info p {
             margin: 0;
             font-size: 14px;
+            color: #333;
         }
 
-        .order-details strong {
-            font-size: 16px;
-            
-        }
-
-    .order-status {
+    .product-meta {
         text-align: right;
-    }
-
-    .badge-status {
         font-size: 14px;
-        padding: 8px 12px;
-        border-radius: 20px;
-        text-transform: capitalize;
+        color: #666;
     }
 
-    .btn-primary {
-        border-radius: 25px;
+        .product-meta p {
+            margin: 0;
+        }
+
+        .product-meta strong {
+            color: #333;
+        }
+    .order-footer {
+        padding: 5px 10px;
+        
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+       
+
     }
 
-    .no-orders {
-        text-align: center;
-        padding: 40px 0;
-        color: #999;
-    }
+        .order-footer p {
+            padding: 6px 10px;
+            margin:0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-footer a {
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .order-footer a:hover {
+                background-color: #0056b3;
+            }
 
     .customer-info {
-        background-color: #f8f9fa; /* Màu nền xám nhạt */
-        color: #333; /* Màu chữ tối hơn để dễ đọc */
+        background-color: #f8f9fa; 
+        color: #333; 
         text-align: center;
-        border-radius: 10px; /* Bo góc cho khung */
-        padding: 20px; /* Khoảng cách bên trong */
+        border-radius: 10px; 
+        padding: 20px; 
         border: 1px solid #ddd; /* Viền mỏng màu xám */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
     }
@@ -115,46 +190,64 @@
             font-size: 16px;
             font-weight: 500;
         }
-
-   
 </style>
-
 <div class="container">
     <div class="row">
-        <!-- Sidebar -->
         <div class="col-md-3">
             <div class="customer-info">
                 <h5>Khách Hàng</h5>
                 <p class="mb-1"><strong>@Model.FirstOrDefault()?.TenKhachHang</strong></p>
-                
+            </div>
+        </div>
+        <div class="col-md-12 mb-4 text-center">
+            <div>
+                <button class="btn btn-status" data-status="all">Tất cả</button>
+                <button class="btn btn-status" data-status="Chờ xác nhận">Chờ xác nhận</button>
+                <button class="btn btn-status" data-status="Đã xác nhận">Đã xác nhận</button>
+                <button class="btn btn-status" data-status="Đang giao">Đang giao</button>
+                <button class="btn btn-status" data-status="Đã giao">Đã giao</button>
             </div>
         </div>
 
         <!-- Lịch sử đơn hàng -->
-        <div class="col-md-9">
-
+        <div class="col-md-12">
             <div class="order-list-container">
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var item in Model)
+                    var groupedOrders = Model.GroupBy(x => x.MaDonHang);
+                    foreach (var group in groupedOrders)
                     {
-                        <div class="order-item" data-status="@item.TrangThai">
-                            <div class="order-info">
-                                <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc">
-                                <div class="order-details">
-                                    <p><strong>@item.TenThuoc</strong></p>
-                                   
-                                   
-                                </div>
-                            </div>
-                            <div class="order-status">
-                                <span class="badge badge-status @GetBadgeClass(item.TrangThai)">
-                                    @item.TrangThai
+                        var firstItem = group.First();
+                        <div class="order-item-group" data-status="@firstItem.TrangThai">
+                            <div class="order-header">
+                    
+                                <p>Ngày đặt: @firstItem.NgayDatHang.ToString("dd/MM/yyyy")</p>
+                                <span class="badge badge-status @GetBadgeClass(firstItem.TrangThai)">
+                                    @firstItem.TrangThai
                                 </span>
-                                <a href="@Url.Action("OrderDetails", "SanPham", new { area = "KhachHang", id = item.MaDonHang })" class="btn btn-primary btn-sm mt-2">
+                            </div>
+                            <div class="order-products">
+                                @foreach (var item in group)
+                                {
+                                    <div class="product-item">
+                                        <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc">
+                                        <div class="product-details">
+                                            <div class="product-info">
+                                                <p><strong>@item.TenThuoc</strong></p>
+                                            </div>
+                                        </div>
+                                        <div class="product-meta">
+                                            <p>Số lượng: <strong>@item.SoLuong</strong></p>
+                                            <p>Giá: <strong>@String.Format("{0:N0}", item.ThanhTien)₫</strong></p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="order-footer">
+                                <p>Tổng tiền: <strong>@String.Format("{0:N0}", group.Sum(x => x.ThanhTien))₫</strong></p>
+                                <a href="@Url.Action("OrderDetails", "SanPham", new { area = "KhachHang", id = firstItem.MaDonHang })" class="btn btn-primary btn-sm mt-2">
                                     Xem chi tiết
                                 </a>
-                                <p>Thành tiền: <strong>@String.Format("{0:N0}", item.ThanhTien)₫</strong></p>
                             </div>
                         </div>
                     }
@@ -171,15 +264,14 @@
 </div>
 
 @functions {
-    // Đổi màu nút trạng thái
     public string GetBadgeClass(string status)
     {
         return status switch
         {
             "Đã giao" => "bg-success text-white",
-            "Đang giao hàng" => "bg-warning text-dark",
-            "Đã hủy" => "bg-danger text-white",
-            "Chờ xử lý" => "bg-secondary text-white",
+            "Đang giao" => "bg-warning text-dark",
+            "Đã xác nhận" => "bg-danger text-white",
+            "Chờ xác nhận" => "bg-secondary text-white",
             _ => "bg-light text-dark"
         };
     }
@@ -188,27 +280,30 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const filterButtons = document.querySelectorAll('.btn-status');
-        const orderItems = document.querySelectorAll('.order-item');
+        const orderGroups = document.querySelectorAll('.order-item-group');
 
         filterButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const status = this.getAttribute('data-status');
 
+                // Làm nổi bật nút được chọn
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
 
-                orderItems.forEach(order => {
-                    const orderStatus = order.getAttribute('data-status');
+                // Lọc các nhóm đơn hàng
+                orderGroups.forEach(group => {
+                    const orderStatus = group.getAttribute('data-status');
                     if (status === 'all' || orderStatus === status) {
-                        order.style.display = 'flex';
+                        group.style.display = 'block';
                     } else {
-                        order.style.display = 'none';
+                        group.style.display = 'none';
                     }
                 });
             });
         });
 
-        // Chọn "Tất cả" khi tải trang
+        // Khởi động: Chọn "Tất cả" khi tải trang
         document.querySelector('.btn-status[data-status="all"]').click();
     });
+
 </script>
