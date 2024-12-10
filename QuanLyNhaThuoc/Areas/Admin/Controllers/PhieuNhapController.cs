@@ -32,7 +32,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 phieuNhapQuery = phieuNhapQuery.Where(pn =>
                     pn.MaPhieuNhap.ToString().Contains(searchString) || 
-                    pn.MaNhanVienNavigation.HoTen.Contains(searchString) ||
+                    pn.MaNhanVienNavigation.Ten.Contains(searchString) ||
                     pn.NhaCungCap.Contains(searchString));
             }
 
