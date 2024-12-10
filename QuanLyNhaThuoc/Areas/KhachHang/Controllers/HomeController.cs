@@ -22,7 +22,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         public async Task<IActionResult> Index()
         {
             int maDanhMuc1 = 97;
-            int maDanhMuc2 = 41;
+            int maDanhMuc2 = 98;
 
             var param1 = new SqlParameter("@MaDanhMuc", maDanhMuc1);
             var param2 = new SqlParameter("@MaDanhMuc", maDanhMuc2);
