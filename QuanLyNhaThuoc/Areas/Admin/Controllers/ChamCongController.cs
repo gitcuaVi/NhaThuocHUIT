@@ -65,9 +65,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Không tìm thấy mã nhân viên." });
             }
 
-            // In ra mã nhân viên
-            Console.WriteLine("ChamCongVao - MaNhanVien: " + maNhanVien);
-
             using (var conn = new SqlConnection(db.Database.GetDbConnection().ConnectionString))
             {
                 conn.Open();
@@ -100,9 +97,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Không tìm thấy mã nhân viên." });
             }
-
-            // In ra mã nhân viên
-            Console.WriteLine("ChamCongRa - MaNhanVien: " + maNhanVien);
 
             using (var conn = new SqlConnection(db.Database.GetDbConnection().ConnectionString))
             {

@@ -33,6 +33,34 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 if (userInfo != null)
                 {
+                    ViewBag.UserName = userInfo.TenNguoiDung;
+
+                    return View(userInfo);
+                }
+                else
+                {
+                    return NotFound("Không tìm thấy thông tin người dùng.");
+                }
+            }
+            else
+            {
+                return Unauthorized("Bạn chưa đăng nhập.");
+            }
+        }
+        [HttpGet("DisplayName")]
+        public IActionResult DisplayName()
+        {
+            var maNguoiDungClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (maNguoiDungClaim != null)
+            {
+                int maNguoiDung = int.Parse(maNguoiDungClaim.Value);
+                var userInfo = db.ThongTinCaNhanView.FirstOrDefault(u => u.MaNguoiDung == maNguoiDung);
+
+                if (userInfo != null)
+                {
+                    ViewBag.UserName = userInfo.TenNguoiDung;
+
                     return View(userInfo);
                 }
                 else

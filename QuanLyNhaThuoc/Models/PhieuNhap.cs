@@ -13,7 +13,7 @@ namespace QuanLyNhaThuoc.Models
         public int MaPhieuNhap { get; set; }
         public int MaNhanVien { get; set; }
         public decimal TongTien { get; set; }
-        public DateTime? NgayNhap { get; set; }
+        public DateTime NgayNhap { get; set; }
         public string? GhiChu { get; set; }
         public string NhaCungCap { get; set; } = null!;
 
