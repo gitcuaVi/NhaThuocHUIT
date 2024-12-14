@@ -1,5 +1,30 @@
 ﻿@model List<QuanLyNhaThuoc.ViewModels.DonHangViewModel>
 
+  <style>
+    /* Nút "Xem chi tiết" */
+    .order-detail-btn {
+        background-color: #28a745; /* Màu xanh lá */
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .order-detail-btn:hover {
+            background-color: #218838; /* Màu xanh lá đậm hơn khi hover */
+        }
+
+        /* Thêm các hiệu ứng nếu cần */
+        .order-detail-btn:focus {
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+            outline: none;
+        }
+
+  </style>
+
 @{
     ViewBag.Title = "Danh sách đơn hàng";
 }
@@ -31,7 +56,7 @@ else
                     <td>@donHang.TongTien₫</td>
                     <td>@donHang.TrangThai</td>
                     <td>
-                        <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#chiTiet-@donHang.MaDonHang">
+                        <button class="btn order-detail-btn" data-bs-toggle="collapse" data-bs-target="#chiTiet-@donHang.MaDonHang">
                             Xem chi tiết
                         </button>
                         <div id="chiTiet-@donHang.MaDonHang" class="collapse mt-2">

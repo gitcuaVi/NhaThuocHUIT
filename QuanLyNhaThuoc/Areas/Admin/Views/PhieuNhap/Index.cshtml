@@ -108,20 +108,18 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="select-all"></th>
-                        <th>Mã Phiếu Nhập</th>
+                        <th style="width:170px;">Mã Phiếu Nhập</th>
                         <th>Nhân Viên</th>
                         <th>Ngày Nhập</th>
                         <th>Nhà Cung Cấp</th>
                         <th>Tổng Tiền</th>
-                        <th>Hành động</th>
+                        <th style="width:170px;">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var pn in Model)
                     {
                         <tr>
-                            <td><input type="checkbox" class="phieunhap-select" value="@pn.MaPhieuNhap"></td>
                             <td>@pn.MaPhieuNhap</td>
                             <td>@pn.MaNhanVienNavigation.HoTen</td>
                             <td>@pn.NgayNhap?.ToString("dd/MM/yyyy")</td>

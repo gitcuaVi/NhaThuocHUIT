@@ -141,11 +141,19 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 {
                     if (key.StartsWith("TrangThai_"))
                     {
-                        // lấy mã chi tiết phiếu nhập
                         var maChiTietPn = int.Parse(key.Replace("TrangThai_", ""));
                         var trangThaiValue = bool.Parse(trangThai[key]);
 
-                        // procedure sp_CapNhatTrangThaiChiTietPN
+                        // Lấy phiếu nhập hiện tại
+                        var chiTietPn = _context.ChiTietPns.Find(maChiTietPn);
+
+                        if (chiTietPn == null || chiTietPn.TrangThai != null)
+                        {
+                            TempData["ErrorMessage"] = $"Chi tiết phiếu nhập {maChiTietPn} đã được cập nhật trước đó.";
+                            continue;
+                        }
+
+                        // Gọi stored procedure
                         var parameters = new[]
                         {
                     new SqlParameter("@MaChiTietPN", maChiTietPn),
@@ -165,6 +173,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
             return RedirectToAction("ChiTiet", new { id = maPhieuNhap });
         }
+
 
 
 

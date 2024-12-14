@@ -4,6 +4,90 @@
     var danhMucList = ViewBag.DanhMucList as List<QuanLyNhaThuoc.Models.DanhMuc>;
 }
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    h2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .cart-container {
+        margin-bottom: 20px;
+    }
+
+    form label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    select {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .table {
+        width: 100%;
+        background-color: #fff;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table img {
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+    .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+    input[type="number"] {
+        width: 60px;
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+
 <div class="cart-container">
     @await Html.PartialAsync("_CartPartial", ViewBag.Cart as List<CartItem>)
 </div>
@@ -31,11 +115,11 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Hình ảnh</th>
-                <th>Tên thuốc</th>
-                <th>Đơn giá</th>
-                <th>Đơn vị</th>
-                <th>Thao tác</th>
+                <th style="width:200px;">Hình ảnh</th>
+                <th style="width:580px;">Tên thuốc</th>
+                <th style="width:200px;">Đơn giá</th>
+                <th style="width:200px;">Đơn vị</th>
+                <th style="width300px;">Thao tác</th>
             </tr>
         </thead>
         <tbody>
@@ -46,7 +130,7 @@ else
                         <img src="@item.HinhAnhDauTien" alt="@item.TenThuoc" style="width: 100px;" />
                     </td>
                     <td>@item.TenThuoc</td>
-                    <td>@item.DonGia</td>
+                    <td>@item.DonGia₫</td>
                     <td>@item.DonVi</td>
                     <td>
                         <form method="post" asp-action="AddToCart" asp-controller="NhanVienHoaDon" asp-area="Admin">

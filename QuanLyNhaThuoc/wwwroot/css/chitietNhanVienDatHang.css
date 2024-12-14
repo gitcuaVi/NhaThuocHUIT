@@ -1,0 +1,86 @@
+﻿/* Tiêu đề trang đơn hàng */
+.order-list-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Nếu không có đơn hàng */
+.no-orders {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Bảng danh sách đơn hàng */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .order-table th, .order-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .order-table th {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .order-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+/* Nút chi tiết đơn hàng */
+.order-detail-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .order-detail-btn:hover {
+        background-color: #0056b3;
+    }
+
+/* Bảng chi tiết đơn hàng */
+.order-detail-table-container {
+    margin-top: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.order-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .order-detail-table th, .order-detail-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .order-detail-table th {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .order-detail-table tr:hover {
+        background-color: #f1f1f1;
+    }

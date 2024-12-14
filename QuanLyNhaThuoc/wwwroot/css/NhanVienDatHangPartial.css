@@ -1,0 +1,111 @@
+﻿/* Khung giỏ hàng */
+#cart-container {
+    margin: 20px auto;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Bảng giỏ hàng */
+#cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    #cart-table th,
+    #cart-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    #cart-table th {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    #cart-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+/* Tổng tiền */
+#cart-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+    margin-right:20px;
+}
+
+/* Form khách hàng */
+#customer-info-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    /* Tiêu đề form */
+    #customer-info-form .form-title {
+        font-size: 1.5rem;
+        color: #28a745;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Nhóm form */
+    #customer-info-form .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Nhãn form */
+    #customer-info-form .form-label {
+        font-weight: bold;
+        color: #555;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    /* Input và Select */
+    #customer-info-form .form-input,
+    #customer-info-form .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+        #customer-info-form .form-input:focus,
+        #customer-info-form .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 4px rgba(40, 167, 69, 0.25);
+        }
+
+/* Nút bấm */
+#submit-button {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    #submit-button:hover {
+        background-color: #218838;
+    }
+
+/* Bảng trống */
+#cart-container p {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+    margin-top: 20px;
+}
