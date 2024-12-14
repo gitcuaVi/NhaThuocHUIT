@@ -75,7 +75,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             new SqlParameter("@MaLoaiSanPham", thuoc.MaLoaiSanPham),
             new SqlParameter("@DonVi", thuoc.DonVi),
             new SqlParameter("@SoLuongCanhBao", 10),
-            new SqlParameter("@SoLuongToiDa", 100)
+            new SqlParameter("@SoLuongToiDa", 10000)
         };
 
                 // thêm thuốc lấy mã thuốc mới
