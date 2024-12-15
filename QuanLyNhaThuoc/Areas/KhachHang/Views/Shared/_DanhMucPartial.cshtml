@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<QuanLyNhaThuoc.Models.DanhMuc>
 <link rel="stylesheet" href="~/css/layoutKhachhang.css" />
- <ul class="dropdown-menu show-on-hover">
+<ul class="dropdown-menu show-on-hover">
     @foreach (var item in Model)
     {
-        <a class="dropdown-item-gocsuckhoe" href="@Url.Action("Index", "SanPham", new { area = "KhachHang", categoryId = item.MaDanhMuc })">@item.TenDanhMuc</a>
+        <a class="dropdown-item-gocsuckhoe" href="@Url.Action("Index", "SanPham", new { area = "KhachHang", categoryId = item.MaDanhMuc, categoryName = item.TenDanhMuc })">@item.TenDanhMuc</a>
     }
 </ul>
+
 

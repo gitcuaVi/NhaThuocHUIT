@@ -1,9 +1,37 @@
 ﻿@model IEnumerable<dynamic>
 @{
     ViewBag.Title = "Bảng Lương Nhân Viên";
+    var companyName = "Nhà Thuốc An Khang";
+    var currentDate = DateTime.Now.ToString("dd-MM-yyyy"); 
 }
 <link rel="stylesheet" href="~/css/admincss.css" asp-append-version="true" />
-<h2>Bảng Lương Nhân Viên</h2>
+<style>
+    .pdf-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .pdf-header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #4CAF50;
+        }
+
+        .pdf-header h2 {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .pdf-header p {
+            font-size: 14px;
+            margin: 0;
+            color: #666;
+        }
+</style>
+
+<h2 class="text-center">Bảng Lương Nhân Viên</h2>
 
 <form method="get" action="@Url.Action("XemBangLuong")">
     <label for="filterMonth">Chọn tháng:</label>
@@ -54,21 +82,55 @@
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage - 1, filterMonth = ViewBag.FilterMonth })">Trước</a>
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage - 1, filterMonth = ViewBag.FilterMonth })">
+                        Trước
+                    </a>
                 </li>
             }
             @for (var i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = i, filterMonth = ViewBag.FilterMonth })">@i</a>
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = i, filterMonth = ViewBag.FilterMonth })">
+                        @i
+                    </a>
                 </li>
             }
             @if (ViewBag.CurrentPage < ViewBag.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage + 1, filterMonth = ViewBag.FilterMonth })">Sau</a>
+                    <a class="page-link" href="@Url.Action("XemBangLuong", new { page = ViewBag.CurrentPage + 1, filterMonth = ViewBag.FilterMonth })">
+                        Sau
+                    </a>
                 </li>
             }
         </ul>
     </nav>
 </div>
+
+<button id="exportPdf" class="btn btn-primary mt-3">Xuất PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById('exportPdf').addEventListener('click', function () {
+        const element = document.createElement('div');
+        const header = `
+            <div class="pdf-header">
+                <h1>@companyName</h1>
+                <h2>Bảng Lương Nhân Viên</h2>
+                <p>Ngày lập: @currentDate</p>
+            </div>
+        `;
+
+        element.innerHTML = header + document.querySelector('table.table').outerHTML;
+
+        const options = {
+            margin: 10,
+            filename: 'BangLuongNhanVien.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+
+        html2pdf().set(options).from(element).save();
+    });
+</script>

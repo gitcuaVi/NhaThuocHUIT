@@ -94,7 +94,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
 
             // Lấy danh sách vai trò
-            ViewBag.RoleList = db.VaiTros.ToList(); // Giả sử bạn có bảng VaiTro trong cơ sở dữ liệu
+            ViewBag.RoleList = db.VaiTros.ToList(); 
 
             return View(user);
         }

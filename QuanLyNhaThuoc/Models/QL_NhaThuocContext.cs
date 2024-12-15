@@ -8,9 +8,7 @@ namespace QuanLyNhaThuoc.Models
 {
     public partial class QL_NhaThuocContext : DbContext
     {
-        public QL_NhaThuocContext()
-        {
-        }
+       
 
         public QL_NhaThuocContext(DbContextOptions<QL_NhaThuocContext> options)
             : base(options)
@@ -57,7 +55,6 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<ThongKeDonHangView> vw_ThongKeDonHang { get; set; }
         public DbSet<ThongKePhieuNhapView> vw_ThongKePhieuNhap { get; set; }
         public DbSet<BangTamTKDH> BangTamTKDHs { get; set; }
-
         public DbSet<GioHangViewModel> GioHangViewModels { get; set; }
         public DbSet<PaymentModel> PaymentModels { get; set; }
 
@@ -87,7 +84,6 @@ namespace QuanLyNhaThuoc.Models
             modelBuilder.Entity<LichsudonhangView>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
-            
             modelBuilder.Entity<ProductViewDetailsModel>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();

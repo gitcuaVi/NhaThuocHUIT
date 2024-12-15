@@ -27,15 +27,13 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             var maKhachHangClaim = User.Claims.FirstOrDefault(c => c.Type == "MaKhachHang");
             if (maKhachHangClaim == null)
             {
-                return RedirectToAction("Login", "UserDH"); // Nếu không có thông tin khách hàng, chuyển hướng đến trang đăng nhập
+                return RedirectToAction("Login", "UserDH"); 
             }
 
             int maKhachHang = int.Parse(maKhachHangClaim.Value);
-
-            // Truy vấn lịch sử đơn hàng từ VIEW "LichSuDonHang"
             var query = _context.LichSuDonHang
-                .Where(ldh => ldh.MaKhachHang == maKhachHang)  // Lọc theo MaKhachHang
-                .OrderByDescending(ldh => ldh.NgayDatHang)    // Sắp xếp theo ngày đặt hàng giảm dần
+                .Where(ldh => ldh.MaKhachHang == maKhachHang)  
+                .OrderByDescending(ldh => ldh.NgayDatHang)  
                 .AsQueryable();
 
             // Lọc theo trạng thái nếu có

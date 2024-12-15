@@ -4,6 +4,12 @@
 }
 <div class="container my-4">
     <h1 class="mb-4">Tính Lương Nhân Viên</h1>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
     <form method="post" asp-action="TinhLuong">
         @Html.AntiForgeryToken()
         <input type="hidden" name="maNhanVien" value="@ViewBag.MaNhanVien" />

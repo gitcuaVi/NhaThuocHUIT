@@ -113,7 +113,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                             if (reader.Read())
                             {
                                 var message = reader["ThongBao"].ToString();
-                                return Json(new { success = true, message = message + " MaNhanVien: " + maNhanVien });
+                                return Json(new { success = true, message = "Chấm công ra thành công. MaNhanVien: " + maNhanVien });
                             }
                         }
                     }
