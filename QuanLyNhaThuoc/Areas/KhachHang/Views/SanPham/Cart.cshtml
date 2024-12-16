@@ -65,7 +65,7 @@
             success: function (data) {
                 if (data.success) {
                     alert(data.message);
-                    location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                    location.reload(); // Tải trang cập nhật giỏ hàng
                 } else {
                     alert(data.message);
                 }
@@ -78,9 +78,9 @@
     }
 
     $('#orderForm').on('submit', function (e) {
-        e.preventDefault(); // Prevent form submission
+        e.preventDefault(); 
 
-        const data = $(this).serialize(); // Serialize form data
+        const data = $(this).serialize(); 
 
         $.ajax({
             url: '/KhachHang/SanPham/DatHang',
@@ -89,9 +89,9 @@
             success: function (response) {
                 if (response.success) {
                     alert(response.message);
-                    window.location.href = "/KhachHang/SanPham/OrderDetails"; // Redirect to order page
+                    window.location.href = "/KhachHang/SanPham/OrderDetails";
                 } else if (response.redirectToLogin) {
-                    window.location.href = response.loginUrl; // Redirect to login page if needed
+                    window.location.href = response.loginUrl; 
                 } else {
                     alert(response.message);
                 }
@@ -106,7 +106,6 @@
 </script>
 
 <form id="orderForm" method="post" action="/KhachHang/SanPham/DatHang">
-    <!-- Giỏ hàng -->
     <div class="cart-container">
         <h2>Giỏ thuốc của bạn</h2>
         @if (Model != null && Model.Any())
