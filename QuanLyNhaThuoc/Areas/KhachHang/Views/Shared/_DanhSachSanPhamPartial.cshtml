@@ -27,11 +27,16 @@
                                         @string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi
                                     </p>
 
-
-                                    <!-- Display Stock Quantity -->
-                                    <p class="stock-quantity">Số lượng tồn: @product.SoLuongTon</p>
-
-                                    <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">Thêm vào giỏ thuốc</button>
+                                    <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc" @(product.SoLuongTon == 0 ? "disabled" : "")>
+                                        @if (product.SoLuongTon == 0)
+                                        {
+                                            <span>Hết hàng</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Thêm vào giỏ thuốc</span>
+                                        }
+                                    </button>
                                 </div>
                             </div>
                         </div>
