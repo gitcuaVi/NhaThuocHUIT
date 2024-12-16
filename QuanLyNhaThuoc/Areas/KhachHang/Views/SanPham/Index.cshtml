@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
 
 <div class="product-section container mt-4">
-    <!-- Sử dụng Partial view để hiển thị danh sách sản phẩm -->
     @await Html.PartialAsync("_DanhSachSanPhamDanhMucPartial", ViewData["Products"] as IEnumerable<ProductViewModel>) 
 </div>
 

@@ -270,38 +270,32 @@
             mainImage.src = imageUrl;
         }
         document.addEventListener("DOMContentLoaded", function () {
-            // Kiểm tra trạng thái sản phẩm
-            const stockStatus = parseInt(@Model.SoLuongTon, 10); // Đảm bảo SoLuongTon là số hợp lệ
+            // trạng thái sản phẩm
+            const stockStatus = parseInt(@Model.SoLuongTon, 10); //SoLuong hợp lệ
             const addToCartBtn = document.getElementById("add-to-cart-btn");
 
-            // Xử lý trạng thái nút Thêm vào giỏ hàng
             if (stockStatus <= 0) {
-                // Nếu hết hàng, vô hiệu hóa nút
                 addToCartBtn.textContent = "Hết hàng";
                 addToCartBtn.classList.add("disabled");
                 addToCartBtn.disabled = true;
             } else {
-                // Nếu còn hàng, thêm sự kiện click
                 addToCartBtn.addEventListener("click", function () {
                     const productId = addToCartBtn.getAttribute("data-product-id");
-                    addToCart(productId, 1); // Gọi hàm xử lý thêm vào giỏ
+                    addToCart(productId, 1);
                 });
             }
 
-            // Sử dụng jQuery cho các nút Thêm vào giỏ hàng khác (nếu có)
             $(document).on('click', '.add-to-cart', function () {
                 var productId = $(this).data("product-id");
                 var quantity = 1;
 
-                // Kiểm tra trạng thái còn hàng trước khi thêm
                 if (stockStatus <= 0) {
                     alert("Sản phẩm đã hết hàng, không thể thêm vào giỏ.");
                 } else {
-                    addToCart(productId, quantity); // Gọi hàm xử lý thêm vào giỏ
+                    addToCart(productId, quantity); 
                 }
             });
 
-            // Hàm xử lý thêm vào giỏ hàng (chung cho cả fetch và jQuery AJAX)
             function addToCart(productId, quantity) {
                 $.ajax({
                     url: '/KhachHang/SanPham/AddToCart',

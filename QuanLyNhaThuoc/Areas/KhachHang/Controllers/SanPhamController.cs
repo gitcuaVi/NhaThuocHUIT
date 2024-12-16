@@ -259,12 +259,16 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
 
             try
             {
-                // Lấy giỏ hàng từ database
+                // Lấy giỏ hàng
                 var gioHangItems = await db.Set<GioHangViewModel>()
                     .FromSqlRaw("EXEC sp_GetGioHangByKhachHang @MaKhachHang", new SqlParameter("@MaKhachHang", maKhachHang))
                     .ToListAsync();
 
-                // Tạo DataTable để truyền vào TVP
+                if (gioHangItems == null || !gioHangItems.Any())
+                {
+                    return Json(new { success = false, message = "Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi đặt hàng!" });
+                }
+
                 var gioHangTable = new DataTable();
                 gioHangTable.Columns.Add("MaThuoc", typeof(int));
                 gioHangTable.Columns.Add("SoLuong", typeof(int));
@@ -274,7 +278,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     gioHangTable.Rows.Add(item.MaThuoc, item.SoLuong);
                 }
 
-                // Tham số TVP
                 var gioHangParam = new SqlParameter
                 {
                     ParameterName = "@GioHang",
@@ -310,7 +313,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi đặt hàng.", details = ex.Message });
+                return Json(new { success = false, message = "Đặt hàng không thành công!" });
             }
         }
 
