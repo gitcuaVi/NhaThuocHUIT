@@ -75,9 +75,9 @@ body {
     position: absolute;
     top: 50px;
     right: 0;
-    width: 400px; /* Tăng chiều rộng popup */
-    max-height: 600px; /* Đặt chiều cao tối đa để tránh tràn */
-    overflow-y: auto; /* Thêm cuộn dọc nếu quá dài */
+    width: 400px; 
+    max-height: 600px; 
+    overflow-y: auto;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;

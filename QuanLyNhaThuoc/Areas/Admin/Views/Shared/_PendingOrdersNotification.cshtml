@@ -3,29 +3,36 @@
 <ul>
     @if (Model.Any())
     {
-        foreach (var order in Model)
+        foreach (var notification in Model)
         {
-            <li>
-                <a href="/Admin/DonHang/Details/@order.MaDonHang" class="order-link d-block">
-                    <i class="fas fa-shopping-cart mr-2"></i>
-                    Bạn có đơn hàng mới **Mã đơn hàng: <strong>@order.MaDonHang</strong>** chưa xác nhận.
-                    <span class="float-right text-muted text-sm">@order.NgayDatHang.ToString("HH:mm dd/MM/yyyy")</span>
-                </a>
-            </li>
+            if (notification.Type == "Order")
+            {
+                <li>
+                    <i class="fas fa-shopping-cart text-primary mr-2"></i>
+                    Đơn hàng mới:
+                    <a href="/Admin/DonHang/Details/@notification.MaDonHang" class="text-dark">
+                        **Mã: <strong>@notification.MaDonHang</strong>**
+                    </a>
+                    <span class="float-right text-muted text-sm">@notification.NgayDatHang.ToString("HH:mm dd/MM/yyyy")</span>
+                </li>
+            }
+            else if (notification.Type == "Stock")
+            {
+                <li>
+                    <i class="fas fa-exclamation-circle text-warning mr-2"></i>
+                    Thuốc sắp hết hàng:
+                    <a href="/Admin/TonKho" class="text-dark">
+                        **Mã: <strong>@notification.MaThuoc</strong>**
+                    </a>
+                    <span class="text-danger">(Tồn kho: @notification.SoLuongTon, Cảnh báo: @notification.SoLuongCanhBao)</span>
+                </li>
+            }
         }
-        <li class="text-center">
-            <a href="/Admin/DonHang" class="dropdown-footer">Xem tất cả đơn hàng</a>
-        </li>
     }
     else
     {
         <li class="text-center">
-            <i class="fas fa-check-circle text-success"></i> Không có đơn hàng nào đang chờ xác nhận.
+            <i class="fas fa-check-circle text-success"></i> Không có thông báo nào.
         </li>
     }
 </ul>
-
-
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@

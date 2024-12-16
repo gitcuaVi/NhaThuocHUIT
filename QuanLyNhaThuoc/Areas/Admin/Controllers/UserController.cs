@@ -20,27 +20,46 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             db = context;
             _logger = logger;
         }
+      
         [HttpGet("GetPendingOrders")]
         public IActionResult GetPendingOrders()
         {
             try
             {
+                // Lấy thông báo đơn hàng
                 var pendingOrders = db.DonHangs
                     .Where(d => d.TrangThai == "Chờ xác nhận")
                     .OrderByDescending(d => d.NgayDatHang)
                     .Select(d => new
                     {
+                        Type = "Order",
                         d.MaDonHang,
                         d.NgayDatHang,
                         KhachHang = d.KhachHang != null ? d.KhachHang.TenKhachHang : "Không rõ"
                     })
                     .ToList();
 
-                return PartialView("_PendingOrdersNotification", pendingOrders);
+                // Lấy thông báo tồn kho
+                var lowStockItems = db.TonKhos
+                    .Where(tk => tk.SoLuongTon < tk.SoLuongCanhBao)
+                    .OrderBy(tk => tk.NgayGioCapNhat)
+                    .Select(tk => new
+                    {
+                        Type = "Stock",
+                        tk.MaThuoc,
+                        TenThuoc = tk.MaThuocNavigation != null ? tk.MaThuocNavigation.TenThuoc : "Không rõ",
+                        tk.SoLuongTon,
+                        tk.SoLuongCanhBao
+                    })
+                    .ToList();
+
+                // Kết hợp dữ liệu
+                var notifications = pendingOrders.Concat<object>(lowStockItems);
+
+                return PartialView("_PendingOrdersNotification", notifications);
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi nếu cần
                 return BadRequest($"Đã xảy ra lỗi khi tải thông báo: {ex.Message}");
             }
         }
