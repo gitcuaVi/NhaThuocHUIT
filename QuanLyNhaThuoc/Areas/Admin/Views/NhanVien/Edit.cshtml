@@ -11,6 +11,12 @@
 </head>
 
 <div class="container mt-4">
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
     <form asp-action="Edit" method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="Ho">Họ</label>

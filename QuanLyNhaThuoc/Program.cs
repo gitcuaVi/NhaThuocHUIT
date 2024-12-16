@@ -9,6 +9,28 @@ using QuanLyNhaThuoc.Areas.KhachHang.Services.Momo;
 
 namespace QuanLyNhaThuoc
 {
+    // User Info Middleware
+    public class UserInfoMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        public UserInfoMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            if (context.User.Identity.IsAuthenticated)
+            {
+                var userName = context.User.Identity.Name;
+                context.Items["UserName"] = userName; // Save the username in HttpContext.Items
+            }
+
+            await _next(context);
+        }
+    }
+
     public class Program
     {
         public static void Main(string[] args)
@@ -34,13 +56,9 @@ namespace QuanLyNhaThuoc
             builder.Services.AddScoped<IMomoService, MomoService>();
             builder.Services.AddScoped<IVnPayService, VnPayService>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-           
-
-        
 
             // Add MVC and session services
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -57,6 +75,9 @@ namespace QuanLyNhaThuoc
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            // Add UserInfoMiddleware to the pipeline
+            app.UseMiddleware<UserInfoMiddleware>();
 
             // Middleware configuration
             app.UseHttpsRedirection();

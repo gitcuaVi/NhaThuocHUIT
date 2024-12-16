@@ -24,7 +24,7 @@ namespace QuanLyNhaThuoc.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl; // Pass the returnUrl to the view
+            ViewData["ReturnUrl"] = returnUrl; 
             return View();
         }
 

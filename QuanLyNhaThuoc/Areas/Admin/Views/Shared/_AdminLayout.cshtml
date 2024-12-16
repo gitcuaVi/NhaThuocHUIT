@@ -4,15 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QL_NhaThuoc</title>
+    <title>@ViewData["Title"] - An Khang </title>
 
-    <!-- Bootstrap 5 CSS từ CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome từ CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- AdminLTE CSS từ CDN -->
     <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" rel="stylesheet">
-    <!-- CSS tùy chỉnh -->
+    
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QL_NhaThuoc.styles.css" asp-append-version="true" />
     <!-- Các thư viện bổ sung từ CDN -->
@@ -25,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/bootstrap-duallistbox.min.css" />
     <style>
         .custom-sidebar {
-            background-color: #28a745 !important; /* Màu xanh lá Bootstrap */
+            background-color: #28a745 !important; 
         }
 
         .action-buttons {
@@ -37,8 +35,9 @@
             display: flex;
             justify-content: flex-end;
         }
-    </style>
-    <!-- Các thư viện bổ sung từ CDN -->
+       
+
+ </style>
     @RenderSection("Styles", required: false)
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -55,7 +54,16 @@
             <!-- Right navbar links -->
 
             <ul class="navbar-nav ml-auto">
-                <!-- User Info Dropdown -->
+           <li class="nav-item dropdown notification-dropdown">
+        <a class="nav-link notification-icon" href="#" role="button" id="notification-icon">
+            <i class="fas fa-bell"></i>
+            <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div id="notification-popup" class="notification-popup">
+           
+        </div>
+        </li>  
+<!-- User Info Dropdown -->
                 <li class="nav-item dropdown user-panel-dropdown">
                     <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
@@ -92,7 +100,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4 custom-sidebar">
             <!-- Brand Logo -->
-            <a href="/" class="brand-link">
+            <a href="/Admin/Home/Index" class="brand-link">
                 <img src="~/lib/image/logo.png" alt="Admin Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Nhà Thuốc An Khang</span>
             </a>
@@ -102,10 +110,12 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/lib/Image/user3-128x128.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="~/images/images.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block"></a>
+                        <a href="/Admin/User/Profile" class="d-block">
+                               @User.Identity.Name
+                        </a>
                     </div>
                 </div>
 
@@ -255,4 +265,70 @@
         // Hiển thị hộp thoại xác nhận
         return confirm("Bạn có chắc chắn muốn đăng xuất không?");
     }
+$(document).on("click", "#notification-icon", function (event) {
+    event.preventDefault();
+    const popup = $("#notification-popup");
+    popup.toggleClass("active");
+
+    if (!popup.hasClass("loaded")) {
+        $.ajax({
+            url: '/Admin/User/GetPendingOrders', // Gọi API lấy tất cả thông báo
+            method: 'GET',
+            success: function (data) {
+                const notifications = $(data).find("li"); // Lấy danh sách thông báo
+                const maxDisplay = 6; // Số thông báo tối đa hiển thị ban đầu
+                const viewAllLink = `
+                    <li class="text-center">
+                        <a href="#" id="view-all-link" class="dropdown-footer">Xem tất cả</a>
+                    </li>
+                `;
+
+                if (notifications.length > maxDisplay) {
+                    // Hiển thị tối đa 6 thông báo ban đầu
+                    const limitedNotifications = notifications.slice(0, maxDisplay);
+                    popup.html(limitedNotifications).append(viewAllLink);
+                } else {
+                    popup.html(data); 
+                }
+
+                popup.addClass("loaded");
+            },
+            error: function () {
+                console.error("Không thể tải thông báo.");
+                popup.html('<p class="text-danger">Không thể tải thông báo.</p>');
+            }
+        });
+    }
+});
+
+// Xử lý sự kiện khi nhấn "Xem tất cả"
+$(document).on("click", "#view-all-link", function (event) {
+    event.preventDefault();
+    const popup = $("#notification-popup");
+
+    $.ajax({
+        url: '/Admin/User/GetPendingOrders', // Lấy tất cả thông báo
+        method: 'GET',
+        success: function (data) {
+            popup.html(data); // Hiển thị toàn bộ thông báo
+        },
+        error: function () {
+            console.error("Không thể tải thông báo.");
+            popup.html('<p class="text-danger">Không thể tải thông báo.</p>');
+        }
+    });
+});
+
+
+// Đóng popup khi click bên ngoài
+$(document).on("mousedown", function (event) {
+    const popup = $("#notification-popup");
+    const notificationIcon = $("#notification-icon");
+
+    if (!popup.is(event.target) && popup.has(event.target).length === 0 &&
+        !notificationIcon.is(event.target) && notificationIcon.has(event.target).length === 0) {
+        popup.removeClass("active");
+    }
+});
+
 </script>

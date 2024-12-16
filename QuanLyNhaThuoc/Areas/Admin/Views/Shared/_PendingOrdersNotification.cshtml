@@ -1,0 +1,38 @@
+﻿@model IEnumerable<dynamic>
+
+<ul>
+    @if (Model.Any())
+    {
+        foreach (var notification in Model)
+        {
+            if (notification.Type == "Order")
+            {
+                <li>
+                    <i class="fas fa-shopping-cart text-primary mr-2"></i>
+                    Đơn hàng mới:
+                    <a href="/Admin/DonHang/Details/@notification.MaDonHang" class="text-dark">
+                        **Mã: <strong>@notification.MaDonHang</strong>**
+                    </a>
+                    <span class="float-right text-muted text-sm">@notification.NgayDatHang.ToString("HH:mm dd/MM/yyyy")</span>
+                </li>
+            }
+            else if (notification.Type == "Stock")
+            {
+                <li>
+                    <i class="fas fa-exclamation-circle text-warning mr-2"></i>
+                    Thuốc sắp hết hàng:
+                    <a href="/Admin/TonKho" class="text-dark">
+                        **Mã: <strong>@notification.MaThuoc</strong>**
+                    </a>
+                    <span class="text-danger">(Tồn kho: @notification.SoLuongTon, Cảnh báo: @notification.SoLuongCanhBao)</span>
+                </li>
+            }
+        }
+    }
+    else
+    {
+        <li class="text-center">
+            <i class="fas fa-check-circle text-success"></i> Không có thông báo nào.
+        </li>
+    }
+</ul>

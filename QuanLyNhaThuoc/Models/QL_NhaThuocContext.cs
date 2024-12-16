@@ -8,9 +8,7 @@ namespace QuanLyNhaThuoc.Models
 {
     public partial class QL_NhaThuocContext : DbContext
     {
-        public QL_NhaThuocContext()
-        {
-        }
+       
 
         public QL_NhaThuocContext(DbContextOptions<QL_NhaThuocContext> options)
             : base(options)
@@ -26,6 +24,7 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<ProductViewDetailsModel> ViewSanPhamByid { get; set; }
         public virtual DbSet<GioHang> GioHangs { get; set; } = null!;
         public virtual DbSet<ChiTietGioHang> ChiTietGioHangs { get; set; } = null!;
+        public DbSet<ChartData> MonthlyOrders { get; set; }
 
         public virtual DbSet<CaLamViec> CaLamViecs { get; set; } = null!;
         public virtual DbSet<ChamCong> ChamCongs { get; set; } = null!;
@@ -56,7 +55,6 @@ namespace QuanLyNhaThuoc.Models
         public DbSet<ThongKeDonHangView> vw_ThongKeDonHang { get; set; }
         public DbSet<ThongKePhieuNhapView> vw_ThongKePhieuNhap { get; set; }
         public DbSet<BangTamTKDH> BangTamTKDHs { get; set; }
-
         public DbSet<GioHangViewModel> GioHangViewModels { get; set; }
         public DbSet<PaymentModel> PaymentModels { get; set; }
 
@@ -75,7 +73,7 @@ namespace QuanLyNhaThuoc.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=LAPTOP-OGOI530P;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Data Source=LAPTOP-4UK5DRJR\\SQLEXPRESS;Initial Catalog=QL_NhaThuoc;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
         }
 
@@ -86,7 +84,6 @@ namespace QuanLyNhaThuoc.Models
             modelBuilder.Entity<LichsudonhangView>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
-            
             modelBuilder.Entity<ProductViewDetailsModel>().HasNoKey();
 
             modelBuilder.Entity<ProductViewModel>().HasNoKey();
@@ -120,7 +117,8 @@ namespace QuanLyNhaThuoc.Models
             modelBuilder.Entity<DonHangDetailsViewModel>().HasNoKey();
             modelBuilder.Entity<ThongKeDonHangView>().HasNoKey();
             modelBuilder.Entity<BangTamTKDH>().HasNoKey();
-            
+            modelBuilder.Entity<ChartData>().HasNoKey();
+
             modelBuilder.Entity<ThongKePhieuNhapView>().HasNoKey();
             modelBuilder.Entity<ChamCong>(entity =>
             {

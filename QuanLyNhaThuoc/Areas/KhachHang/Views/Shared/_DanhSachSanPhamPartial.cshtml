@@ -23,7 +23,10 @@
 
                                 <div class="card-body">
                                     <h5 class="card-title text-left">@product.TenThuoc</h5>
-                                    <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
+                                    <p class="price" style="color: @(product.DonGia > 100000 ? "#e74c3c" : "#27ae60");">
+                                        @string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi
+                                    </p>
+
 
                                     <!-- Display Stock Quantity -->
                                     <p class="stock-quantity">Số lượng tồn: @product.SoLuongTon</p>

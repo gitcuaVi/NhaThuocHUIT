@@ -25,7 +25,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             
         }
 
-        // Trang hiển thị thông tin người dùng
         [HttpGet("Profile")]
         public IActionResult Profile()
         {
@@ -76,8 +75,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
-                    // Tạo các tham số cho stored procedure
+                { 
                     var parameters = new[]
                     {
                 new SqlParameter("@TenKhachHang", tenKhachHang),
@@ -103,12 +101,10 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 }
             }
 
-            // Nếu có lỗi, hiển thị lại form đăng ký
             return View();
         }
 
 
-        // Trang đăng nhập (GET)
         [HttpGet("Login")]
         public IActionResult Login()
         {

@@ -34,14 +34,13 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         {
             var maGiaoDich = Request.Query["vnp_TxnRef"].ToString();
 
-            // Extract the requestId for further processing (this will be the OrderId in the Momo response)
             var requestId = Request.Query["requestId"].ToString();
             var response = _momoService.PaymentExecuteMomo(Request.Query);
             if (Request.Query["resultCode"] == "0")
             {
 
                 var paramMaGiaoDich = new SqlParameter("@MaGiaoDich", maGiaoDich);
-                var paramRequestId = new SqlParameter("@RequestId", requestId);  // Pass requestId (OrderId)
+                var paramRequestId = new SqlParameter("@RequestId", requestId);  
 
                 var result = await db.Database.ExecuteSqlRawAsync("EXEC sp_CapNhatTrangThaiThanhToan @MaGiaoDich", paramRequestId);
 

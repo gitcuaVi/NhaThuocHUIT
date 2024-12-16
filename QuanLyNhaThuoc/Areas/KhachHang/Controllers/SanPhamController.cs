@@ -36,19 +36,44 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
           
         }
         [HttpGet]
-        public async Task<IActionResult> Index(int categoryId, decimal? minPrice, decimal? maxPrice, string productType)
+        public async Task<IActionResult> Index(int categoryId, string categoryName, decimal? minPrice, decimal? maxPrice, string productType)
         {
             var paramCategoryId = new SqlParameter("@MaDanhMuc", categoryId);
             var paramMinPrice = new SqlParameter("@MinPrice", minPrice ?? (object)DBNull.Value);
             var paramMaxPrice = new SqlParameter("@MaxPrice", maxPrice ?? (object)DBNull.Value);
             var paramProductType = new SqlParameter("@ProductType",
-      string.IsNullOrEmpty(productType) ? (object)DBNull.Value : productType);
+                string.IsNullOrEmpty(productType) ? (object)DBNull.Value : productType);
 
-            var products = await db.Set<ProductViewModel>()
-                .FromSqlRaw("EXEC sp_GetAllProductsByCategoryAndFilters @MaDanhMuc, @MinPrice, @MaxPrice, @ProductType",
-                            paramCategoryId, paramMinPrice, paramMaxPrice, paramProductType)
-                .ToListAsync();
+            IEnumerable<ProductViewModel> products;
 
+            if (categoryName.StartsWith("Xem tất cả"))
+            {
+                var loaiMenu = await GetLoaiMenuByCategoryId(categoryId);
+
+                if (loaiMenu > 0)
+                {
+                    var paramLoaiMenu = new SqlParameter("@LoaiMenu", loaiMenu);
+                    //lấy theo loại menu
+                    products = await db.Set<ProductViewModel>()
+                        .FromSqlRaw("EXEC sp_GetAllProductsByCategoryAndMenu @LoaiMenu, @MinPrice, @MaxPrice, @ProductType",
+                                    paramLoaiMenu, paramMinPrice, paramMaxPrice, paramProductType)
+                        .ToListAsync();
+                }
+                else
+                {
+                    return NotFound("Loại menu không hợp lệ.");
+                }
+            }
+            else
+            {
+                // Lấy sản phẩm theo danh mục 
+                products = await db.Set<ProductViewModel>()
+                    .FromSqlRaw("EXEC sp_GetAllProductsByCategoryAndFilters @MaDanhMuc, @MinPrice, @MaxPrice, @ProductType",
+                                paramCategoryId, paramMinPrice, paramMaxPrice, paramProductType)
+                    .ToListAsync();
+            }
+
+            // Lấy các loại sản phẩm cho danh mục hiện tại
             var productTypes = await db.LoaiSanPhams
                 .Where(l => l.MaDanhMuc == categoryId)
                 .ToListAsync();
@@ -62,15 +87,27 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return NotFound("Danh mục không tồn tại.");
             }
 
+            // Set the ViewData
             ViewData["ProductTypes"] = productTypes;
             ViewData["Products"] = products;
             ViewData["CategoryName"] = category?.TenDanhMuc ?? "Danh mục không xác định";
-
-            // Thêm categoryId vào ViewData để sử dụng trong Razor View
             ViewData["CategoryId"] = categoryId;
 
             return View();
         }
+
+        public async Task<int?> GetLoaiMenuByCategoryId(int categoryId)
+        {
+            //  lấy giá trị LoaiMenu theo MaDanhMuc
+            var category = await db.DanhMucs
+                                   .Where(d => d.MaDanhMuc == categoryId)
+                                   .Select(d => d.LoaiMenu)  // Chỉ lấy trường LoaiMenu
+                                   .FirstOrDefaultAsync();
+
+            //trả về giá trị LoaiMenu, không thì trả về null
+            return category;
+        }
+
 
 
         private int GetMaKhachHangFromClaims()
