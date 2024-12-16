@@ -238,7 +238,7 @@
             </div>
             <div class="action-buttons">
                 <input type="hidden" id="categoryId" value="@Model.MaDanhMuc" />
-                <a href="@Url.Action("Index", "SanPham", new { area = "KhachHang", categoryId = Model.MaDanhMuc })" class="btn-back-to-list">
+                <a href="@Url.Action("Index", "SanPham", new { area = "KhachHang", categoryId = Model.MaDanhMuc, categoryName = Model.TenDanhMuc })" class="btn-back-to-list">
                     <i class="fas fa-arrow-left"></i> Quay lại
                 </a>
             </div>
