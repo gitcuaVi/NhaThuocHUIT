@@ -80,9 +80,53 @@
             font-size: 1.1rem;
             padding: 10px 20px;
         }
+        /* Tổng thể cho bảng */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+            /* Định dạng các tiêu đề (thead) */
+            .table thead th {
+                background-color: #28a745; /* Màu nền xanh */
+                color: white; /* Chữ màu trắng */
+                text-align: center;
+                padding: 10px;
+                font-size: 0.9rem;
+        
+                border-bottom: 2px solid #ddd; /* Đường viền ngăn cách */
+            }
+
+            /* Định dạng các ô trong bảng */
+            .table tbody td, .table tbody th {
+                text-align: center;
+                font-weight: normal;
+                padding: 10px;
+                font-size: 0.85rem;
+                color: #333;
+                border-bottom: 1px solid #f0f0f0; /* Đường viền nhẹ */
+            }
+
+            /* Dòng hover */
+            .table tbody tr:hover {
+                background-color: #f8f9fa; /* Màu xám nhạt khi hover */
+                cursor: pointer;
+            }
+
+            /* Hiệu chỉnh cột */
+            .table td:first-child, .table th:first-child {
+                text-align: left;
+            }
+
+   
     </style>
 </head>
-<h1>Danh Sách Đơn Hàng</h1>
+<h1 style="text-align:center">Danh Sách Đơn Hàng</h1>
 <form method="get" class="row g-3 align-items-center mb-3">
     @Html.AntiForgeryToken()
     <div class="col-md-2">
@@ -121,21 +165,21 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Mã Đơn Hàng</th>
-            <th>Mã Khách Hàng</th>
-            <th>Tên Khách Hàng</th>
-            <th>Địa Chỉ Khách Hàng</th>
-            <th>Số Điện Thoại</th>
+            <th >Mã Đơn Hàng</th>
+            <th >Mã Khách Hàng</th>
+            <th >Tên Khách Hàng</th>
+            <th >Đ/C Khách Hàng</th>
+            <th >Số Điện Thoại</th>
             <th>Ghi Chú</th>
-            <th>Ngày Đặt Hàng</th>
+            <th >Ngày Đặt Hàng</th>
             <th>Ngày Giao Hàng</th>
-            <th>Địa Chỉ Đơn Hàng</th>
-            <th>Tổng Tiền</th>
-            <th>Ngày Cập Nhật</th>
-            <th>Trạng Thái</th>
-            <th>Mã Nhân Viên</th>
-            <th>Cập Nhật Trạng Thái</th>
-            <th>Xem Chi Tiết</th>
+            <th>Đ/C Đơn Hàng</th>
+            <th >Tổng Tiền</th>
+            <th >Ngày Cập Nhật</th>
+            <th >Trạng Thái</th>
+            <th >Mã Nhân Viên</th>
+            <th >Cập Nhật Trạng Thái</th>
+            <th >Xem Chi Tiết</th>
 
         </tr>
     </thead>
