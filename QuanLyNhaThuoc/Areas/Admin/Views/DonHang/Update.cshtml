@@ -23,8 +23,13 @@
 
     <span asp-validation-for="TrangThai" class="text-danger"></span>
 
-    <button type="submit" class="btn btn-primary mt-4">Cập nhật</button>
+    
+    <a asp-action="Index" class="btn btn-secondary  mt-4">Quay lại danh sách</a>
+    <button type="submit" class="btn btn-primary mt-4" id="updateButton">Cập nhật</button>
+   
 </form>
+
+
 <style>
     .order-status {
         display: flex;
@@ -72,25 +77,39 @@
         }
 
 </style>
-<script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
-</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const buttons = document.querySelectorAll(".status-button");
         const hiddenInput = document.getElementById("TrangThaiHidden");
+        const updateButton = document.getElementById("updateButton");
+
+        const statusOrder = ["Chờ xác nhận", "Đã xác nhận", "Đang giao", "Đã giao"]; // Thứ tự trạng thái
 
         buttons.forEach(button => {
             button.addEventListener("click", function () {
-                // Xóa lớp 'selected' khỏi tất cả các nút
-                buttons.forEach(btn => btn.classList.remove("selected"));
+                // Lấy trạng thái hiện tại
+                const currentStatus = hiddenInput.value;
+                const selectedStatus = this.getAttribute("data-status");
 
-                // Thêm lớp 'selected' vào nút được chọn
-                this.classList.add("selected");
+                // Kiểm tra trạng thái hiện tại và chỉ cho phép chọn trạng thái tiếp theo
+                const currentIndex = statusOrder.indexOf(currentStatus);
+                const selectedIndex = statusOrder.indexOf(selectedStatus);
 
-                // Cập nhật giá trị trạng thái vào input ẩn
-                hiddenInput.value = this.getAttribute("data-status");
+                // Chỉ cho phép chọn trạng thái tiếp theo trong danh sách
+                if (selectedIndex === currentIndex + 1) {
+                    // Xóa lớp 'selected' khỏi tất cả các nút
+                    buttons.forEach(btn => btn.classList.remove("selected"));
+
+                    // Thêm lớp 'selected' vào nút được chọn
+                    this.classList.add("selected");
+
+                    // Cập nhật giá trị trạng thái vào input ẩn
+                    hiddenInput.value = selectedStatus;
+
+                } else {
+                    alert("Bạn chỉ có thể chọn trạng thái tiếp theo.");
+                }
             });
         });
 
@@ -99,8 +118,11 @@
         buttons.forEach(button => {
             if (button.getAttribute("data-status") === currentStatus) {
                 button.classList.add("selected");
+                // Kiểm tra nếu trạng thái là "Đã giao", ẩn nút cập nhật ngay từ đầu
+                if (currentStatus === "Đã giao") {
+                    updateButton.style.display = "none"; // Ẩn nút cập nhật nếu trạng thái là "Đã giao"
+                }
             }
         });
     });
-
 </script>
