@@ -20,6 +20,30 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             db = context;
             _logger = logger;
         }
+        [HttpGet("GetPendingOrders")]
+        public IActionResult GetPendingOrders()
+        {
+            try
+            {
+                var pendingOrders = db.DonHangs
+                    .Where(d => d.TrangThai == "Chờ xác nhận")
+                    .OrderByDescending(d => d.NgayDatHang)
+                    .Select(d => new
+                    {
+                        d.MaDonHang,
+                        d.NgayDatHang,
+                        KhachHang = d.KhachHang != null ? d.KhachHang.TenKhachHang : "Không rõ"
+                    })
+                    .ToList();
+
+                return PartialView("_PendingOrdersNotification", pendingOrders);
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi nếu cần
+                return BadRequest($"Đã xảy ra lỗi khi tải thông báo: {ex.Message}");
+            }
+        }
 
         [HttpGet("Profile")]
         public IActionResult Profile()
