@@ -78,5 +78,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
             return View();
         }
+        
+
     }
 }
