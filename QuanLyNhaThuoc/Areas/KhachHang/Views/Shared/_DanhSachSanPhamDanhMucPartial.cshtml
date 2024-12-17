@@ -2,6 +2,29 @@
 @model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
 
 <link rel="stylesheet" href="~/css/layotsanphamdanhmuc.css" asp-append-version="true" />
+<style>
+    .product-grid .product-item.hidden {
+        display: none;
+        opacity: 0;
+    }
+
+    .btn-XemThem {
+        background-color: #28a745;
+        color: white; 
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px; 
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s ease-in-out; 
+    }
+
+        .btn-XemThem:hover {
+            background-color: #218838; 
+            transform: scale(1.05);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -88,6 +111,18 @@
         });
     });
 
+        $(document).ready(function () {
+            $('#show-more-btn').on('click', function () {
+                const hiddenItems = $('.product-grid .product-item.hidden');
+                hiddenItems.slice(0, 12).removeClass('hidden');
+
+                // Ẩn nút nếu không còn sản phẩm nào để hiển thị
+                if ($('.product-grid .product-item.hidden').length === 0) {
+                    $(this).hide();
+                }
+            });
+        });
+
 </script>
 <div class="container mt-4">
     <h4>@Model.Count() sản phẩm @ViewData["CategoryName"] </h4>
@@ -141,21 +176,21 @@
     </div>
 
     <div class="product-grid row">
-        @foreach (var product in Model)
+        @foreach (var product in Model.Select((value, index) => new { value, index }))
         {
-            <div class="col-md-3 col-lg-3 mb-4">
+            <div class="col-md-3 col-lg-3 mb-4 product-item @(product.index >= 12 ? "hidden" : "")">
                 <div class="product-item card">
-                    <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
-                        <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                    <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.value.MaThuoc })">
+                        <img src="@product.value.HinhAnhDauTien" alt="@product.value.TenThuoc" class="card-img-top product-image" />
                     </a>
 
                     <div class="card-body">
-                        <h5 class="card-title text-left">@product.TenThuoc</h5>
-                        <p class="price">@string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi</p>
+                        <h5 class="card-title text-left">@product.value.TenThuoc</h5>
+                        <p style="color: #e74c3c;" class="price">@string.Format("{0:#,##0}", product.value.DonGia)₫/@product.value.DonVi</p>
 
-                        @if (product.SoLuongTon > 0)
+                        @if (product.value.SoLuongTon > 0)
                         {
-                            <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc">
+                            <button class="btn btn-primary add-to-cart" data-product-id="@product.value.MaThuoc">
                                 Thêm vào giỏ thuốc
                             </button>
                         }
@@ -169,6 +204,9 @@
                 </div>
             </div>
         }
+        <div class="col-12 text-center mt-4">
+            <button id="show-more-btn" class="btn-XemThem">Xem thêm</button>
+        </div>
     </div>
 
 </div>

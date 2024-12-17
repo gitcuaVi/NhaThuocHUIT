@@ -40,17 +40,32 @@
 }
 
 .product-grid {
-    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Khoảng cách giữa các sản phẩm */
+}
+
+.card-body {
+    flex-grow: 1; /* Tự động mở rộng phần body nếu nội dung còn trống */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .product-item {
-    width: 280px; 
-    height: 500px; 
+    width: 280px;
+    height: 500px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
+    flex-direction: column; /* Cột dọc */
+    justify-content: space-between; /* Căn nội dung đều trên/dưới */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    width: calc(300px - 20px);
+    flex-direction: column;
+    display: flex;
 }
 
 
@@ -65,7 +80,10 @@
 }
 
 .card-title {
-    height:70px;
+    flex-grow: 0; /* Đảm bảo tiêu đề không chiếm quá nhiều không gian */
+    height: 70px; /* Giữ chiều cao cố định */
+    overflow: hidden; /* Ẩn nội dung vượt quá */
+    text-overflow: ellipsis;
     font-size: 14px;
     font-weight: bold;
     color: #333;
