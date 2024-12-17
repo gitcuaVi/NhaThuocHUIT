@@ -69,6 +69,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             return Json(allMonths);
         }
 
+
         [Route("Home/AccessDenied")]
         public IActionResult AccessDenied(string returnUrl)
         {

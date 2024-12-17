@@ -22,7 +22,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchString, DateTime? startDate, DateTime? endDate, string statusFilter)
+        public async Task<IActionResult> Index(string searchString, DateTime? startDate, DateTime? endDate, string statusFilter, string searchnv)
         {
             // Lấy danh sách đơn hàng kèm thông tin khách hàng
             var query = _context.DonHangs
@@ -45,6 +45,10 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             if (!string.IsNullOrEmpty(statusFilter))
             {
                 query = query.Where(d => d.TrangThai == statusFilter);
+            }
+            if (!string.IsNullOrEmpty(searchnv))
+            {
+                query = query.Where(d => d.MaNhanVien.ToString().Contains(searchnv));
             }
 
             var donHangs = await query
