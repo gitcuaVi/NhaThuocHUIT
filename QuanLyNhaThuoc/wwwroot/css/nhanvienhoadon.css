@@ -1,0 +1,111 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    margin: 1em 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.cart-container {
+    margin-bottom: 1em;
+    padding: 0 1em;
+}
+
+form label {
+    font-weight: bold;
+    margin-right: 0.5em;
+}
+
+select {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+}
+
+.table {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1em auto;
+    background-color: #fff;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    border-radius: 0.5em;
+    overflow: hidden;
+}
+
+    .table th,
+    .table td {
+        padding: 1em;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table img {
+        border-radius: 0.5em;
+        object-fit: cover;
+        width: 100%;
+        max-width: 100px;
+        height: auto;
+    }
+
+.btn-primary {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    font-size: 1rem;
+    border-radius: 0.5em;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #218838;
+        color: white;
+    }
+
+input[type="number"] {
+    width: 3em;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+}
+
+.table td.product-name {
+    font-size: 0.9rem; /* Giảm kích thước chữ */
+    font-weight: normal; /* Không cần chữ đậm */
+    word-wrap: break-word; /* Tự động xuống dòng */
+    max-width: 200px; /* Giới hạn chiều rộng */
+    white-space: normal; /* Cho phép xuống dòng */
+    line-height: 1.4; /* Tăng khoảng cách giữa các dòng */
+    padding: 0.8em; /* Đảm bảo khoảng cách bên trong ô */
+}
+
+@media (max-width: 768px) {
+    .table td.product-name {
+        font-size: 0.85rem; /* Kích thước nhỏ hơn cho màn hình nhỏ */
+        max-width: 150px; /* Giới hạn chiều rộng nhỏ hơn */
+    }
+}
+
+@media (max-width: 576px) {
+    .table td.product-name {
+        font-size: 0.8rem; /* Nhỏ hơn nữa trên màn hình rất nhỏ */
+        max-width: 120px; /* Giới hạn chiều rộng chặt hơn */
+    }
+}

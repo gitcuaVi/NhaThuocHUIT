@@ -252,7 +252,6 @@
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
                     <th>Thành tiền</th>
-                    <th>Trạng thái thanh toán</th>
                 </tr>
             </thead>
             <tbody>
@@ -263,11 +262,21 @@
                         <td>@item.SoLuong</td>
                         <td>@String.Format("{0:N0}", item.DonGia)₫</td>
                         <td>@String.Format("{0:N0}", item.ThanhTien)₫</td>
-                        <td>@item.TrangThaiThanhToan</td>
                     </tr>
                 }
             </tbody>
         </table>
+        <p>
+            <strong>Trạng thái thanh toán:</strong>
+            @if (Model.OrderItems.All(item => item.TrangThaiThanhToan == "Đã thanh toán"))
+            {
+                <span style="color: green;">Đã thanh toán</span>
+            }
+            else
+            {
+                <span style="color: red;">Chưa thanh toán</span>
+            }
+        </p>
     </div>
 </div>
 
