@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -59,8 +60,27 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            // Lấy danh sách ca làm việc
+            var caLamViecs = db.CaLamViecs.Select(c => new
+            {
+                c.MaCaLam,
+                DisplayText = $"{c.MaCaLam} - {c.ThoiGianBatDau} đến {c.ThoiGianKetThuc}"
+            }).ToList();
+
+            // Lấy danh sách người dùng
+            var nguoiDungs = db.NguoiDungs.Select(n => new
+            {
+                n.MaNguoiDung,
+                DisplayText = $"{n.TenNguoiDung} ({n.Email})"
+            }).ToList();
+
+            // Truyền dữ liệu qua ViewBag
+            ViewBag.CaLamViecs = new SelectList(caLamViecs, "MaCaLam", "DisplayText");
+            ViewBag.NguoiDungs = new SelectList(nguoiDungs, "MaNguoiDung", "DisplayText");
+
             return View();
         }
+
 
         [Route("Create")]
         [HttpPost]
