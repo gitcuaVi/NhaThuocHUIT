@@ -19,17 +19,18 @@
     @{
         var chamCongs = (IEnumerable<ChamCong>)Model; 
     }
-    @if (!chamCongs.Any(cc => cc.NgayChamCong.Date == DateTime.Today && cc.ThoiGianVaoLam != null && cc.ThoiGianRaVe != null && cc.GhiChu == "Đạt"))
-    {
-        <div class="text-center">
-            <button id="btnChamCongVao" class="btn btn-success">Chấm Công Vào</button>
-            <button id="btnChamCongRa" class="btn btn-danger">Chấm Công Ra</button>
-        </div>
-    }
-   else
-    {
-        <div class="alert alert-info text-center">Bạn đã chấm công hôm nay!</div>
-    }
+    <div class="text-center">
+        <button id="btnChamCongVao" class="btn btn-success">Chấm Công Vào</button>
+        <button id="btnChamCongRa" class="btn btn-danger">Chấm Công Ra</button>
+    </div>
+@*      @if (!chamCongs.Any(cc => cc.NgayChamCong.Date == DateTime.Today && cc.ThoiGianVaoLam != null && cc.ThoiGianRaVe != null && cc.GhiChu == "Đạt"))
+     {
+
+     }
+    else
+     {
+         <div class="alert alert-info text-center">Bạn đã chấm công hôm nay!</div>
+     } *@
 
     <div id="message" class="mt-3"></div>
     <h3 class="text-center mt-5">Lịch Sử Chấm Công</h3>
