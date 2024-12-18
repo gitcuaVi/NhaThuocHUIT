@@ -55,13 +55,25 @@
             <input type="date" class="form-control" id="NgayTuyenDung" name="NgayTuyenDung">
         </div>
         <div class="col-md-6">
-            <label for="MaNguoiDung" class="form-label">Mã Người Dùng</label>
-            <input type="number" class="form-control" id="MaNguoiDung" name="MaNguoiDung">
+            <label for="MaNguoiDung" class="form-label">Người Dùng</label>
+            @Html.DropDownList(
+                     "MaNguoiDung",
+                     (SelectList)ViewBag.NguoiDungs,
+                     "Chọn người dùng",
+                     new { @class = "form-select", id = "MaNguoiDung" }
+                     )
         </div>
+
         <div class="col-md-6">
-            <label for="MaCaLamViec" class="form-label">Mã Ca Làm Việc</label>
-            <input type="number" class="form-control" id="MaCaLamViec" name="MaCaLamViec">
+            <label for="MaCaLamViec" class="form-label">Ca Làm Việc</label>
+            @Html.DropDownList(
+                     "MaCaLamViec",
+                     (SelectList)ViewBag.CaLamViecs,
+                     "Chọn ca làm việc",
+                     new { @class = "form-select", id = "MaCaLamViec" }
+                     )
         </div>
+
         <div class="col-md-6">
             <label for="LuongCoBan1Ca" class="form-label">Lương Cơ Bản 1 Ca</label>
             <input type="number" class="form-control" id="LuongCoBan1Ca" name="LuongCoBan1Ca">

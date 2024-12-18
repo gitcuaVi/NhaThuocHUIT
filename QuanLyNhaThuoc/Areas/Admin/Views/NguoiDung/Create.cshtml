@@ -16,6 +16,14 @@
     <h2 class="mb-4">Thêm Người Dùng</h2>
 
     <form method="post" asp-action="Create" onsubmit="return validateForm()">
+        <!-- Hiển thị lỗi chung -->
+        @if (ViewData.ModelState.Count > 0)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(true)
+            </div>
+        }
+
         <div class="mb-3">
             <label asp-for="TenNguoiDung" class="form-label">Tên Người Dùng</label>
             <input asp="text" class="form-control" id="TenNguoiDung" name="TenNguoiDung" placeholder="Nhập tên người dùng" required />
@@ -38,6 +46,7 @@
         <a href="/admin/NguoiDung" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
+
 
 <script>
     function validateForm() {

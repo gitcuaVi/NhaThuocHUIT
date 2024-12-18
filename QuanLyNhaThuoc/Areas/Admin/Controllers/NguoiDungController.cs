@@ -65,20 +65,33 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 // Thiết lập các tham số cho stored procedure
                 var parameters = new[]
                 {
-                    new SqlParameter("@TenNguoiDung", TenNguoiDung),
-                    new SqlParameter("@Email", Email),
-                    new SqlParameter("@SoDienThoai", SoDienThoai),
-                };
+            new SqlParameter("@TenNguoiDung", TenNguoiDung),
+            new SqlParameter("@Email", Email),
+            new SqlParameter("@SoDienThoai", SoDienThoai),
+        };
 
-               
                 db.Database.ExecuteSqlRaw("EXEC sp_ThemNguoiDungNhanVien @TenNguoiDung, @Email, @SoDienThoai", parameters);
 
                 return RedirectToAction("Index");
             }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == 2627) // Mã lỗi vi phạm ràng buộc UNIQUE
+                {
+                    ModelState.AddModelError("", "Email hoặc số điện thoại đã tồn tại.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi khi thêm người dùng. Vui lòng thử lại.");
+                }
+
+                _logger.LogError(sqlEx, "Lỗi hệ thống khi thêm người dùng.");
+                return View();
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Lỗi khi tạo người dùng.");
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi khi thêm người dùng.";
+                ModelState.AddModelError("", "Đã xảy ra lỗi không xác định. Vui lòng thử lại.");
                 return View();
             }
         }
@@ -123,13 +136,16 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (SqlException sqlEx)
             {
-                _logger.LogError(ex, "Lỗi khi chỉnh sửa thông tin người dùng.");
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi khi chỉnh sửa thông tin người dùng.";
+                ModelState.AddModelError("", "Không thể cập nhật thông tin người dùng. Vui lòng kiểm tra lại.");
+
+                _logger.LogError(sqlEx, "Lỗi hệ thống khi cập nhật người dùng.");
                 return View();
             }
+
         }
+
 
         [Route("Delete")]
         [HttpPost]
