@@ -20,8 +20,10 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("")]
         public IActionResult Index(string searchString, int page = 1, int pageSize = 10)
         {
+            // Lấy danh mục
             var danhMucQuery = _context.DanhMucs.AsQueryable();
 
+            //Tìm kiếm
             if (!string.IsNullOrEmpty(searchString))
             {
                 danhMucQuery = danhMucQuery.Where(dm => dm.TenDanhMuc.Contains(searchString));
@@ -29,6 +31,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
             int totalItems = danhMucQuery.Count();
 
+            // Lấy danh mục, sắp xếp danh mục
             var danhMucList = danhMucQuery
                               .OrderBy(dm => dm.MaDanhMuc) 
                               .Skip((page - 1) * pageSize)
@@ -55,7 +58,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(DanhMuc danhMuc)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //hop le
             {
                 try
                 {
@@ -88,12 +91,12 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, DanhMuc danhMuc)
         {
-            if (id != danhMuc.MaDanhMuc)
+            if (id != danhMuc.MaDanhMuc) // khong hop le madanhmuc
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // hop le
             {
                 try
                 {
@@ -123,11 +126,12 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                // Kiểm tra danh mục
                 if (ids == null || ids.Count == 0)
                 {
                     return Json(new { success = false, message = "Không có loại sản phẩm nào được chọn để xóa." });
                 }
-
+                // Tạo ds id chuỗi
                 var idList = string.Join(",", ids);
 
                 _context.Database.ExecuteSqlRaw($"EXEC sp_XoaDanhMuc @Ids = '{idList}'");

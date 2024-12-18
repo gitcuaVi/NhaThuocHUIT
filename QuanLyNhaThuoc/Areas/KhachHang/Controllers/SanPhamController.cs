@@ -73,7 +73,7 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                     .ToListAsync();
             }
 
-            // Lấy các loại sản phẩm cho danh mục hiện tại
+            // Lấy các loại sản phẩm cho danh mục
             var productTypes = await db.LoaiSanPhams
                 .Where(l => l.MaDanhMuc == categoryId)
                 .ToListAsync();
@@ -87,7 +87,6 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
                 return NotFound("Danh mục không tồn tại.");
             }
 
-            // Set the ViewData
             ViewData["ProductTypes"] = productTypes;
             ViewData["Products"] = products;
             ViewData["CategoryName"] = category?.TenDanhMuc ?? "Danh mục không xác định";
@@ -109,12 +108,13 @@ namespace QuanLyNhaThuoc.Areas.KhachHang.Controllers
         }
 
 
-
         private int GetMaKhachHangFromClaims()
         {
             var maKhachHangClaim = User.FindFirst("MaKhachHang")?.Value;
             return int.TryParse(maKhachHangClaim, out var maKhachHang) ? maKhachHang : -1;
         }
+
+
         [HttpGet("Chitietsp/{id}")]
         public async Task<IActionResult> Chitietsp(int id)
         {

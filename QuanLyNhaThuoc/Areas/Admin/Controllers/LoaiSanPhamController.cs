@@ -55,6 +55,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("Create")]
         public IActionResult Create()
         {
+            // Lấy danh sách danh mục
             ViewData["MaDanhMuc"] = new SelectList(_context.DanhMucs, "MaDanhMuc", "TenDanhMuc");
             return View();
         }
@@ -92,6 +93,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("Edit/{id}")]
         public IActionResult Edit(int id)
         {
+            //lay loaisanpham 
             var loaiSanPham = _context.LoaiSanPhams
                                     .FirstOrDefault(lsp => lsp.MaLoaiSanPham == id);
 
@@ -110,6 +112,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                // Tạo tham số loại sản phẩm
                 var parameters = new[]
                 {
             new SqlParameter("@MaLoaiSanPham", id),
@@ -133,6 +136,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                // Duyệt qua danh sách loại sản phẩm xóa
                 foreach (var id in MaLoaiSanPham)
                 {
                     var parameters = new[]
@@ -150,9 +154,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
         }
-
-
-
 
     }
 }

@@ -27,7 +27,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 .Include(p => p.ChiTietPns)
                     .ThenInclude(ctpn => ctpn.MaTonKhoNavigation)
                 .AsQueryable();
-
+            // Lọc danh sách phiếu nhập
             if (!string.IsNullOrEmpty(searchString))
             {
                 phieuNhapQuery = phieuNhapQuery.Where(pn =>
@@ -37,6 +37,8 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             }
 
             int totalItems = phieuNhapQuery.Count();
+
+            // Phân trang, sắp xếp theo ngày giảm dần
             var phieuNhaps = phieuNhapQuery
                 .OrderByDescending(pn => pn.NgayNhap)
                 .Skip((page - 1) * pageSize)
@@ -65,7 +67,9 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                //ngay hien tai
                 DateTime ngayNhap = DateTime.Now;
+
                 var chiTietPnTable = new DataTable();
                 chiTietPnTable.Columns.Add("MaThuoc", typeof(int));
                 chiTietPnTable.Columns.Add("SoLuong", typeof(int));
@@ -116,6 +120,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("ChiTiet/{id}")]
         public IActionResult ChiTiet(int id)
         {
+            //chi tiet theo phieunhap
             var chiTietPhieuNhap = _context.ChiTietPns
                 .Include(ct => ct.MaThuocNavigation)
                 .Include(ct => ct.MaTonKhoNavigation)
@@ -137,6 +142,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                //lap trang thai
                 foreach (var key in trangThai.Keys)
                 {
                     if (key.StartsWith("TrangThai_"))
@@ -173,8 +179,6 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
 
             return RedirectToAction("ChiTiet", new { id = maPhieuNhap });
         }
-
-
 
 
     }

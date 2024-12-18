@@ -74,21 +74,25 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             try
             {
+                // Tìm thuốc theo mã thuốc
                 var thuoc = await db.Thuocs.FindAsync(maThuoc);
                 if (thuoc == null)
                 {
+                    //thông báo lỗi
                     TempData["ErrorMessage"] = "Không tìm thấy thuốc.";
                     return RedirectToAction("Index");
                 }
-
+                //ktra soluong
                 if (thuoc.SoLuongTon < soLuong)
                 {
                     TempData["ErrorMessage"] = "Số lượng không đủ.";
                     return RedirectToAction("Index");
                 }
 
+                //gio hang tu session
                 var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
 
+                //thuoc ton tai trong gio
                 var item = cart.FirstOrDefault(c => c.MaThuoc == maThuoc);
                 if (item != null)
                 {
@@ -96,6 +100,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 }
                 else
                 {
+                    //chua them thuoc
                     cart.Add(new CartItem
                     {
                         MaThuoc = maThuoc,
@@ -104,7 +109,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                         SoLuong = soLuong
                     });
                 }
-
+                //up gio hang
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
                 TempData["SuccessMessage"] = "Thêm vào giỏ hàng thành công!";
                 return RedirectToAction("Index");
@@ -152,6 +157,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             chiTietDonHang.Columns.Add("SoLuong", typeof(int));
             chiTietDonHang.Columns.Add("Gia", typeof(decimal));
 
+            // Thêm hàng trong giỏ
             foreach (var item in cart)
             {
                 chiTietDonHang.Rows.Add(item.MaThuoc, item.SoLuong, item.DonGia);
@@ -197,9 +203,10 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             var maNhanVien = GetMaNhanVienFromClaims();
 
+            // Lấy danh sách đơn hàng của nhân viên
             var donHangList = await db.DonHangs
                 .Where(d => d.MaNhanVien == maNhanVien)
-                .OrderByDescending(d => d.NgayDatHang)
+                .OrderByDescending(d => d.NgayDatHang)//giam
                 .Select(d => new DonHangViewModel
                 {
                     MaDonHang = d.MaDonHang,

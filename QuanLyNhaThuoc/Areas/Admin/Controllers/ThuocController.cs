@@ -124,6 +124,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
+            // lay thuoc va danh sach hinh
             var thuoc = await _context.Thuocs
                                       .Include(t => t.HinhAnhs) 
                                       .FirstOrDefaultAsync(t => t.MaThuoc == id);
@@ -133,6 +134,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            // tao list loai san pham
             ViewData["MaLoaiSanPham"] = new SelectList(_context.LoaiSanPhams, "MaLoaiSanPham", "TenLoai", thuoc.MaLoaiSanPham);
             return View(thuoc); 
         }
@@ -143,17 +145,19 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                //du lieu loi tra ve form 
                 ViewData["MaLoaiSanPham"] = new SelectList(_context.LoaiSanPhams, "MaLoaiSanPham", "TenLoai", thuoc.MaLoaiSanPham);
                 return View(thuoc);
             }
 
-            // cập nhật thông tin thuốc
+            //lay thuoc hien tai
             var existingThuoc = await _context.Thuocs.Include(t => t.HinhAnhs).FirstOrDefaultAsync(t => t.MaThuoc == id);
             if (existingThuoc == null)
             {
                 return NotFound();
             }
 
+            //cap nhat thuoc
             existingThuoc.TenThuoc = thuoc.TenThuoc;
             existingThuoc.HanSuDung = thuoc.HanSuDung;
             existingThuoc.DonVi = thuoc.DonVi;
@@ -161,10 +165,10 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
             existingThuoc.SoLuongTon = thuoc.SoLuongTon;
             existingThuoc.MaLoaiSanPham = thuoc.MaLoaiSanPham;
 
-            // cập nhật ảnh
+            // xu ly anh moi
             if (ImageFiles != null && ImageFiles.Count > 0)
             {
-                // xóa ảnh
+                // xoa anh cu va trong folder
                 if (existingThuoc.HinhAnhs != null)
                 {
                     foreach (var hinhAnh in existingThuoc.HinhAnhs)
@@ -178,7 +182,7 @@ namespace QuanLyNhaThuoc.Areas.Admin.Controllers
                     _context.HinhAnhs.RemoveRange(existingThuoc.HinhAnhs);
                 }
 
-                // lưu lại ảnh
+                // Luu anh
                 foreach (var imageFile in ImageFiles)
                 {
                     if (imageFile.Length > 0)
