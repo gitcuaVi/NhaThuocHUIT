@@ -1,0 +1,93 @@
+Nhân Viên
+NguoiDung: 0125478986 mk 123456
+MayDung:0946789461
+VietDung:0975451567
+
+Khách hàng:0123654789 mk 12345
+
+admin
+0987654321 123456789
+
+Ngân hàng        NCB
+Số thẻ        9704198526191432198
+Tên chủ thẻ        NGUYEN VAN A
+Ngày phát hành        07/15
+Mật khẩu OTP        123456
+
+
+
+
+CREATE TRIGGER trg_UpdateThanhToan
+ON [QL_NhaThuoc].[dbo].[DonHang]
+AFTER UPDATE
+AS
+BEGIN
+    -- Bắt đầu một transaction để đảm bảo tính toàn vẹn dữ liệu
+    BEGIN TRANSACTION;
+
+    -- Kiểm tra nếu trạng thái đơn hàng được cập nhật thành 'Đã giao'
+    UPDATE tt
+    SET tt.TrangThaiThanhToan = N'Đã thanh toán',
+        tt.NgayThanhToan = GETDATE() -- Cập nhật ngày thanh toán là ngày hiện tại
+    FROM [QL_NhaThuoc].[dbo].[ThanhToan] tt
+    INNER JOIN inserted i ON i.MaDonHang = tt.MaDonHang
+    WHERE i.TrangThai = N'Đã giao';
+
+    -- Kiểm tra xem có lỗi không và thực hiện COMMIT hoặc ROLLBACK
+    IF @@ERROR <> 0
+    BEGIN
+        ROLLBACK TRANSACTION;
+    END
+    ELSE
+    BEGIN
+        COMMIT TRANSACTION;
+    END
+END;
+
+
+CREATE VIEW vw_ThongKePhieuNhap AS
+SELECT 
+      [MaPhieuNhap],
+      [MaNhanVien],
+      [TongTien],
+      [NgayNhap],
+      [GhiChu],
+      [NhaCungCap]
+FROM [QL_NhaThuoc].[dbo].[PhieuNhap];
+
+CREATE PROCEDURE CapNhatTrangThaiVaMaNhanVien
+    @MaDonHang INT,         -- Mã đơn hàng cần cập nhật
+    @TrangThai NVARCHAR(50),-- Trạng thái mới của đơn hàng
+    @MaNhanVien INT         -- Mã nhân viên mới
+AS
+BEGIN
+    BEGIN TRY
+        -- Bắt đầu một transaction
+        BEGIN TRANSACTION;
+
+        -- Cập nhật bảng DonHang
+        UPDATE [QL_NhaThuoc].[dbo].[DonHang]
+        SET TrangThai = @TrangThai,
+            MaNhanVien = @MaNhanVien,
+            NgayCapNhat = GETDATE() -- Cập nhật thời gian sửa đổi
+        WHERE MaDonHang = @MaDonHang;
+
+        -- Kiểm tra xem có dòng nào bị ảnh hưởng hay không
+        IF @@ROWCOUNT = 0
+        BEGIN
+            THROW 50000, 'Không tìm thấy đơn hàng với mã đã cung cấp.', 1;
+        END
+
+        -- Commit transaction nếu mọi thứ thành công
+        COMMIT TRANSACTION;
+
+        PRINT 'Cập nhật thành công!';
+    END TRY
+    BEGIN CATCH
+        -- Rollback transaction nếu có lỗi xảy ra
+        ROLLBACK TRANSACTION;
+
+        -- In ra thông báo lỗi
+        PRINT 'Đã xảy ra lỗi: ' + ERROR_MESSAGE();
+    END CATCH
+END;
